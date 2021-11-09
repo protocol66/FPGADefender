@@ -1,0 +1,29 @@
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+use ieee.math_real.all;
+
+entity clk_div is
+    port (
+        clk_in  : in std_logic;
+        div     : in integer;
+        clk_out : buffer std_logic := '0'
+    );
+end entity clk_div;
+
+architecture rtl of clk_div is
+begin
+    process (clk_in, div)
+        variable count : integer := 0;
+    begin
+        if((rising_edge(clk_in) or falling_edge(clk_in) )and div > 0) then
+            count := count + 1;
+
+            if count >= div then
+                clk_out <= not clk_out;
+                count := 0;
+            end if;
+        end if;
+    end process;
+
+end architecture;
