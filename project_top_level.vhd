@@ -21,6 +21,7 @@ entity project_top_level is
 end entity project_top_level;
 
 architecture rtl of project_top_level is
+
     component vga_controller is
 	port(
 		pixel_clk	:	IN		STD_LOGIC;	--pixel clock at frequency of VGA mode being used
@@ -41,9 +42,6 @@ architecture rtl of project_top_level is
 		c0		: OUT STD_LOGIC 
 	);
     end component vga_pll_25_175;
-
-
-
 
     component clk_div is
         port (
@@ -81,6 +79,21 @@ architecture rtl of project_top_level is
         );
     end component score;
 
+    component objDisp is
+        generic (
+            X_SIZE : integer;
+            Y_SIZE : integer;
+            bitmap : bit_map_t(0 to X_SIZE-1), 0 to Y_SIZE-1)
+        );
+        port (
+            box : Bounding_Box;
+            enable : in std_logic;
+            pixel : out Pixel_t
+        );
+    end component;
+
+    type ship_lives_boxes is array (2 downto 0) of Bounding_Box;
+
     signal vga_clk              : std_logic;
     signal global_display_en    : std_logic;
     signal global_x             : integer;
@@ -89,10 +102,19 @@ architecture rtl of project_top_level is
     signal very_slow_clk_x : std_logic;
     signal very_slow_clk_y : std_logic;
 
+    signal curr_pixel : Pixel_t;
+
+    signal ship_box : Bounding_Box;
+    signal ship_lives_box : ship_lives_boxes;
+    signal ship_lives : std_logic_vector(2 downto 0) := (others => '1'); -- one-hot ship lives
+    signal ship_sizeX : integer := 50;
+    signal ship_sizeY : integer := 50;
+
     signal score_box : Bounding_Box;
-    signal score_pixel : Pixel_t;
     signal rand_x_pos : std_logic_vector(7 downto 0);
     signal rand_y_pos : std_logic_vector(7 downto 0);
+
+
 
 begin
 
@@ -134,15 +156,15 @@ begin
     score_box.x_origin <= to_integer(unsigned(rand_x_pos));
     score_box.y_origin <= to_integer(unsigned(rand_y_pos));
     
-    VGA_R <= score_pixel.red;
-    VGA_G <= score_pixel.green;
-    VGA_B <= score_pixel.blue;
+    VGA_R <= curr_pixel.red;
+    VGA_G <= curr_pixel.green;
+    VGA_B <= curr_pixel.blue;
 
     TEST1: score port map (
         box => score_box,
         enable => global_display_en,
         score_in => "0000",
-        pixel => score_pixel
+        pixel => curr_pixel
     );
 
     DIAGNOSTIC1: bin2seg7 port map (
@@ -183,4 +205,27 @@ begin
     --     end if;
     -- end process;
     
+----Ship Lives--------------------------------------------------------------------------------------------------------------------
+    -- SHIP_LIFE1: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
+    --                     port map (box => shipLives_box(0), enable => ship_lives(0), pixel => curr_pixel);
+    -- SHIP_LIFE2: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
+    --                     port map (box => shipLives_box(1), enable => ship_lives(1), pixel => curr_pixel);
+    -- SHIP_LIFE2: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
+    --                     port map (box => shipLives_box(2), enable => ship_lives(2), pixel => curr_pixel);
+    
+    -- shipLives(0).x_pos <= global_x;
+    -- shipLives(0).y_pos <= global_y;
+    -- shipLives(0).x_origin <= 20;
+    -- shipLives(0).y_origin <= 20;
+
+    -- shipLives(1).x_pos <= global_x;
+    -- shipLives(1).y_pos <= global_y;
+    -- shipLives(1).x_origin <= 30 + ship_sizeX;
+    -- shipLives(1).y_origin <= 20;
+
+    -- shipLives(2).x_pos <= global_x;
+    -- shipLives(2).y_pos <= global_y;
+    -- shipLives(2).x_origin <= 40 + (ship_sizeX * 2);
+    -- shipLives(2).y_origin <= 20;
+
 end architecture;

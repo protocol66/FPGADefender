@@ -26,7 +26,7 @@ begin
     y <= get_bb_y_index(box);
     in_bounds <= check_bb_bounds(box, X_SIZE, Y_SIZE);
 
-    pixel <= bit_map(x,y) when (enable and in_bounds) = '1' else BLACK;
+    pixel <= bit_map(y,x) when (enable and in_bounds) = '1' else BLACK;
 
 
 end architecture; 
