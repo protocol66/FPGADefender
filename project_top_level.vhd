@@ -4,6 +4,7 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 
 use work.my_data_types.all;
+use work.bitmaps.all;
 
 entity project_top_level is
     port (
@@ -85,16 +86,15 @@ architecture rtl of project_top_level is
             pixel     : out Pixel_t
         );
     end component score;
-    
 
     component objDisp is
         generic (
             X_SIZE : integer;
-            Y_SIZE : integer;
-            bitmap : bit_map_t(0 to X_SIZE-1), 0 to Y_SIZE-1)
+            Y_SIZE : integer
         );
         port (
             box : Bounding_Box;
+            bit_map : bit_map_t(0 to X_SIZE-1, 0 to Y_SIZE-1);
             enable : in std_logic;
             pixel : out Pixel_t
         );
@@ -115,9 +115,13 @@ architecture rtl of project_top_level is
         );
     end component;
 
+    constant BACKGROUND : Pixel_t := BLACK;
     constant NUM_LIVES : natural := 3;
+    constant SHIP_SPAWNX : integer := 160;
+    constant SHIP_SPAWNY : integer := 240;
 
     type ship_lives_boxes is array (NUM_LIVES-1 downto 0) of Bounding_Box;
+    type ship_lives_pixel_vector is array (NUM_LIVES-1 downto 0) of Pixel_t;
 
     signal vga_clk              : std_logic;
     signal global_display_en    : std_logic;
@@ -128,6 +132,12 @@ architecture rtl of project_top_level is
     signal very_slow_clk_y : std_logic;
 
     signal curr_pixel : Pixel_t;
+    signal top_line_pixel : Pixel_t;
+    signal score_pixel : Pixel_t;
+    signal ship_pixel : Pixel_t;
+    signal ship_life_pixels : ship_lives_pixel_vector;
+
+    signal line_box : Bounding_Box;
 
     signal ship_box : Bounding_Box;
     signal ship_lives_box : ship_lives_boxes;
@@ -182,20 +192,47 @@ begin
         random_8 => rand_y_pos
     );
 
+    line_box.x_pos <= global_x;
+    line_box.y_pos <= global_y;
+    line_box.x_origin <= 0;
+    line_box.y_origin <= 10 + ship_sizeY;
+
     score_box.x_pos <= global_x;
     score_box.y_pos <= global_y;
     score_box.x_origin <= to_integer(unsigned(rand_x_pos));
     score_box.y_origin <= to_integer(unsigned(rand_y_pos));
+
+    pixel : process(global_x, global_y)
+    begin
+        if top_line_pixel /= BACKGROUND then
+            curr_pixel <= top_line_pixel;
+        elsif score_pixel /= BACKGROUND then
+            curr_pixel <= score_pixel;
+        elsif ship_life_pixels(0) /= BACKGROUND then
+            curr_pixel <= ship_life_pixels(0);
+        elsif ship_life_pixels(1) /= BACKGROUND then
+            curr_pixel <= ship_life_pixels(1);
+        elsif ship_life_pixels(2) /= BACKGROUND then
+            curr_pixel <= ship_life_pixels(2);
+        elsif ship_pixel /= BACKGROUND then
+            curr_pixel <= ship_pixel;
+        else
+            curr_pixel <= BACKGROUND;
+        end if;
+    end process;
     
     VGA_R <= curr_pixel.red;
     VGA_G <= curr_pixel.green;
     VGA_B <= curr_pixel.blue;
 
+    TOP_LINE: objDisp generic map (X_SIZE => line_width, Y_SIZE => line_length)
+                        port map (box => line_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
+
     TEST1: score port map (
         box => score_box,
         enable => global_display_en,
         score_in => "0000",
-        pixel => curr_pixel
+        pixel => score_pixel
     );
 
     DIAGNOSTIC1: bin2seg7 port map (
@@ -237,9 +274,9 @@ begin
     -- end process;
 
     SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
-                                            SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
-    SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
-                        port map (box => ship_box, enable => ship_alive, pixel => curr_pixel);
+                                            GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
+    SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
+                        port map (box => ship_box, bit_map => SHIP, enable => ship_alive, pixel => ship_pixel);
     
     ship_box.x_pos <= global_x;
     ship_box.y_pos <= global_y;
@@ -248,13 +285,14 @@ begin
     
     ship_main : process(ship_collision)
     begin
-        if ship collision = '1' then
+        if ship_collision = '1' then
             ship_alive <= '0';
             ship_reset_L <= '0';
             if ship_lives /= "000" then
                 ship_lives <= std_logic_vector(shift_right(unsigned(ship_lives), 1));
             else 
                 game_over <= '1';
+				end if;
         else
             ship_alive <= '1';
             ship_reset_L <= '1';
@@ -262,14 +300,14 @@ begin
     end process;
      
 ----Ship Lives--------------------------------------------------------------------------------------------------------------------
-    SHIP_LIVES: for I in 0 to NUM_LIVES-1 generate
-                    SHIP_LIFE: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
-                                        port map (box => shipLives_box(I), enable => ship_lives(I), pixel => curr_pixel);
+    SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
+                    SHIP_LIFE: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
+                                        port map (box => ship_lives_box(I), bit_map => SHIP, enable => ship_lives(I), pixel => ship_life_pixels(I));
                     
-                    shipLives_box(I).x_pos <= global_x;
-                    shipLives_box(I).y_pos <= global_y;
-                    shipLives_box(I).x_origin <= 10 + ((10 + ship_sizeX) * I);
-                    shipLives_box(I).y_origin <= 5;
+                    ship_lives_box(I).x_pos <= global_x;
+                    ship_lives_box(I).y_pos <= global_y;
+                    ship_lives_box(I).x_origin <= 10 + ((10 + ship_sizeX) * I);
+                    ship_lives_box(I).y_origin <= 5;
     end generate;
 
 ----Laser-------------------------------------------------------------------------------------------------------------------------

@@ -24,14 +24,17 @@ end ship_movement;
 architecture arch of ship_movement is
     constant MAX_X_OFFSET : integer := 160;
     -- constant MAX_Y_OFFSET : integer := 180;
-    constant MAX_UP_OFFSET : integer := (480 - (score_sizeY + 5) - 2) / 2;
-    constant MAX_DOWN_OFFSET : integer := MAX_UP_OFFSET - ship_sizeY;
+    constant MAX_UP_OFFSET : integer := (480 / 2) - (15 + ship_sizeY);
+    constant MAX_DOWN_OFFSET : integer := 480 / 2  - ship_sizeY;
     signal data_x : std_logic_vector(0 to 15);
     signal data_y : std_logic_vector(0 to 15);
+    signal clk_10k : std_logic;
     signal x_counter_clk : std_logic;
     signal y_counter_clk : std_logic;
     signal x_shift : std_logic_vector(0 to 8);
     signal y_shift : std_logic_vector(0 to 8);
+    signal x_enable : std_logic := '1';
+    signal y_enable : std_logic := '1';
 
     component ADXL345_controller is
 
@@ -75,11 +78,11 @@ architecture arch of ship_movement is
     end component;
 
 begin
-    U1: clk_div port map (clk_in => max10_clk, div => 5000, clk_out => clk_10k);
+    U1: clk_div port map (clk_in => max10_clk, div => 500, clk_out => clk_10k);
     U2: ADXL345_controller port map(reset_n => '1', clk => max10_clk, data_valid => open, data_x => data_x, data_y => data_y, data_z => open, 
                                     SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
-    U3: counter generic map (SIZE => 9) port map(clk => x_counter_clk, up_down => data_x(4), reset_L => reset_L, enable => x_enable, cout => x_shift);
-    U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => data_y(4), reset_L => reset_L, enable => y_enable, cout => y_shift);
+    U3: counter generic map (SIZE => 9) port map(clk => x_counter_clk, up_down => not data_x(4), reset_L => reset_L, enable => x_enable, cout => x_shift);
+    U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => not data_y(4), reset_L => reset_L, enable => y_enable, cout => y_shift);
 
     x_clk_divider : process(clk_10k)
     variable count : integer := 0;
@@ -124,7 +127,7 @@ begin
         if abs(to_integer(signed(x_shift))) >= MAX_X_OFFSET then
             if to_integer(signed(x_shift)) = MAX_X_OFFSET and data_x(4) = '0' then 
                 x_enable <= '1';
-            else if to_integer(signed(x_shift)) = -1 * MAX_X_OFFSET and data_x(4) = '1' then
+            elsif to_integer(signed(x_shift)) = -1 * MAX_X_OFFSET and data_x(4) = '1' then
                 x_enable <= '1';
             else
                 x_enable <= '0';
@@ -132,14 +135,15 @@ begin
         else
             x_enable <= '1';
         end if;
-        if to_integer(signed(y_shift)) >= MAX_UP_OFFSET then
-            if to_integer(signed(y_shift)) >= MAX_UP_OFFSET and data_y(4) = '0' then 
+
+        if to_integer(signed(y_shift)) <= -1 * MAX_UP_OFFSET then
+            if data_y(4) = '1' then 
                 y_enable <= '1';
             else 
                 y_enable <= '0';
             end if;
-        else if to_integer(signed(y_shift)) <= MAX_DOWN_OFFSET then
-            if to_integer(signed(y_shift)) <= MAX_DOWN_OFFSET and data_y(4) = '1' then 
+        elsif to_integer(signed(y_shift)) >= MAX_DOWN_OFFSET then
+            if data_y(4) = '0' then 
                 y_enable <= '1';
             else 
                 y_enable <= '0';
