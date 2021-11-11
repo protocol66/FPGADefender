@@ -94,7 +94,7 @@ architecture rtl of project_top_level is
 
     type ship_lives_boxes is array (2 downto 0) of Bounding_Box;
 
-    signal vga_clk              : std_logic;
+    signal vga_clk              : std_logic;`   `
     signal global_display_en    : std_logic;
     signal global_x             : integer;
     signal global_y             : integer;

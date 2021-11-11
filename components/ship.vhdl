@@ -1,13 +1,17 @@
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
+use ieee.math_real.all;
 
 use work.my_data_types.all;
 
 entity ship_movement is
     port (
         max10_clk : in std_logic;
-        reset : in std_logic;
+        reset_L : in std_logic;
+
+        x_offset : out integer;
+        y_offset : out integer;
 	
 		GSENSOR_CS_N : OUT	STD_LOGIC;
 		GSENSOR_SCLK : OUT	STD_LOGIC;
@@ -17,11 +21,14 @@ entity ship_movement is
 end ship_movement;
 
 architecture arch of ship_movement is
+    constant MAX_X_OFFSET : integer := 160;
+    constant MAX_Y_OFFSET : integer := 180;
     signal data_x : std_logic_vector(0 to 15);
     signal data_y : std_logic_vector(0 to 15);
-    signal data_z : std_logic_vector(0 to 15);
     signal x_counter_clk : std_logic;
     signal y_counter_clk : std_logic;
+    signal x_shift : std_logic_vector(0 to 8);
+    signal y_shift : std_logic_vector(0 to 8);
 
     component ADXL345_controller is
 
@@ -42,11 +49,88 @@ architecture arch of ship_movement is
         
     end component;
 
-begin
-     U2: ADXL345_controller port map(reset_n => '1', clk => max10_clk, data_valid => open, data_x => data_x, data_y => data_y, data_z => open, 
-                                    SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
-                                    
+    component clk_div is
+        port (
+            clk_in  : in std_logic;
+            div     : in integer;       -- rounds down to closest even number
+            clk_out : buffer std_logic := '0'
+        );
+    end component;
 
+    component counter is
+        generic (
+            SIZE : integer := 1;
+            STEP : integer := 1
+            );
+        port (
+            clk     : in std_logic;
+            reset_L : in std_logic := '0';
+            enable  : in std_logic := '0';
+            up_down : in std_logic := '0';
+            cout    : out std_logic_vector(SIZE-1 downto 0)
+        );
+    end component;
+
+begin
+    U1: clk_div port map (clk_in => max10_clk, div => 5000, clk_out => clk_10k);
+    U2: ADXL345_controller port map(reset_n => '1', clk => max10_clk, data_valid => open, data_x => data_x, data_y => data_y, data_z => open, 
+                                    SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
+    U3: counter generic map (SIZE => 9) port map(clk => x_counter_clk, up_down => data_x(4), reset_L => reset_L, enable => x_enable, cout => x_shift);
+    U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => data_y(4), reset_L => reset_L, enable => y_enable, cout => y_shift);
+
+    x_clk_divider : process(clk_10k)
+    variable count : integer := 0;
+    begin
+        if rising_edge(clk_10k) and data_x(8 to 11) /= "0000" then
+            count := count + 1;
+            if data_x(4) = '0' then
+                if count > ((16 - to_integer(unsigned(data_x(8 to 11)))) * 100) then
+                    count := 0;
+                    x_counter_clk <= not x_counter_clk;
+                end if;
+            else
+                if count > to_integer(unsigned(data_x(8 to 11))) * 100 then
+                    count := 0;
+                    x_counter_clk <= not x_counter_clk;
+                end if;
+            end if;
+        end if;
+    end process;
+
+    y_clk_divider : process(clk_10k)
+    variable count : integer := 0;
+    begin
+        if rising_edge(clk_10k) and data_y(8 to 11) /= "0000" then
+            count := count + 1;
+            if data_y(4) = '0' then
+                if count > ((16 - to_integer(unsigned(data_y(8 to 11)))) * 100) then
+                    count := 0;
+                    y_counter_clk <= not y_counter_clk;
+                end if;
+            else
+                if count > to_integer(unsigned(data_y(8 to 11))) * 100 then
+                    count := 0;
+                    y_counter_clk <= not y_counter_clk;
+                end if;
+            end if;
+        end if;
+    end process;                                
+
+    bounds : process(x_shift, y_shift)
+    begin
+        if abs(to_integer(signed(x_shift))) >= MAX_X_OFFSET then
+            x_enable <= '0';
+        else
+            x_enable <= '1';
+        end if;
+        if abs(to_integer(signed(y_shift))) >= MAX_Y_OFFSET then
+            y_enable <= '0';
+        else
+            y_enable <= '1';
+        end if;
+        x_offset <= to_integer(signed(x_shift));
+        y_offset <= to_integer(signed(y_shift));
+    end process;
 
 
 end architecture ; -- arch
