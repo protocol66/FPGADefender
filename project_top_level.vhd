@@ -11,10 +11,17 @@ entity project_top_level is
         reset_L : in std_logic;
         pause   : in std_logic;
 
+        shoot_L : in std_logic;
+
         VGA_HS  : out std_logic;
         VGA_VS  : out std_logic;
 
         HEX0, HEX1, HEX2, HEX3    : out std_logic_vector(7 downto 0);
+
+        GSENSOR_CS_N : OUT	STD_LOGIC;
+        GSENSOR_SCLK : OUT	STD_LOGIC;
+        GSENSOR_SDI  : INOUT	STD_LOGIC;
+        GSENSOR_SDO  : INOUT	STD_LOGIC;
 
         VGA_R, VGA_G, VGA_B : out std_logic_vector(3 downto 0)
     );
@@ -78,6 +85,7 @@ architecture rtl of project_top_level is
             pixel     : out Pixel_t
         );
     end component score;
+    
 
     component objDisp is
         generic (
@@ -92,9 +100,26 @@ architecture rtl of project_top_level is
         );
     end component;
 
-    type ship_lives_boxes is array (2 downto 0) of Bounding_Box;
+    component ship_movement is
+        port (
+            max10_clk : in std_logic;
+            reset_L : in std_logic;
+    
+            x_offset : out integer;
+            y_offset : out integer;
+        
+            GSENSOR_CS_N : OUT	STD_LOGIC;
+            GSENSOR_SCLK : OUT	STD_LOGIC;
+            GSENSOR_SDI  : INOUT	STD_LOGIC;
+            GSENSOR_SDO  : INOUT	STD_LOGIC
+        );
+    end component;
 
-    signal vga_clk              : std_logic;`   `
+    constant NUM_LIVES : natural := 3;
+
+    type ship_lives_boxes is array (NUM_LIVES-1 downto 0) of Bounding_Box;
+
+    signal vga_clk              : std_logic;
     signal global_display_en    : std_logic;
     signal global_x             : integer;
     signal global_y             : integer;
@@ -106,13 +131,19 @@ architecture rtl of project_top_level is
 
     signal ship_box : Bounding_Box;
     signal ship_lives_box : ship_lives_boxes;
-    signal ship_lives : std_logic_vector(2 downto 0) := (others => '1'); -- one-hot ship lives
-    signal ship_sizeX : integer := 50;
-    signal ship_sizeY : integer := 50;
+    signal ship_lives : std_logic_vector(NUM_LIVES-1 downto 0) := (others => '1'); -- one-hot ship lives
+
+    signal ship_reset_L : std_logic := '1';
+    signal ship_alive : std_logic := '1';
+    signal ship_collision : std_logic := '0';
+    signal shipX_offset : integer := 0;
+    signal shipY_offset : integer := 0;
 
     signal score_box : Bounding_Box;
     signal rand_x_pos : std_logic_vector(7 downto 0);
     signal rand_y_pos : std_logic_vector(7 downto 0);
+
+    signal game_over : std_logic := '0';
 
 
 
@@ -204,28 +235,49 @@ begin
     --         end if;
     --     end if;
     -- end process;
+
+    SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
+                                            SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
+    SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
+                        port map (box => ship_box, enable => ship_alive, pixel => curr_pixel);
     
+    ship_box.x_pos <= global_x;
+    ship_box.y_pos <= global_y;
+    ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
+    ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
+    
+    ship_main : process(ship_collision)
+    begin
+        if ship collision = '1' then
+            ship_alive <= '0';
+            ship_reset_L <= '0';
+            if ship_lives /= "000" then
+                ship_lives <= std_logic_vector(shift_right(unsigned(ship_lives), 1));
+            else 
+                game_over <= '1';
+        else
+            ship_alive <= '1';
+            ship_reset_L <= '1';
+        end if;
+    end process;
+     
 ----Ship Lives--------------------------------------------------------------------------------------------------------------------
-    -- SHIP_LIFE1: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
-    --                     port map (box => shipLives_box(0), enable => ship_lives(0), pixel => curr_pixel);
-    -- SHIP_LIFE2: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
-    --                     port map (box => shipLives_box(1), enable => ship_lives(1), pixel => curr_pixel);
-    -- SHIP_LIFE2: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
-    --                     port map (box => shipLives_box(2), enable => ship_lives(2), pixel => curr_pixel);
-    
-    -- shipLives(0).x_pos <= global_x;
-    -- shipLives(0).y_pos <= global_y;
-    -- shipLives(0).x_origin <= 20;
-    -- shipLives(0).y_origin <= 20;
+    SHIP_LIVES: for I in 0 to NUM_LIVES-1 generate
+                    SHIP_LIFE: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY, bitmap => shipBitmap)
+                                        port map (box => shipLives_box(I), enable => ship_lives(I), pixel => curr_pixel);
+                    
+                    shipLives_box(I).x_pos <= global_x;
+                    shipLives_box(I).y_pos <= global_y;
+                    shipLives_box(I).x_origin <= 10 + ((10 + ship_sizeX) * I);
+                    shipLives_box(I).y_origin <= 5;
+    end generate;
 
-    -- shipLives(1).x_pos <= global_x;
-    -- shipLives(1).y_pos <= global_y;
-    -- shipLives(1).x_origin <= 30 + ship_sizeX;
-    -- shipLives(1).y_origin <= 20;
-
-    -- shipLives(2).x_pos <= global_x;
-    -- shipLives(2).y_pos <= global_y;
-    -- shipLives(2).x_origin <= 40 + (ship_sizeX * 2);
-    -- shipLives(2).y_origin <= 20;
+----Laser-------------------------------------------------------------------------------------------------------------------------
+    -- laser : process(shoot_L)
+    -- begin
+    --     if shoot_L = '0' then
+            
+    --     end if;
+    -- end process;
 
 end architecture;

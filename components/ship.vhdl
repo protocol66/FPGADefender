@@ -4,6 +4,7 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 
 use work.my_data_types.all;
+use work.bitmaps.all;
 
 entity ship_movement is
     port (
@@ -22,7 +23,9 @@ end ship_movement;
 
 architecture arch of ship_movement is
     constant MAX_X_OFFSET : integer := 160;
-    constant MAX_Y_OFFSET : integer := 180;
+    -- constant MAX_Y_OFFSET : integer := 180;
+    constant MAX_UP_OFFSET : integer := (480 - (score_sizeY + 5) - 2) / 2;
+    constant MAX_DOWN_OFFSET : integer := MAX_UP_OFFSET - ship_sizeY;
     signal data_x : std_logic_vector(0 to 15);
     signal data_y : std_logic_vector(0 to 15);
     signal x_counter_clk : std_logic;
@@ -119,12 +122,28 @@ begin
     bounds : process(x_shift, y_shift)
     begin
         if abs(to_integer(signed(x_shift))) >= MAX_X_OFFSET then
-            x_enable <= '0';
+            if to_integer(signed(x_shift)) = MAX_X_OFFSET and data_x(4) = '0' then 
+                x_enable <= '1';
+            else if to_integer(signed(x_shift)) = -1 * MAX_X_OFFSET and data_x(4) = '1' then
+                x_enable <= '1';
+            else
+                x_enable <= '0';
+            end if;
         else
             x_enable <= '1';
         end if;
-        if abs(to_integer(signed(y_shift))) >= MAX_Y_OFFSET then
-            y_enable <= '0';
+        if to_integer(signed(y_shift)) >= MAX_UP_OFFSET then
+            if to_integer(signed(y_shift)) >= MAX_UP_OFFSET and data_y(4) = '0' then 
+                y_enable <= '1';
+            else 
+                y_enable <= '0';
+            end if;
+        else if to_integer(signed(y_shift)) <= MAX_DOWN_OFFSET then
+            if to_integer(signed(y_shift)) <= MAX_DOWN_OFFSET and data_y(4) = '1' then 
+                y_enable <= '1';
+            else 
+                y_enable <= '0';
+            end if;
         else
             y_enable <= '1';
         end if;

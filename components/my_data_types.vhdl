@@ -22,11 +22,14 @@ package my_data_types is
 
     type bit_map_t is array (natural range<>, natural range<>) of Pixel_t;
 
-    constant BLACK : Pixel_t := ((others => '0'), (others => '0'), (others => '0'));
-    constant WHITE : Pixel_t := ((others => '1'), (others => '1'), (others => '1'));
-    constant RED   : Pixel_t := ((others => '1'), (others => '0'), (others => '0'));
-    constant GREEN : Pixel_t := ((others => '0'), (others => '1'), (others => '0'));
-    constant BLUE  : Pixel_t := ((others => '0'), (others => '0'), (others => '1'));
+    constant BLACK  : Pixel_t := ((others => '0'), (others => '0'), (others => '0'));
+    constant BLUE   : Pixel_t := ((others => '0'), (others => '0'), (others => '1'));
+    constant GREEN  : Pixel_t := ((others => '0'), (others => '1'), (others => '0'));
+    constant TEAL   : Pixel_t := ((others => '0'), (others => '1'), (others => '1'));
+    constant RED    : Pixel_t := ((others => '1'), (others => '0'), (others => '0'));
+    constant PURPLE : Pixel_t := ((others => '1'), (others => '0'), (others => '1'));
+    constant YELLOW : Pixel_t := ((others => '1'), (others => '1'), (others => '0'));
+    constant WHITE  : Pixel_t := ((others => '1'), (others => '1'), (others => '1'));
 
     function get_bb_x_index (b : Bounding_Box) return integer;
     function get_bb_y_index (b : Bounding_Box) return integer;
