@@ -98,9 +98,6 @@ begin
 
     PLL1 : vga_pll_25_175 port map (MAX10_CLK1_50, vga_clk);
 
-    RAND_CLK_x : clk_div port map (MAX10_CLK1_50, 8_000_000, very_slow_clk_x);
-    RAND_CLK_y : clk_div port map (MAX10_CLK1_50, 5_000_000, very_slow_clk_y);
-
     VGA_CONTROLL : vga_controller port map (
         pixel_clk => vga_clk,
         reset_n => '1',
@@ -113,26 +110,14 @@ begin
         n_sync => open
     );
 
-    X_POS : pseudorandom_8 port map (
-        clk => very_slow_clk_x,
-        reset_L => '1',
-        enable => '1',
-        seed => "10101010",
-        random_8 => rand_x_pos
-    );
-
-    Y_POS : pseudorandom_8 port map (
-        clk => very_slow_clk_y,
-        reset_L => '1',
-        enable => '1',
-        seed => "11111111",
-        random_8 => rand_y_pos
-    );
 
     score_box.x_pos <= global_x;
     score_box.y_pos <= global_y;
-    score_box.x_origin <= to_integer(unsigned(rand_x_pos));
-    score_box.y_origin <= to_integer(unsigned(rand_y_pos));
+    -- score_box.x_origin <= to_integer(unsigned(rand_x_pos));
+    -- score_box.y_origin <= to_integer(unsigned(rand_y_pos));
+
+    score_box.x_origin <= 0;
+    score_box.y_origin <= 0;
     
     VGA_R <= score_pixel.red;
     VGA_G <= score_pixel.green;
@@ -171,16 +156,5 @@ begin
         dispPoint => '0',
         HEX => HEX3
     );
-
-    -- process (very_slow_clk)
-    -- begin
-    --     if rising_edge(very_slow_clk) then
-    --         if (score_box.x_origin < 600)  then
-    --             score_box.x_origin <= score_box.x_origin + 1;
-    --         else 
-    --             score_box.x_origin <= 0;
-    --         end if;
-    --     end if;
-    -- end process;
     
 end architecture;
