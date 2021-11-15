@@ -16,8 +16,8 @@ entity score is
 end entity score;
 
 architecture rtl of score is
-    constant X_SIZE : integer := 600;
-    constant Y_SIZE : integer := 400;
+    constant X_SIZE : integer := 25;
+    constant Y_SIZE : integer := 40;
     signal bit_map : bit_map_t(0 to X_SIZE-1, 0 to Y_SIZE-1) := (others => (others => RED));
 
     signal x, y : integer;

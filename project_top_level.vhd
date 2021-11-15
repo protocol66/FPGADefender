@@ -54,7 +54,7 @@ architecture rtl of project_top_level is
     component clk_div is
         port (
             clk_in  : in std_logic;
-            div     : in integer;
+            div     : in integer;       -- rounds down to closest even number
             clk_out : buffer std_logic := '0'
         );
     end component clk_div;
@@ -89,12 +89,12 @@ architecture rtl of project_top_level is
 
     component objDisp is
         generic (
-            X_SIZE : integer;
-            Y_SIZE : integer
+            X_SIZE : positive;
+            Y_SIZE : positive
         );
         port (
             box : Bounding_Box;
-            bit_map : bit_map_t(0 to X_SIZE-1, 0 to Y_SIZE-1);
+            bit_map : bit_map_t(0 to Y_SIZE-1, 0 to X_SIZE-1);
             enable : in std_logic;
             pixel : out Pixel_t
         );
@@ -119,6 +119,8 @@ architecture rtl of project_top_level is
     constant NUM_LIVES : natural := 3;
     constant SHIP_SPAWNX : integer := 160;
     constant SHIP_SPAWNY : integer := 240;
+
+
 
     type ship_lives_boxes is array (NUM_LIVES-1 downto 0) of Bounding_Box;
     type ship_lives_pixel_vector is array (NUM_LIVES-1 downto 0) of Pixel_t;
@@ -150,8 +152,6 @@ architecture rtl of project_top_level is
     signal shipY_offset : integer := 0;
 
     signal score_box : Bounding_Box;
-    signal rand_x_pos : std_logic_vector(7 downto 0);
-    signal rand_y_pos : std_logic_vector(7 downto 0);
 
     signal game_over : std_logic := '0';
 
@@ -173,6 +173,10 @@ begin
         n_sync => open
     );
 
+    VGA_R <= curr_pixel.red;
+    VGA_G <= curr_pixel.green;
+    VGA_B <= curr_pixel.blue;
+
 
     line_box.x_pos <= global_x;
     line_box.y_pos <= global_y;
@@ -181,8 +185,27 @@ begin
 
     score_box.x_pos <= global_x;
     score_box.y_pos <= global_y;
-    score_box.x_origin <= to_integer(unsigned(rand_x_pos));
-    score_box.y_origin <= to_integer(unsigned(rand_y_pos));
+    score_box.x_origin <= 400;
+    score_box.y_origin <= 5;
+
+    ship_box.x_pos <= global_x;
+    ship_box.y_pos <= global_y;
+    ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
+    ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
+
+    TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
+                        port map (box => line_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
+
+    SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
+                                             GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
+    SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
+                        port map (box => ship_box, bit_map => SHIP, enable => ship_alive, pixel => ship_pixel);
+
+    SCORE_1: objDisp generic map (X_SIZE => score_sizeX, Y_SIZE => score_sizeY)
+                        port map (box => score_box, bit_map => score_bit_test, enable => '1', pixel => score_pixel);
+
+
+
 
     pixel : process(global_x, global_y)
     begin
@@ -202,47 +225,40 @@ begin
             curr_pixel <= BACKGROUND;
         end if;
     end process;
-    
-    VGA_R <= curr_pixel.red;
-    VGA_G <= curr_pixel.green;
-    VGA_B <= curr_pixel.blue;
 
-    TOP_LINE: objDisp generic map (X_SIZE => line_width, Y_SIZE => line_length)
-                        port map (box => line_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
+    -- TEST1: score port map (
+    --     box => score_box,
+    --     enable => global_display_en,
+    --     score_in => "0000",
+    --     pixel => score_pixel
+    -- );
 
-    TEST1: score port map (
-        box => score_box,
-        enable => global_display_en,
-        score_in => "0000",
-        pixel => score_pixel
-    );
+    -- DIAGNOSTIC1: bin2seg7 port map (
+    --     inData => rand_x_pos(3 downto 0),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX0
+    -- );
 
-    DIAGNOSTIC1: bin2seg7 port map (
-        inData => rand_x_pos(3 downto 0),
-        enable => '1',
-        dispPoint => '0',
-        HEX => HEX0
-    );
+    -- DIAGNOSTIC2: bin2seg7 port map (
+    --     inData => rand_x_pos(7 downto 4),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX1
+    -- );
+    -- DIAGNOSTIC3: bin2seg7 port map (
+    --     inData => rand_y_pos(3 downto 0),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX2
+    -- );
 
-    DIAGNOSTIC2: bin2seg7 port map (
-        inData => rand_x_pos(7 downto 4),
-        enable => '1',
-        dispPoint => '0',
-        HEX => HEX1
-    );
-    DIAGNOSTIC3: bin2seg7 port map (
-        inData => rand_y_pos(3 downto 0),
-        enable => '1',
-        dispPoint => '0',
-        HEX => HEX2
-    );
-
-    DIAGNOSTIC4: bin2seg7 port map (
-        inData => rand_y_pos(7 downto 4),
-        enable => '1',
-        dispPoint => '0',
-        HEX => HEX3
-    );
+    -- DIAGNOSTIC4: bin2seg7 port map (
+    --     inData => rand_y_pos(7 downto 4),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX3
+    -- );
 
     -- process (very_slow_clk)
     -- begin
@@ -255,15 +271,9 @@ begin
     --     end if;
     -- end process;
 
-    SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
-                                            GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
-    SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
-                        port map (box => ship_box, bit_map => SHIP, enable => ship_alive, pixel => ship_pixel);
     
-    ship_box.x_pos <= global_x;
-    ship_box.y_pos <= global_y;
-    ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
-    ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
+    
+    
     
     ship_main : process(ship_collision)
     begin

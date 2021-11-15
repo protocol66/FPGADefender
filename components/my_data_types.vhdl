@@ -14,10 +14,10 @@ package my_data_types is
 
 
     type Bounding_Box is record
-        x_origin : integer range 0 to 640;
-        y_origin : integer range 0 to 480;
-        x_pos    : integer range 0 to 640;
-        y_pos    : integer range 0 to 480;
+        x_origin : integer range 0 to 640-1;
+        y_origin : integer range 0 to 480-1;
+        x_pos    : integer range 0 to 640-1;
+        y_pos    : integer range 0 to 480-1;
     end record;
 
     type bit_map_t is array (natural range<>, natural range<>) of Pixel_t;

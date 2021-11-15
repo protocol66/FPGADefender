@@ -7,12 +7,12 @@ use work.bitmaps.all;
 
 entity objDisp is
     generic (
-        X_SIZE : integer;
-        Y_SIZE : integer
+        X_SIZE : positive;
+        Y_SIZE : positive
     );
     port (
         box : Bounding_Box;
-        bit_map : bit_map_t(0 to X_SIZE-1, 0 to Y_SIZE-1);
+        bit_map : bit_map_t(0 to Y_SIZE-1, 0 to X_SIZE-1);
         enable : in std_logic;
         pixel : out Pixel_t
     );

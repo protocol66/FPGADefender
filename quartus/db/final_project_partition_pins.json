@@ -12,6 +12,14 @@
 					"strict" : false
 				},
 				{
+					"name" : "GSENSOR_CS_N",
+					"strict" : false
+				},
+				{
+					"name" : "GSENSOR_SCLK",
+					"strict" : false
+				},
+				{
 					"name" : "VGA_R[0]",
 					"strict" : false
 				},
@@ -25,6 +33,50 @@
 				},
 				{
 					"name" : "VGA_R[3]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_G[0]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_G[1]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_G[2]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_G[3]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_B[0]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_B[1]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_B[2]",
+					"strict" : false
+				},
+				{
+					"name" : "VGA_B[3]",
+					"strict" : false
+				},
+				{
+					"name" : "GSENSOR_SDI",
+					"strict" : false
+				},
+				{
+					"name" : "GSENSOR_SDO",
+					"strict" : false
+				},
+				{
+					"name" : "MAX10_CLK1_50",
 					"strict" : false
 				}
 			]
