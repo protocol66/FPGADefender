@@ -1,5 +1,5 @@
 Timing Analyzer report for final_project
-Mon Nov 15 02:19:30 2021
+Mon Nov 15 11:46:29 2021
 Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 
 
@@ -92,14 +92,13 @@ https://fpgasoftware.intel.com/eula.
 ; Number detected on machine ; 8           ;
 ; Maximum allowed            ; 8           ;
 ;                            ;             ;
-; Average used               ; 1.44        ;
+; Average used               ; 3.18        ;
 ; Maximum used               ; 8           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   6.8%      ;
-;     Processor 3            ;   6.3%      ;
-;     Processors 4-8         ;   6.2%      ;
+;     Processor 2            ;  31.2%      ;
+;     Processors 3-8         ;  31.1%      ;
 +----------------------------+-------------+
 
 
@@ -121,11 +120,11 @@ https://fpgasoftware.intel.com/eula.
 +------------+-----------------+--------------------------------------------------+------+
 ; Fmax       ; Restricted Fmax ; Clock Name                                       ; Note ;
 +------------+-----------------+--------------------------------------------------+------+
-; 126.65 MHz ; 126.65 MHz      ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ;      ;
-; 134.63 MHz ; 134.63 MHz      ; MAX10_CLK1_50                                    ;      ;
-; 171.32 MHz ; 171.32 MHz      ; PLL1|altpll_component|auto_generated|pll1|clk[0] ;      ;
-; 245.1 MHz  ; 245.1 MHz       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ;      ;
-; 413.22 MHz ; 413.22 MHz      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ;      ;
+; 101.45 MHz ; 101.45 MHz      ; MAX10_CLK1_50                                    ;      ;
+; 119.2 MHz  ; 119.2 MHz       ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ;      ;
+; 143.82 MHz ; 143.82 MHz      ; PLL1|altpll_component|auto_generated|pll1|clk[0] ;      ;
+; 248.51 MHz ; 248.51 MHz      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ;      ;
+; 388.2 MHz  ; 388.2 MHz       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ;      ;
 +------------+-----------------+--------------------------------------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -135,11 +134,11 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +--------------------------------------------------+--------+---------------+
 ; Clock                                            ; Slack  ; End Point TNS ;
 +--------------------------------------------------+--------+---------------+
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -6.896 ; -344.253      ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -3.080 ; -27.720       ;
-; MAX10_CLK1_50                                    ; -1.438 ; -1.438        ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.420 ; -12.780       ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 33.892 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -7.389 ; -392.734      ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -3.024 ; -27.216       ;
+; MAX10_CLK1_50                                    ; -1.871 ; -1.871        ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.576 ; -14.184       ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 32.776 ; 0.000         ;
 +--------------------------------------------------+--------+---------------+
 
 
@@ -149,10 +148,10 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 ; Clock                                            ; Slack ; End Point TNS ;
 +--------------------------------------------------+-------+---------------+
 ; MAX10_CLK1_50                                    ; 0.325 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.392 ; 0.000         ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 0.423 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 0.530 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 0.556 ; 0.000         ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 0.422 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 0.529 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.557 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 0.574 ; 0.000         ;
 +--------------------------------------------------+-------+---------------+
 
 
@@ -176,8 +175,8 @@ No paths to report.
 ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -1.222 ; -80.652       ;
 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -1.222 ; -10.998       ;
 ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.222 ; -10.998       ;
-; MAX10_CLK1_50                                    ; 9.574  ; 0.000         ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 19.620 ; 0.000         ;
+; MAX10_CLK1_50                                    ; 9.584  ; 0.000         ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 19.618 ; 0.000         ;
 +--------------------------------------------------+--------+---------------+
 
 
@@ -188,22 +187,22 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 1
 Shortest Synchronizer Chain: 4 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 74.654 ns
+Worst Case Available Settling Time: 75.474 ns
 
 
 
 
-+----------------------------------------------------------------------------------------------------------------------------------+
-; Slow 1200mV 0C Model Fmax Summary                                                                                                ;
-+------------+-----------------+--------------------------------------------------+------------------------------------------------+
-; Fmax       ; Restricted Fmax ; Clock Name                                       ; Note                                           ;
-+------------+-----------------+--------------------------------------------------+------------------------------------------------+
-; 138.31 MHz ; 138.31 MHz      ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ;                                                ;
-; 148.57 MHz ; 148.57 MHz      ; MAX10_CLK1_50                                    ;                                                ;
-; 186.15 MHz ; 186.15 MHz      ; PLL1|altpll_component|auto_generated|pll1|clk[0] ;                                                ;
-; 268.82 MHz ; 268.82 MHz      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ;                                                ;
-; 450.45 MHz ; 450.05 MHz      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; limit due to minimum period restriction (tmin) ;
-+------------+-----------------+--------------------------------------------------+------------------------------------------------+
++----------------------------------------------------------------------------------------+
+; Slow 1200mV 0C Model Fmax Summary                                                      ;
++------------+-----------------+--------------------------------------------------+------+
+; Fmax       ; Restricted Fmax ; Clock Name                                       ; Note ;
++------------+-----------------+--------------------------------------------------+------+
+; 111.87 MHz ; 111.87 MHz      ; MAX10_CLK1_50                                    ;      ;
+; 130.82 MHz ; 130.82 MHz      ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ;      ;
+; 157.08 MHz ; 157.08 MHz      ; PLL1|altpll_component|auto_generated|pll1|clk[0] ;      ;
+; 274.12 MHz ; 274.12 MHz      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ;      ;
+; 424.09 MHz ; 424.09 MHz      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ;      ;
++------------+-----------------+--------------------------------------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
 
@@ -212,11 +211,11 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +--------------------------------------------------+--------+---------------+
 ; Clock                                            ; Slack  ; End Point TNS ;
 +--------------------------------------------------+--------+---------------+
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -6.230 ; -308.710      ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -2.720 ; -24.480       ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.220 ; -10.980       ;
-; MAX10_CLK1_50                                    ; -1.206 ; -1.206        ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 34.357 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -6.644 ; -351.329      ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -2.648 ; -23.832       ;
+; MAX10_CLK1_50                                    ; -1.607 ; -1.607        ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.358 ; -12.222       ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 33.363 ; 0.000         ;
 +--------------------------------------------------+--------+---------------+
 
 
@@ -225,11 +224,11 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +--------------------------------------------------+-------+---------------+
 ; Clock                                            ; Slack ; End Point TNS ;
 +--------------------------------------------------+-------+---------------+
-; MAX10_CLK1_50                                    ; 0.294 ; 0.000         ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 0.350 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.355 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 0.489 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 0.511 ; 0.000         ;
+; MAX10_CLK1_50                                    ; 0.295 ; 0.000         ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 0.349 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 0.488 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.510 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 0.527 ; 0.000         ;
 +--------------------------------------------------+-------+---------------+
 
 
@@ -253,8 +252,8 @@ No paths to report.
 ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -1.222 ; -80.652       ;
 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -1.222 ; -10.998       ;
 ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.222 ; -10.998       ;
-; MAX10_CLK1_50                                    ; 9.586  ; 0.000         ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 19.576 ; 0.000         ;
+; MAX10_CLK1_50                                    ; 9.593  ; 0.000         ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 19.577 ; 0.000         ;
 +--------------------------------------------------+--------+---------------+
 
 
@@ -265,7 +264,7 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 1
 Shortest Synchronizer Chain: 4 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 75.146 ns
+Worst Case Available Settling Time: 75.878 ns
 
 
 
@@ -275,11 +274,11 @@ Worst Case Available Settling Time: 75.146 ns
 +--------------------------------------------------+--------+---------------+
 ; Clock                                            ; Slack  ; End Point TNS ;
 +--------------------------------------------------+--------+---------------+
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -2.821 ; -129.521      ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -0.937 ; -8.433        ;
-; MAX10_CLK1_50                                    ; -0.571 ; -0.571        ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -0.131 ; -1.179        ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 36.991 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -3.048 ; -152.337      ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -0.943 ; -8.487        ;
+; MAX10_CLK1_50                                    ; -0.926 ; -0.926        ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -0.207 ; -1.863        ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 36.437 ; 0.000         ;
 +--------------------------------------------------+--------+---------------+
 
 
@@ -289,10 +288,10 @@ Worst Case Available Settling Time: 75.146 ns
 ; Clock                                            ; Slack ; End Point TNS ;
 +--------------------------------------------------+-------+---------------+
 ; MAX10_CLK1_50                                    ; 0.148 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.179 ; 0.000         ;
 ; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 0.209 ; 0.000         ;
 ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 0.238 ; 0.000         ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 0.252 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 0.238 ; 0.000         ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.239 ; 0.000         ;
 +--------------------------------------------------+-------+---------------+
 
 
@@ -316,8 +315,8 @@ No paths to report.
 ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -1.000 ; -66.000       ;
 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -1.000 ; -9.000        ;
 ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.000 ; -9.000        ;
-; MAX10_CLK1_50                                    ; 9.329  ; 0.000         ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 19.671 ; 0.000         ;
+; MAX10_CLK1_50                                    ; 9.325  ; 0.000         ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 19.664 ; 0.000         ;
 +--------------------------------------------------+--------+---------------+
 
 
@@ -328,7 +327,7 @@ The design MTBF is not calculated because there are no specified synchronizers i
 Number of Synchronizer Chains Found: 1
 Shortest Synchronizer Chain: 4 Registers
 Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-Worst Case Available Settling Time: 77.348 ns
+Worst Case Available Settling Time: 77.752 ns
 
 
 
@@ -338,18 +337,18 @@ Worst Case Available Settling Time: 77.348 ns
 +---------------------------------------------------+----------+-------+----------+---------+---------------------+
 ; Clock                                             ; Setup    ; Hold  ; Recovery ; Removal ; Minimum Pulse Width ;
 +---------------------------------------------------+----------+-------+----------+---------+---------------------+
-; Worst-case Slack                                  ; -6.896   ; 0.148 ; N/A      ; N/A     ; -1.222              ;
-;  MAX10_CLK1_50                                    ; -1.438   ; 0.148 ; N/A      ; N/A     ; 9.329               ;
-;  PLL1|altpll_component|auto_generated|pll1|clk[0] ; 33.892   ; 0.209 ; N/A      ; N/A     ; 19.576              ;
-;  ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -6.896   ; 0.238 ; N/A      ; N/A     ; -1.222              ;
-;  ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -3.080   ; 0.252 ; N/A      ; N/A     ; -1.222              ;
-;  ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.420   ; 0.179 ; N/A      ; N/A     ; -1.222              ;
-; Design-wide TNS                                   ; -386.191 ; 0.0   ; 0.0      ; 0.0     ; -102.648            ;
-;  MAX10_CLK1_50                                    ; -1.438   ; 0.000 ; N/A      ; N/A     ; 0.000               ;
+; Worst-case Slack                                  ; -7.389   ; 0.148 ; N/A      ; N/A     ; -1.222              ;
+;  MAX10_CLK1_50                                    ; -1.871   ; 0.148 ; N/A      ; N/A     ; 9.325               ;
+;  PLL1|altpll_component|auto_generated|pll1|clk[0] ; 32.776   ; 0.209 ; N/A      ; N/A     ; 19.577              ;
+;  ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -7.389   ; 0.238 ; N/A      ; N/A     ; -1.222              ;
+;  ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -3.024   ; 0.238 ; N/A      ; N/A     ; -1.222              ;
+;  ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -1.576   ; 0.239 ; N/A      ; N/A     ; -1.222              ;
+; Design-wide TNS                                   ; -436.005 ; 0.0   ; 0.0      ; 0.0     ; -102.648            ;
+;  MAX10_CLK1_50                                    ; -1.871   ; 0.000 ; N/A      ; N/A     ; 0.000               ;
 ;  PLL1|altpll_component|auto_generated|pll1|clk[0] ; 0.000    ; 0.000 ; N/A      ; N/A     ; 0.000               ;
-;  ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -344.253 ; 0.000 ; N/A      ; N/A     ; -80.652             ;
-;  ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -27.720  ; 0.000 ; N/A      ; N/A     ; -10.998             ;
-;  ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -12.780  ; 0.000 ; N/A      ; N/A     ; -10.998             ;
+;  ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; -392.734 ; 0.000 ; N/A      ; N/A     ; -80.652             ;
+;  ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; -27.216  ; 0.000 ; N/A      ; N/A     ; -10.998             ;
+;  ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; -14.184  ; 0.000 ; N/A      ; N/A     ; -10.998             ;
 +---------------------------------------------------+----------+-------+----------+---------+---------------------+
 
 
@@ -615,17 +614,17 @@ Worst Case Available Settling Time: 77.348 ns
 +--------------------------------------------------+--------------------------------------------------+----------+----------+----------+----------+
 ; From Clock                                       ; To Clock                                         ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +--------------------------------------------------+--------------------------------------------------+----------+----------+----------+----------+
-; MAX10_CLK1_50                                    ; MAX10_CLK1_50                                    ; 8623     ; 0        ; 0        ; 0        ;
+; MAX10_CLK1_50                                    ; MAX10_CLK1_50                                    ; 8587     ; 0        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; MAX10_CLK1_50                                    ; 1        ; 1        ; 0        ; 0        ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 3396     ; 0        ; 0        ; 0        ;
-; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 18739    ; 0        ; 0        ; 0        ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 57760    ; 0        ; 0        ; 0        ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 3376     ; 0        ; 0        ; 0        ;
+; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 13000    ; 0        ; 0        ; 0        ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 94880    ; 0        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 1        ; 1        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 1        ; 1        ; 0        ; 0        ;
 ; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 45       ; 0        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 684      ; 0        ; 0        ; 0        ;
-; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 45       ; 0        ; 0        ; 0        ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 153      ; 0        ; 0        ; 0        ;
+; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 54       ; 0        ; 0        ; 0        ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 171      ; 0        ; 0        ; 0        ;
 +--------------------------------------------------+--------------------------------------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -635,17 +634,17 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +--------------------------------------------------+--------------------------------------------------+----------+----------+----------+----------+
 ; From Clock                                       ; To Clock                                         ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +--------------------------------------------------+--------------------------------------------------+----------+----------+----------+----------+
-; MAX10_CLK1_50                                    ; MAX10_CLK1_50                                    ; 8623     ; 0        ; 0        ; 0        ;
+; MAX10_CLK1_50                                    ; MAX10_CLK1_50                                    ; 8587     ; 0        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; MAX10_CLK1_50                                    ; 1        ; 1        ; 0        ; 0        ;
-; PLL1|altpll_component|auto_generated|pll1|clk[0] ; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 3396     ; 0        ; 0        ; 0        ;
-; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 18739    ; 0        ; 0        ; 0        ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 57760    ; 0        ; 0        ; 0        ;
+; PLL1|altpll_component|auto_generated|pll1|clk[0] ; PLL1|altpll_component|auto_generated|pll1|clk[0] ; 3376     ; 0        ; 0        ; 0        ;
+; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 13000    ; 0        ; 0        ; 0        ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 94880    ; 0        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 1        ; 1        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 1        ; 1        ; 0        ; 0        ;
 ; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 45       ; 0        ; 0        ; 0        ;
 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 684      ; 0        ; 0        ; 0        ;
-; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 45       ; 0        ; 0        ; 0        ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 153      ; 0        ; 0        ; 0        ;
+; MAX10_CLK1_50                                    ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 54       ; 0        ; 0        ; 0        ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 171      ; 0        ; 0        ; 0        ;
 +--------------------------------------------------+--------------------------------------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -763,7 +762,7 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 Info: *******************************************************************
 Info: Running Quartus Prime Timing Analyzer
     Info: Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
-    Info: Processing started: Mon Nov 15 02:19:26 2021
+    Info: Processing started: Mon Nov 15 11:46:21 2021
 Info: Command: quartus_sta final_project -c final_project
 Info: qsta_default_script.tcl version: #1
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
@@ -786,22 +785,22 @@ Info: Found TIMING_ANALYZER_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
 Info: Analyzing Slow 1200mV 85C Model
 Info: Can't run Report Timing Closure Recommendations. The current device family is not supported.
 Critical Warning (332148): Timing requirements not met
-Info (332146): Worst-case setup slack is -6.896
+Info (332146): Worst-case setup slack is -7.389
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -6.896            -344.253 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
-    Info (332119):    -3.080             -27.720 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
-    Info (332119):    -1.438              -1.438 MAX10_CLK1_50 
-    Info (332119):    -1.420             -12.780 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):    33.892               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+    Info (332119):    -7.389            -392.734 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
+    Info (332119):    -3.024             -27.216 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
+    Info (332119):    -1.871              -1.871 MAX10_CLK1_50 
+    Info (332119):    -1.576             -14.184 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
+    Info (332119):    32.776               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
 Info (332146): Worst-case hold slack is 0.325
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
     Info (332119):     0.325               0.000 MAX10_CLK1_50 
-    Info (332119):     0.392               0.000 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):     0.423               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
-    Info (332119):     0.530               0.000 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
-    Info (332119):     0.556               0.000 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
+    Info (332119):     0.422               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+    Info (332119):     0.529               0.000 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
+    Info (332119):     0.557               0.000 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
+    Info (332119):     0.574               0.000 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is -1.222
@@ -810,14 +809,14 @@ Info (332146): Worst-case minimum pulse width slack is -1.222
     Info (332119):    -1.222             -80.652 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
     Info (332119):    -1.222             -10.998 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
     Info (332119):    -1.222             -10.998 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):     9.574               0.000 MAX10_CLK1_50 
-    Info (332119):    19.620               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+    Info (332119):     9.584               0.000 MAX10_CLK1_50 
+    Info (332119):    19.618               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
 Info (332114): Report Metastability: Found 1 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 1
     Info (332114): Shortest Synchronizer Chain: 4 Registers
     Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 74.654 ns
+    Info (332114): Worst Case Available Settling Time: 75.474 ns
     Info (332114): 
 Info: Analyzing Slow 1200mV 0C Model
 Info (334003): Started post-fitting delay annotation
@@ -825,22 +824,22 @@ Warning (334000): Timing characteristics of device 10M50DAF484C6GES are prelimin
 Info (334004): Delay annotation completed successfully
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
 Critical Warning (332148): Timing requirements not met
-Info (332146): Worst-case setup slack is -6.230
+Info (332146): Worst-case setup slack is -6.644
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -6.230            -308.710 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
-    Info (332119):    -2.720             -24.480 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
-    Info (332119):    -1.220             -10.980 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):    -1.206              -1.206 MAX10_CLK1_50 
-    Info (332119):    34.357               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
-Info (332146): Worst-case hold slack is 0.294
+    Info (332119):    -6.644            -351.329 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
+    Info (332119):    -2.648             -23.832 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
+    Info (332119):    -1.607              -1.607 MAX10_CLK1_50 
+    Info (332119):    -1.358             -12.222 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
+    Info (332119):    33.363               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+Info (332146): Worst-case hold slack is 0.295
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.294               0.000 MAX10_CLK1_50 
-    Info (332119):     0.350               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
-    Info (332119):     0.355               0.000 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):     0.489               0.000 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
-    Info (332119):     0.511               0.000 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
+    Info (332119):     0.295               0.000 MAX10_CLK1_50 
+    Info (332119):     0.349               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+    Info (332119):     0.488               0.000 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
+    Info (332119):     0.510               0.000 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
+    Info (332119):     0.527               0.000 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is -1.222
@@ -849,34 +848,34 @@ Info (332146): Worst-case minimum pulse width slack is -1.222
     Info (332119):    -1.222             -80.652 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
     Info (332119):    -1.222             -10.998 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
     Info (332119):    -1.222             -10.998 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):     9.586               0.000 MAX10_CLK1_50 
-    Info (332119):    19.576               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+    Info (332119):     9.593               0.000 MAX10_CLK1_50 
+    Info (332119):    19.577               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
 Info (332114): Report Metastability: Found 1 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 1
     Info (332114): Shortest Synchronizer Chain: 4 Registers
     Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 75.146 ns
+    Info (332114): Worst Case Available Settling Time: 75.878 ns
     Info (332114): 
 Info: Analyzing Fast 1200mV 0C Model
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in the Timing Analyzer to see clock uncertainties.
 Critical Warning (332148): Timing requirements not met
-Info (332146): Worst-case setup slack is -2.821
+Info (332146): Worst-case setup slack is -3.048
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    -2.821            -129.521 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
-    Info (332119):    -0.937              -8.433 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
-    Info (332119):    -0.571              -0.571 MAX10_CLK1_50 
-    Info (332119):    -0.131              -1.179 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):    36.991               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+    Info (332119):    -3.048            -152.337 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
+    Info (332119):    -0.943              -8.487 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
+    Info (332119):    -0.926              -0.926 MAX10_CLK1_50 
+    Info (332119):    -0.207              -1.863 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
+    Info (332119):    36.437               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
 Info (332146): Worst-case hold slack is 0.148
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
     Info (332119):     0.148               0.000 MAX10_CLK1_50 
-    Info (332119):     0.179               0.000 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
     Info (332119):     0.209               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
     Info (332119):     0.238               0.000 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
-    Info (332119):     0.252               0.000 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
+    Info (332119):     0.238               0.000 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
+    Info (332119):     0.239               0.000 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
 Info (332140): No Recovery paths to report
 Info (332140): No Removal paths to report
 Info (332146): Worst-case minimum pulse width slack is -1.000
@@ -885,21 +884,21 @@ Info (332146): Worst-case minimum pulse width slack is -1.000
     Info (332119):    -1.000             -66.000 ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out 
     Info (332119):    -1.000              -9.000 ship_movement:SHIP_OFFSET_GEN|x_counter_clk 
     Info (332119):    -1.000              -9.000 ship_movement:SHIP_OFFSET_GEN|y_counter_clk 
-    Info (332119):     9.329               0.000 MAX10_CLK1_50 
-    Info (332119):    19.671               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
+    Info (332119):     9.325               0.000 MAX10_CLK1_50 
+    Info (332119):    19.664               0.000 PLL1|altpll_component|auto_generated|pll1|clk[0] 
 Info (332114): Report Metastability: Found 1 synchronizer chains.
     Info (332114): The design MTBF is not calculated because there are no specified synchronizers in the design.
     Info (332114): Number of Synchronizer Chains Found: 1
     Info (332114): Shortest Synchronizer Chain: 4 Registers
     Info (332114): Fraction of Chains for which MTBFs Could Not be Calculated: 1.000
-    Info (332114): Worst Case Available Settling Time: 77.348 ns
+    Info (332114): Worst Case Available Settling Time: 77.752 ns
     Info (332114): 
 Info (332102): Design is not fully constrained for setup requirements
 Info (332102): Design is not fully constrained for hold requirements
 Info: Quartus Prime Timing Analyzer was successful. 0 errors, 6 warnings
-    Info: Peak virtual memory: 566 megabytes
-    Info: Processing ended: Mon Nov 15 02:19:30 2021
-    Info: Elapsed time: 00:00:04
-    Info: Total CPU time (on all processors): 00:00:05
+    Info: Peak virtual memory: 649 megabytes
+    Info: Processing ended: Mon Nov 15 11:46:29 2021
+    Info: Elapsed time: 00:00:08
+    Info: Total CPU time (on all processors): 00:00:20
 
 

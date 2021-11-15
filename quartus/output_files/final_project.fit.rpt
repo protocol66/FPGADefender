@@ -1,5 +1,5 @@
 Fitter report for final_project
-Mon Nov 15 02:19:18 2021
+Mon Nov 15 11:46:12 2021
 Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 
 
@@ -31,21 +31,22 @@ Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
  23. Pad To Core Delay Chain Fanout
  24. Control Signals
  25. Global & Other Fast Signals
- 26. Routing Usage Summary
- 27. LAB Logic Elements
- 28. LAB-wide Signals
- 29. LAB Signals Sourced
- 30. LAB Signals Sourced Out
- 31. LAB Distinct Inputs
- 32. I/O Rules Summary
- 33. I/O Rules Details
- 34. I/O Rules Matrix
- 35. Fitter Device Options
- 36. Operating Settings and Conditions
- 37. Estimated Delay Added for Hold Timing Summary
- 38. Estimated Delay Added for Hold Timing Details
- 39. Fitter Messages
- 40. Fitter Suppressed Messages
+ 26. Non-Global High Fan-Out Signals
+ 27. Routing Usage Summary
+ 28. LAB Logic Elements
+ 29. LAB-wide Signals
+ 30. LAB Signals Sourced
+ 31. LAB Signals Sourced Out
+ 32. LAB Distinct Inputs
+ 33. I/O Rules Summary
+ 34. I/O Rules Details
+ 35. I/O Rules Matrix
+ 36. Fitter Device Options
+ 37. Operating Settings and Conditions
+ 38. Estimated Delay Added for Hold Timing Summary
+ 39. Estimated Delay Added for Hold Timing Details
+ 40. Fitter Messages
+ 41. Fitter Suppressed Messages
 
 
 
@@ -72,15 +73,15 @@ https://fpgasoftware.intel.com/eula.
 +----------------------------------------------------------------------------------+
 ; Fitter Summary                                                                   ;
 +------------------------------------+---------------------------------------------+
-; Fitter Status                      ; Successful - Mon Nov 15 02:19:18 2021       ;
+; Fitter Status                      ; Successful - Mon Nov 15 11:46:12 2021       ;
 ; Quartus Prime Version              ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
 ; Revision Name                      ; final_project                               ;
 ; Top-level Entity Name              ; project_top_level                           ;
 ; Family                             ; MAX 10                                      ;
 ; Device                             ; 10M50DAF484C6GES                            ;
 ; Timing Models                      ; Preliminary                                 ;
-; Total logic elements               ; 767 / 49,760 ( 2 % )                        ;
-;     Total combinational functions  ; 732 / 49,760 ( 1 % )                        ;
+; Total logic elements               ; 6,779 / 49,760 ( 14 % )                     ;
+;     Total combinational functions  ; 6,740 / 49,760 ( 14 % )                     ;
 ;     Dedicated logic registers      ; 252 / 49,760 ( < 1 % )                      ;
 ; Total registers                    ; 252                                         ;
 ; Total pins                         ; 54 / 360 ( 15 % )                           ;
@@ -158,13 +159,18 @@ https://fpgasoftware.intel.com/eula.
 ; Number detected on machine ; 8           ;
 ; Maximum allowed            ; 8           ;
 ;                            ;             ;
-; Average used               ; 1.20        ;
+; Average used               ; 1.62        ;
 ; Maximum used               ; 8           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processor 2            ;   2.9%      ;
-;     Processors 3-8         ;   2.8%      ;
+;     Processor 2            ;   8.9%      ;
+;     Processor 3            ;   8.9%      ;
+;     Processor 4            ;   8.9%      ;
+;     Processor 5            ;   8.8%      ;
+;     Processor 6            ;   8.8%      ;
+;     Processor 7            ;   8.8%      ;
+;     Processor 8            ;   8.8%      ;
 +----------------------------+-------------+
 
 
@@ -449,8 +455,8 @@ https://fpgasoftware.intel.com/eula.
 ; Type                ; Total [A + B]       ; From Design Partitions [A] ; From Rapid Recompile [B] ;
 +---------------------+---------------------+----------------------------+--------------------------+
 ; Placement (by node) ;                     ;                            ;                          ;
-;     -- Requested    ; 0.00 % ( 0 / 1119 ) ; 0.00 % ( 0 / 1119 )        ; 0.00 % ( 0 / 1119 )      ;
-;     -- Achieved     ; 0.00 % ( 0 / 1119 ) ; 0.00 % ( 0 / 1119 )        ; 0.00 % ( 0 / 1119 )      ;
+;     -- Requested    ; 0.00 % ( 0 / 7127 ) ; 0.00 % ( 0 / 7127 )        ; 0.00 % ( 0 / 7127 )      ;
+;     -- Achieved     ; 0.00 % ( 0 / 7127 ) ; 0.00 % ( 0 / 7127 )        ; 0.00 % ( 0 / 7127 )      ;
 ;                     ;                     ;                            ;                          ;
 ; Routing (by net)    ;                     ;                            ;                          ;
 ;     -- Requested    ; 0.00 % ( 0 / 0 )    ; 0.00 % ( 0 / 0 )           ; 0.00 % ( 0 / 0 )         ;
@@ -473,7 +479,7 @@ https://fpgasoftware.intel.com/eula.
 +--------------------------------+-----------------------+-------------------------+-------------------+---------------------+-------+
 ; Partition Name                 ; Preservation Achieved ; Preservation Level Used ; Netlist Type Used ; Preservation Method ; Notes ;
 +--------------------------------+-----------------------+-------------------------+-------------------+---------------------+-------+
-; Top                            ; 0.00 % ( 0 / 1101 )   ; N/A                     ; Source File       ; N/A                 ;       ;
+; Top                            ; 0.00 % ( 0 / 7109 )   ; N/A                     ; Source File       ; N/A                 ;       ;
 ; hard_block:auto_generated_inst ; 0.00 % ( 0 / 18 )     ; N/A                     ; Source File       ; N/A                 ;       ;
 +--------------------------------+-----------------------+-------------------------+-------------------+---------------------+-------+
 
@@ -484,57 +490,57 @@ https://fpgasoftware.intel.com/eula.
 The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_files/final_project.pin.
 
 
-+----------------------------------------------------------------------+
-; Fitter Resource Usage Summary                                        ;
-+---------------------------------------------+------------------------+
-; Resource                                    ; Usage                  ;
-+---------------------------------------------+------------------------+
-; Total logic elements                        ; 767 / 49,760 ( 2 % )   ;
-;     -- Combinational with no register       ; 515                    ;
-;     -- Register only                        ; 35                     ;
-;     -- Combinational with a register        ; 217                    ;
-;                                             ;                        ;
-; Logic element usage by number of LUT inputs ;                        ;
-;     -- 4 input functions                    ; 290                    ;
-;     -- 3 input functions                    ; 161                    ;
-;     -- <=2 input functions                  ; 281                    ;
-;     -- Register only                        ; 35                     ;
-;                                             ;                        ;
-; Logic elements by mode                      ;                        ;
-;     -- normal mode                          ; 495                    ;
-;     -- arithmetic mode                      ; 237                    ;
-;                                             ;                        ;
-; Total registers*                            ; 252 / 51,509 ( < 1 % ) ;
-;     -- Dedicated logic registers            ; 252 / 49,760 ( < 1 % ) ;
-;     -- I/O registers                        ; 0 / 1,749 ( 0 % )      ;
-;                                             ;                        ;
-; Total LABs:  partially or completely used   ; 57 / 3,110 ( 2 % )     ;
-; Virtual pins                                ; 0                      ;
-; I/O pins                                    ; 54 / 360 ( 15 % )      ;
-;     -- Clock pins                           ; 1 / 8 ( 13 % )         ;
-;     -- Dedicated input pins                 ; 1 / 1 ( 100 % )        ;
-;                                             ;                        ;
-; M9Ks                                        ; 0 / 182 ( 0 % )        ;
-; UFM blocks                                  ; 0 / 1 ( 0 % )          ;
-; ADC blocks                                  ; 0 / 2 ( 0 % )          ;
-; Total block memory bits                     ; 0 / 1,677,312 ( 0 % )  ;
-; Total block memory implementation bits      ; 0 / 1,677,312 ( 0 % )  ;
-; Embedded Multiplier 9-bit elements          ; 0 / 288 ( 0 % )        ;
-; PLLs                                        ; 1 / 4 ( 25 % )         ;
-; Global signals                              ; 5                      ;
-;     -- Global clocks                        ; 5 / 20 ( 25 % )        ;
-; JTAGs                                       ; 0 / 1 ( 0 % )          ;
-; CRC blocks                                  ; 0 / 1 ( 0 % )          ;
-; Remote update blocks                        ; 0 / 1 ( 0 % )          ;
-; Oscillator blocks                           ; 0 / 1 ( 0 % )          ;
-; Impedance control blocks                    ; 0 / 1 ( 0 % )          ;
-; Average interconnect usage (total/H/V)      ; 0.2% / 0.3% / 0.2%     ;
-; Peak interconnect usage (total/H/V)         ; 3.1% / 3.6% / 2.5%     ;
-; Maximum fan-out                             ; 127                    ;
-; Highest non-global fan-out                  ; 45                     ;
-; Total fan-out                               ; 2949                   ;
-; Average fan-out                             ; 2.56                   ;
-+---------------------------------------------+------------------------+
++-----------------------------------------------------------------------+
+; Fitter Resource Usage Summary                                         ;
++---------------------------------------------+-------------------------+
+; Resource                                    ; Usage                   ;
++---------------------------------------------+-------------------------+
+; Total logic elements                        ; 6,779 / 49,760 ( 14 % ) ;
+;     -- Combinational with no register       ; 6527                    ;
+;     -- Register only                        ; 39                      ;
+;     -- Combinational with a register        ; 213                     ;
+;                                             ;                         ;
+; Logic element usage by number of LUT inputs ;                         ;
+;     -- 4 input functions                    ; 5752                    ;
+;     -- 3 input functions                    ; 619                     ;
+;     -- <=2 input functions                  ; 369                     ;
+;     -- Register only                        ; 39                      ;
+;                                             ;                         ;
+; Logic elements by mode                      ;                         ;
+;     -- normal mode                          ; 6503                    ;
+;     -- arithmetic mode                      ; 237                     ;
+;                                             ;                         ;
+; Total registers*                            ; 252 / 51,509 ( < 1 % )  ;
+;     -- Dedicated logic registers            ; 252 / 49,760 ( < 1 % )  ;
+;     -- I/O registers                        ; 0 / 1,749 ( 0 % )       ;
+;                                             ;                         ;
+; Total LABs:  partially or completely used   ; 490 / 3,110 ( 16 % )    ;
+; Virtual pins                                ; 0                       ;
+; I/O pins                                    ; 54 / 360 ( 15 % )       ;
+;     -- Clock pins                           ; 1 / 8 ( 13 % )          ;
+;     -- Dedicated input pins                 ; 1 / 1 ( 100 % )         ;
+;                                             ;                         ;
+; M9Ks                                        ; 0 / 182 ( 0 % )         ;
+; UFM blocks                                  ; 0 / 1 ( 0 % )           ;
+; ADC blocks                                  ; 0 / 2 ( 0 % )           ;
+; Total block memory bits                     ; 0 / 1,677,312 ( 0 % )   ;
+; Total block memory implementation bits      ; 0 / 1,677,312 ( 0 % )   ;
+; Embedded Multiplier 9-bit elements          ; 0 / 288 ( 0 % )         ;
+; PLLs                                        ; 1 / 4 ( 25 % )          ;
+; Global signals                              ; 5                       ;
+;     -- Global clocks                        ; 5 / 20 ( 25 % )         ;
+; JTAGs                                       ; 0 / 1 ( 0 % )           ;
+; CRC blocks                                  ; 0 / 1 ( 0 % )           ;
+; Remote update blocks                        ; 0 / 1 ( 0 % )           ;
+; Oscillator blocks                           ; 0 / 1 ( 0 % )           ;
+; Impedance control blocks                    ; 0 / 1 ( 0 % )           ;
+; Average interconnect usage (total/H/V)      ; 4.2% / 3.8% / 4.8%      ;
+; Peak interconnect usage (total/H/V)         ; 37.9% / 33.2% / 44.5%   ;
+; Maximum fan-out                             ; 2007                    ;
+; Highest non-global fan-out                  ; 2007                    ;
+; Total fan-out                               ; 26351                   ;
+; Average fan-out                             ; 3.68                    ;
++---------------------------------------------+-------------------------+
 *  Register count does not include registers inside RAM blocks or DSP blocks.
 
 
@@ -546,26 +552,26 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 +---------------------------------------------+-----------------------+--------------------------------+
 ; Difficulty Clustering Region                ; Low                   ; Low                            ;
 ;                                             ;                       ;                                ;
-; Total logic elements                        ; 767 / 49760 ( 2 % )   ; 0 / 49760 ( 0 % )              ;
-;     -- Combinational with no register       ; 515                   ; 0                              ;
-;     -- Register only                        ; 35                    ; 0                              ;
-;     -- Combinational with a register        ; 217                   ; 0                              ;
+; Total logic elements                        ; 6779 / 49760 ( 14 % ) ; 0 / 49760 ( 0 % )              ;
+;     -- Combinational with no register       ; 6527                  ; 0                              ;
+;     -- Register only                        ; 39                    ; 0                              ;
+;     -- Combinational with a register        ; 213                   ; 0                              ;
 ;                                             ;                       ;                                ;
 ; Logic element usage by number of LUT inputs ;                       ;                                ;
-;     -- 4 input functions                    ; 290                   ; 0                              ;
-;     -- 3 input functions                    ; 161                   ; 0                              ;
-;     -- <=2 input functions                  ; 281                   ; 0                              ;
-;     -- Register only                        ; 35                    ; 0                              ;
+;     -- 4 input functions                    ; 5752                  ; 0                              ;
+;     -- 3 input functions                    ; 619                   ; 0                              ;
+;     -- <=2 input functions                  ; 369                   ; 0                              ;
+;     -- Register only                        ; 39                    ; 0                              ;
 ;                                             ;                       ;                                ;
 ; Logic elements by mode                      ;                       ;                                ;
-;     -- normal mode                          ; 495                   ; 0                              ;
+;     -- normal mode                          ; 6503                  ; 0                              ;
 ;     -- arithmetic mode                      ; 237                   ; 0                              ;
 ;                                             ;                       ;                                ;
 ; Total registers                             ; 252                   ; 0                              ;
 ;     -- Dedicated logic registers            ; 252 / 49760 ( < 1 % ) ; 0 / 49760 ( 0 % )              ;
 ;     -- I/O registers                        ; 0                     ; 0                              ;
 ;                                             ;                       ;                                ;
-; Total LABs:  partially or completely used   ; 57 / 3110 ( 2 % )     ; 0 / 3110 ( 0 % )               ;
+; Total LABs:  partially or completely used   ; 490 / 3110 ( 16 % )   ; 0 / 3110 ( 0 % )               ;
 ;                                             ;                       ;                                ;
 ; Virtual pins                                ; 0                     ; 0                              ;
 ; I/O pins                                    ; 54                    ; 0                              ;
@@ -584,8 +590,8 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ;     -- Registered Output Connections        ; 0                     ; 0                              ;
 ;                                             ;                       ;                                ;
 ; Internal Connections                        ;                       ;                                ;
-;     -- Total Connections                    ; 2953                  ; 52                             ;
-;     -- Registered Connections               ; 954                   ; 0                              ;
+;     -- Total Connections                    ; 26355                 ; 52                             ;
+;     -- Registered Connections               ; 9175                  ; 0                              ;
 ;                                             ;                       ;                                ;
 ; External Connections                        ;                       ;                                ;
 ;     -- Top                                  ; 4                     ; 42                             ;
@@ -618,9 +624,9 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; Name          ; Pin # ; I/O Bank ; X coordinate ; Y coordinate ; Z coordinate ; Combinational Fan-Out ; Registered Fan-Out ; Global ; Input Register ; Power Up High ; PCI I/O Enabled ; Bus Hold ; Weak Pull Up ; I/O Standard ; Termination Control Block ; Location assigned by ; Slew Rate ;
 +---------------+-------+----------+--------------+--------------+--------------+-----------------------+--------------------+--------+----------------+---------------+-----------------+----------+--------------+--------------+---------------------------+----------------------+-----------+
 ; MAX10_CLK1_50 ; P11   ; 3        ; 34           ; 0            ; 28           ; 128                   ; 0                  ; yes    ; no             ; no            ; yes             ; no       ; Off          ; 3.3-V LVTTL  ; --                        ; User                 ; 0         ;
-; pause         ; R15   ; 5        ; 78           ; 18           ; 21           ; 0                     ; 0                  ; no     ; no             ; no            ; yes             ; no       ; Off          ; 2.5 V        ; --                        ; Fitter               ; 0         ;
-; reset_L       ; AB13  ; 4        ; 40           ; 0            ; 14           ; 0                     ; 0                  ; no     ; no             ; no            ; yes             ; no       ; Off          ; 3.3-V LVTTL  ; --                        ; Fitter               ; 0         ;
-; shoot_L       ; U19   ; 5        ; 78           ; 15           ; 14           ; 0                     ; 0                  ; no     ; no             ; no            ; yes             ; no       ; Off          ; 2.5 V        ; --                        ; Fitter               ; 0         ;
+; pause         ; A2    ; 8        ; 26           ; 39           ; 0            ; 0                     ; 0                  ; no     ; no             ; no            ; yes             ; no       ; Off          ; 2.5 V        ; --                        ; Fitter               ; 0         ;
+; reset_L       ; L1    ; 1B       ; 0            ; 25           ; 7            ; 0                     ; 0                  ; no     ; no             ; no            ; yes             ; no       ; Off          ; 3.3-V LVTTL  ; --                        ; Fitter               ; 0         ;
+; shoot_L       ; D3    ; 1B       ; 0            ; 30           ; 0            ; 0                     ; 0                  ; no     ; no             ; no            ; yes             ; no       ; Off          ; 2.5 V        ; --                        ; Fitter               ; 0         ;
 +---------------+-------+----------+--------------+--------------+--------------+-----------------------+--------------------+--------+----------------+---------------+-----------------+----------+--------------+--------------+---------------------------+----------------------+-----------+
 
 
@@ -712,14 +718,14 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; I/O Bank ; Usage            ; VCCIO Voltage ; VREF Voltage ;
 +----------+------------------+---------------+--------------+
 ; 1A       ; 0 / 16 ( 0 % )   ; 2.5V          ; --           ;
-; 1B       ; 4 / 24 ( 17 % )  ; 2.5V          ; --           ;
+; 1B       ; 6 / 24 ( 25 % )  ; 2.5V          ; --           ;
 ; 2        ; 11 / 36 ( 31 % ) ; 3.3V          ; --           ;
 ; 3        ; 4 / 48 ( 8 % )   ; 3.3V          ; --           ;
-; 4        ; 5 / 48 ( 10 % )  ; 3.3V          ; --           ;
-; 5        ; 2 / 40 ( 5 % )   ; 2.5V          ; --           ;
+; 4        ; 4 / 48 ( 8 % )   ; 3.3V          ; --           ;
+; 5        ; 0 / 40 ( 0 % )   ; 2.5V          ; --           ;
 ; 6        ; 14 / 60 ( 23 % ) ; 3.3V          ; --           ;
 ; 7        ; 18 / 52 ( 35 % ) ; 3.3V          ; --           ;
-; 8        ; 4 / 36 ( 11 % )  ; 2.5V          ; --           ;
+; 8        ; 5 / 36 ( 14 % )  ; 2.5V          ; --           ;
 +----------+------------------+---------------+--------------+
 
 
@@ -729,7 +735,7 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; Location ; Pad Number ; I/O Bank ; Pin Name/Usage                                 ; Dir.   ; I/O Standard          ; Voltage ; I/O Type   ; User Assignment ; Bus Hold ; Weak Pull Up ;
 +----------+------------+----------+------------------------------------------------+--------+-----------------------+---------+------------+-----------------+----------+--------------+
 ; A1       ;            ;          ; GND                                            ; gnd    ;                       ;         ; --         ;                 ; --       ; --           ;
-; A2       ; 481        ; 8        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
+; A2       ; 481        ; 8        ; pause                                          ; input  ; 2.5 V                 ;         ; Column I/O ; N               ; no       ; Off          ;
 ; A3       ; 483        ; 8        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; A4       ; 475        ; 8        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; A5       ; 473        ; 8        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
@@ -784,7 +790,7 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; AB10     ; 177        ; 4        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; AB11     ; 179        ; 4        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; AB12     ; 181        ; 4        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
-; AB13     ; 183        ; 4        ; reset_L                                        ; input  ; 3.3-V LVTTL           ;         ; Column I/O ; N               ; no       ; Off          ;
+; AB13     ; 183        ; 4        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; AB14     ; 199        ; 4        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; AB15     ; 203        ; 4        ; GSENSOR_SCLK                                   ; output ; 3.3-V LVTTL           ;         ; Column I/O ; Y               ; no       ; Off          ;
 ; AB16     ; 209        ; 4        ; GSENSOR_CS_N                                   ; output ; 3.3-V LVTTL           ;         ; Column I/O ; Y               ; no       ; Off          ;
@@ -840,7 +846,7 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; C22      ; 343        ; 6        ; HEX2[5]                                        ; output ; 3.3-V LVTTL           ;         ; Row I/O    ; Y               ; no       ; Off          ;
 ; D1       ; 35         ; 1B       ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; D2       ; 31         ; 1B       ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
-; D3       ; 29         ; 1B       ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
+; D3       ; 29         ; 1B       ; shoot_L                                        ; input  ; 2.5 V                 ;         ; Row I/O    ; N               ; no       ; Off          ;
 ; D4       ;            ;          ; GND                                            ; gnd    ;                       ;         ; --         ;                 ; --       ; --           ;
 ; D5       ; 491        ; 8        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; D6       ; 496        ; 8        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
@@ -992,7 +998,7 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; K20      ; 363        ; 6        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; K21      ; 326        ; 6        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; K22      ; 324        ; 6        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
-; L1       ; 51         ; 1B       ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
+; L1       ; 51         ; 1B       ; reset_L                                        ; input  ; 3.3-V LVTTL           ;         ; Row I/O    ; N               ; no       ; Off          ;
 ; L2       ; 39         ; 1B       ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; L3       ;            ;          ; DNU                                            ;        ;                       ;         ; --         ;                 ; --       ; --           ;
 ; L4       ; 36         ; 1B       ; ~ALTERA_TDI~ / RESERVED_INPUT_WITH_WEAK_PULLUP ; input  ; 2.5 V Schmitt Trigger ;         ; Row I/O    ; N               ; no       ; On           ;
@@ -1094,7 +1100,7 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; R12      ; 176        ; 4        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; R13      ; 196        ; 4        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Column I/O ;                 ; no       ; On           ;
 ; R14      ; 294        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
-; R15      ; 292        ; 5        ; pause                                          ; input  ; 2.5 V                 ;         ; Row I/O    ; N               ; no       ; Off          ;
+; R15      ; 292        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; R16      ;            ; 5        ; VCCIO5                                         ; power  ;                       ; 2.5V    ; --         ;                 ; --       ; --           ;
 ; R17      ;            ; 5        ; VCCIO5                                         ; power  ;                       ; 2.5V    ; --         ;                 ; --       ; --           ;
 ; R18      ; 308        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
@@ -1142,7 +1148,7 @@ The pin-out file can be found in /home/jon/github/FPGADefender/quartus/output_fi
 ; U16      ;            ;          ; VCCD_PLL4                                      ; power  ;                       ; 1.2V    ; --         ;                 ; --       ; --           ;
 ; U17      ; 246        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; U18      ; 244        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
-; U19      ; 282        ; 5        ; shoot_L                                        ; input  ; 2.5 V                 ;         ; Row I/O    ; N               ; no       ; Off          ;
+; U19      ; 282        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; U20      ; 290        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; U21      ; 300        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
 ; U22      ; 302        ; 5        ; RESERVED_INPUT_WITH_WEAK_PULLUP                ;        ;                       ;         ; Row I/O    ;                 ; no       ; On           ;
@@ -1334,35 +1340,35 @@ Note: Pin directions (input, output or bidir) are based on device operating in u
 +-------------------------------------------------+-------------+---------------------------+---------------+-------------+------+------------+--------------+---------+-----------+------+--------------+--------------+-------------------+------------------+------------+----------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------+--------------+
 ; Compilation Hierarchy Node                      ; Logic Cells ; Dedicated Logic Registers ; I/O Registers ; Memory Bits ; M9Ks ; UFM Blocks ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; LUT-Only LCs ; Register-Only LCs ; LUT/Register LCs ; ADC blocks ; Full Hierarchy Name                                                                                                                                ; Entity Name           ; Library Name ;
 +-------------------------------------------------+-------------+---------------------------+---------------+-------------+------+------------+--------------+---------+-----------+------+--------------+--------------+-------------------+------------------+------------+----------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------+--------------+
-; |project_top_level                              ; 767 (35)    ; 252 (0)                   ; 0 (0)         ; 0           ; 0    ; 1          ; 0            ; 0       ; 0         ; 54   ; 0            ; 515 (35)     ; 35 (0)            ; 217 (2)          ; 0          ; |project_top_level                                                                                                                                 ; project_top_level     ; work         ;
-;    |objDisp:SCORE_1|                            ; 76 (76)     ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 73 (73)      ; 0 (0)             ; 3 (3)            ; 0          ; |project_top_level|objDisp:SCORE_1                                                                                                                 ; objDisp               ; work         ;
+; |project_top_level                              ; 6779 (34)   ; 252 (0)                   ; 0 (0)         ; 0           ; 0    ; 1          ; 0            ; 0       ; 0         ; 54   ; 0            ; 6527 (34)    ; 39 (0)            ; 213 (0)          ; 0          ; |project_top_level                                                                                                                                 ; project_top_level     ; work         ;
+;    |objDisp:SCORE_1|                            ; 6093 (6093) ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 6090 (6090)  ; 0 (0)             ; 3 (3)            ; 0          ; |project_top_level|objDisp:SCORE_1                                                                                                                 ; objDisp               ; work         ;
 ;    |objDisp:SHIP_CURR|                          ; 59 (59)     ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 57 (57)      ; 0 (0)             ; 2 (2)            ; 0          ; |project_top_level|objDisp:SHIP_CURR                                                                                                               ; objDisp               ; work         ;
-;    |objDisp:TOP_LINE|                           ; 4 (4)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 4 (4)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|objDisp:TOP_LINE                                                                                                                ; objDisp               ; work         ;
-;    |objDisp:\SHIP_REM_LIVES:0:SHIP_LIFE|        ; 3 (3)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 2 (2)        ; 0 (0)             ; 1 (1)            ; 0          ; |project_top_level|objDisp:\SHIP_REM_LIVES:0:SHIP_LIFE                                                                                             ; objDisp               ; work         ;
-;    |objDisp:\SHIP_REM_LIVES:1:SHIP_LIFE|        ; 3 (3)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 3 (3)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|objDisp:\SHIP_REM_LIVES:1:SHIP_LIFE                                                                                             ; objDisp               ; work         ;
-;    |objDisp:\SHIP_REM_LIVES:2:SHIP_LIFE|        ; 5 (5)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 3 (3)        ; 0 (0)             ; 2 (2)            ; 0          ; |project_top_level|objDisp:\SHIP_REM_LIVES:2:SHIP_LIFE                                                                                             ; objDisp               ; work         ;
-;    |ship_movement:SHIP_OFFSET_GEN|              ; 513 (227)   ; 211 (66)                  ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 302 (161)    ; 23 (2)            ; 188 (65)         ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN                                                                                                   ; ship_movement         ; work         ;
-;       |ADXL345_controller:U2|                   ; 172 (0)     ; 95 (0)                    ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 77 (0)       ; 20 (0)            ; 75 (0)           ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2                                                                             ; ADXL345_controller    ; work         ;
-;          |gsensor:U0|                           ; 172 (114)   ; 95 (57)                   ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 77 (57)      ; 20 (8)            ; 75 (51)          ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0                                                                  ; gsensor               ; work         ;
-;             |spi:u0|                            ; 58 (58)     ; 38 (38)                   ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 20 (20)      ; 12 (12)           ; 26 (26)          ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|spi:u0                                                           ; spi                   ; work         ;
+;    |objDisp:TOP_LINE|                           ; 3 (3)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 3 (3)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|objDisp:TOP_LINE                                                                                                                ; objDisp               ; work         ;
+;    |objDisp:\SHIP_REM_LIVES:0:SHIP_LIFE|        ; 2 (2)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 2 (2)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|objDisp:\SHIP_REM_LIVES:0:SHIP_LIFE                                                                                             ; objDisp               ; work         ;
+;    |objDisp:\SHIP_REM_LIVES:1:SHIP_LIFE|        ; 5 (5)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 5 (5)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|objDisp:\SHIP_REM_LIVES:1:SHIP_LIFE                                                                                             ; objDisp               ; work         ;
+;    |objDisp:\SHIP_REM_LIVES:2:SHIP_LIFE|        ; 8 (8)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 7 (7)        ; 0 (0)             ; 1 (1)            ; 0          ; |project_top_level|objDisp:\SHIP_REM_LIVES:2:SHIP_LIFE                                                                                             ; objDisp               ; work         ;
+;    |ship_movement:SHIP_OFFSET_GEN|              ; 509 (214)   ; 211 (66)                  ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 298 (148)    ; 28 (2)            ; 183 (65)         ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN                                                                                                   ; ship_movement         ; work         ;
+;       |ADXL345_controller:U2|                   ; 174 (0)     ; 95 (0)                    ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 79 (0)       ; 25 (0)            ; 70 (0)           ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2                                                                             ; ADXL345_controller    ; work         ;
+;          |gsensor:U0|                           ; 174 (115)   ; 95 (57)                   ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 79 (58)      ; 25 (12)           ; 70 (47)          ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0                                                                  ; gsensor               ; work         ;
+;             |spi:u0|                            ; 59 (59)     ; 38 (38)                   ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 21 (21)      ; 13 (13)           ; 25 (25)          ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|spi:u0                                                           ; spi                   ; work         ;
 ;       |clk_div:U1|                              ; 73 (73)     ; 32 (32)                   ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 41 (41)      ; 1 (1)             ; 31 (31)          ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|clk_div:U1                                                                                        ; clk_div               ; work         ;
 ;       |counter:U3|                              ; 9 (9)       ; 9 (9)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 9 (9)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|counter:U3                                                                                        ; counter               ; work         ;
 ;       |counter:U4|                              ; 9 (9)       ; 9 (9)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 9 (9)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|counter:U4                                                                                        ; counter               ; work         ;
-;       |lpm_mult:Mult0|                          ; 10 (0)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 10 (0)       ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult0                                                                                    ; lpm_mult              ; work         ;
-;          |multcore:mult_core|                   ; 10 (4)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 10 (4)       ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult0|multcore:mult_core                                                                 ; multcore              ; work         ;
+;       |lpm_mult:Mult0|                          ; 12 (0)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 12 (0)       ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult0                                                                                    ; lpm_mult              ; work         ;
+;          |multcore:mult_core|                   ; 12 (6)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 12 (6)       ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult0|multcore:mult_core                                                                 ; multcore              ; work         ;
 ;             |mpar_add:padder|                   ; 6 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 6 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult0|multcore:mult_core|mpar_add:padder                                                 ; mpar_add              ; work         ;
 ;                |lpm_add_sub:adder[0]|           ; 6 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 6 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult0|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]                            ; lpm_add_sub           ; work         ;
 ;                   |add_sub_2vg:auto_generated|  ; 6 (6)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 6 (6)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult0|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]|add_sub_2vg:auto_generated ; add_sub_2vg           ; work         ;
-;       |lpm_mult:Mult1|                          ; 5 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 2 (0)        ; 0 (0)             ; 3 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult1                                                                                    ; lpm_mult              ; work         ;
-;          |multcore:mult_core|                   ; 5 (5)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 2 (2)        ; 0 (0)             ; 3 (3)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult1|multcore:mult_core                                                                 ; multcore              ; work         ;
-;       |lpm_mult:Mult2|                          ; 10 (0)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 7 (0)        ; 0 (0)             ; 3 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult2                                                                                    ; lpm_mult              ; work         ;
-;          |multcore:mult_core|                   ; 10 (4)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 7 (1)        ; 0 (0)             ; 3 (3)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult2|multcore:mult_core                                                                 ; multcore              ; work         ;
+;       |lpm_mult:Mult1|                          ; 5 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 4 (0)        ; 0 (0)             ; 1 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult1                                                                                    ; lpm_mult              ; work         ;
+;          |multcore:mult_core|                   ; 5 (5)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 4 (4)        ; 0 (0)             ; 1 (1)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult1|multcore:mult_core                                                                 ; multcore              ; work         ;
+;       |lpm_mult:Mult2|                          ; 12 (0)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 9 (0)        ; 0 (0)             ; 3 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult2                                                                                    ; lpm_mult              ; work         ;
+;          |multcore:mult_core|                   ; 12 (6)      ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 9 (3)        ; 0 (0)             ; 3 (3)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult2|multcore:mult_core                                                                 ; multcore              ; work         ;
 ;             |mpar_add:padder|                   ; 6 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 6 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult2|multcore:mult_core|mpar_add:padder                                                 ; mpar_add              ; work         ;
 ;                |lpm_add_sub:adder[0]|           ; 6 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 6 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult2|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]                            ; lpm_add_sub           ; work         ;
 ;                   |add_sub_2vg:auto_generated|  ; 6 (6)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 6 (6)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult2|multcore:mult_core|mpar_add:padder|lpm_add_sub:adder[0]|add_sub_2vg:auto_generated ; add_sub_2vg           ; work         ;
-;       |lpm_mult:Mult3|                          ; 5 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 4 (0)        ; 0 (0)             ; 1 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult3                                                                                    ; lpm_mult              ; work         ;
-;          |multcore:mult_core|                   ; 5 (5)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 4 (4)        ; 0 (0)             ; 1 (1)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult3|multcore:mult_core                                                                 ; multcore              ; work         ;
-;    |vga_controller:VGA_CONTROLL|                ; 77 (77)     ; 41 (41)                   ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 36 (36)      ; 12 (12)           ; 29 (29)          ; 0          ; |project_top_level|vga_controller:VGA_CONTROLL                                                                                                     ; vga_controller        ; work         ;
+;       |lpm_mult:Mult3|                          ; 5 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 5 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult3                                                                                    ; lpm_mult              ; work         ;
+;          |multcore:mult_core|                   ; 5 (5)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 5 (5)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|ship_movement:SHIP_OFFSET_GEN|lpm_mult:Mult3|multcore:mult_core                                                                 ; multcore              ; work         ;
+;    |vga_controller:VGA_CONTROLL|                ; 72 (72)     ; 41 (41)                   ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 31 (31)      ; 11 (11)           ; 30 (30)          ; 0          ; |project_top_level|vga_controller:VGA_CONTROLL                                                                                                     ; vga_controller        ; work         ;
 ;    |vga_pll_25_175:PLL1|                        ; 0 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|vga_pll_25_175:PLL1                                                                                                             ; vga_pll_25_175        ; work         ;
 ;       |altpll:altpll_component|                 ; 0 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|vga_pll_25_175:PLL1|altpll:altpll_component                                                                                     ; altpll                ; work         ;
 ;          |vga_pll_25_175_altpll:auto_generated| ; 0 (0)       ; 0 (0)                     ; 0 (0)         ; 0           ; 0    ; 0          ; 0            ; 0       ; 0         ; 0    ; 0            ; 0 (0)        ; 0 (0)             ; 0 (0)            ; 0          ; |project_top_level|vga_pll_25_175:PLL1|altpll:altpll_component|vga_pll_25_175_altpll:auto_generated                                                ; vga_pll_25_175_altpll ; work         ;
@@ -1454,20 +1460,20 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +---------------------------------------------------------------------------------------------------+--------------------+---------+--------------+--------+----------------------+------------------+---------------------------+
 ; MAX10_CLK1_50                                                                                     ; PIN_P11            ; 127     ; Clock        ; yes    ; Global Clock         ; GCLK19           ; --                        ;
 ; MAX10_CLK1_50                                                                                     ; PIN_P11            ; 2       ; Clock        ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|Decoder0~3                         ; LCCOMB_X36_Y13_N12 ; 4       ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|Decoder0~4                         ; LCCOMB_X36_Y13_N2  ; 4       ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|Selector0~2                        ; LCCOMB_X42_Y9_N2   ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|spi:u0|Selector2~0                 ; LCCOMB_X44_Y9_N26  ; 11      ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|spi:u0|rx_data[3]~1                ; LCCOMB_X44_Y9_N14  ; 8       ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|Equal0~0                                                            ; LCCOMB_X39_Y19_N28 ; 36      ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|Equal1~0                                                            ; LCCOMB_X42_Y15_N24 ; 36      ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out                                                  ; FF_X45_Y53_N11     ; 66      ; Clock        ; yes    ; Global Clock         ; GCLK14           ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk                                                       ; FF_X44_Y19_N25     ; 9       ; Clock        ; yes    ; Global Clock         ; GCLK17           ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|x_enable~4                                                          ; LCCOMB_X27_Y13_N28 ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk                                                       ; FF_X39_Y14_N31     ; 9       ; Clock        ; yes    ; Global Clock         ; GCLK16           ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|y_enable~3                                                          ; LCCOMB_X35_Y13_N8  ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; vga_controller:VGA_CONTROLL|LessThan6~0                                                           ; LCCOMB_X21_Y11_N22 ; 10      ; Clock enable ; no     ; --                   ; --               ; --                        ;
-; vga_controller:VGA_CONTROLL|LessThan7~0                                                           ; LCCOMB_X21_Y10_N14 ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|Decoder0~3                         ; LCCOMB_X61_Y29_N2  ; 4       ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|Decoder0~4                         ; LCCOMB_X61_Y29_N8  ; 4       ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|Selector0~2                        ; LCCOMB_X63_Y30_N4  ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|spi:u0|Selector2~0                 ; LCCOMB_X63_Y30_N10 ; 11      ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|spi:u0|rx_data[3]~1                ; LCCOMB_X63_Y30_N26 ; 8       ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|Equal0~0                                                            ; LCCOMB_X60_Y36_N20 ; 36      ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|Equal1~0                                                            ; LCCOMB_X58_Y35_N0  ; 36      ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out                                                  ; FF_X44_Y3_N3       ; 66      ; Clock        ; yes    ; Global Clock         ; GCLK15           ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk                                                       ; FF_X62_Y36_N25     ; 9       ; Clock        ; yes    ; Global Clock         ; GCLK6            ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|x_enable~4                                                          ; LCCOMB_X63_Y26_N0  ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk                                                       ; FF_X60_Y35_N5      ; 9       ; Clock        ; yes    ; Global Clock         ; GCLK5            ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|y_enable~3                                                          ; LCCOMB_X60_Y29_N8  ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; vga_controller:VGA_CONTROLL|LessThan6~0                                                           ; LCCOMB_X61_Y23_N10 ; 10      ; Clock enable ; no     ; --                   ; --               ; --                        ;
+; vga_controller:VGA_CONTROLL|LessThan7~0                                                           ; LCCOMB_X62_Y20_N0  ; 9       ; Clock enable ; no     ; --                   ; --               ; --                        ;
 ; vga_pll_25_175:PLL1|altpll:altpll_component|vga_pll_25_175_altpll:auto_generated|wire_pll1_clk[0] ; PLL_1              ; 41      ; Clock        ; yes    ; Global Clock         ; GCLK18           ; --                        ;
 +---------------------------------------------------------------------------------------------------+--------------------+---------+--------------+--------+----------------------+------------------+---------------------------+
 
@@ -1478,11 +1484,27 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 ; Name                                                                                              ; Location       ; Fan-Out ; Fan-Out Using Intentional Clock Skew ; Global Resource Used ; Global Line Name ; Enable Signal Source Name ;
 +---------------------------------------------------------------------------------------------------+----------------+---------+--------------------------------------+----------------------+------------------+---------------------------+
 ; MAX10_CLK1_50                                                                                     ; PIN_P11        ; 127     ; 0                                    ; Global Clock         ; GCLK19           ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out                                                  ; FF_X45_Y53_N11 ; 66      ; 0                                    ; Global Clock         ; GCLK14           ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk                                                       ; FF_X44_Y19_N25 ; 9       ; 0                                    ; Global Clock         ; GCLK17           ; --                        ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk                                                       ; FF_X39_Y14_N31 ; 9       ; 0                                    ; Global Clock         ; GCLK16           ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out                                                  ; FF_X44_Y3_N3   ; 66      ; 0                                    ; Global Clock         ; GCLK15           ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk                                                       ; FF_X62_Y36_N25 ; 9       ; 0                                    ; Global Clock         ; GCLK6            ; --                        ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk                                                       ; FF_X60_Y35_N5  ; 9       ; 0                                    ; Global Clock         ; GCLK5            ; --                        ;
 ; vga_pll_25_175:PLL1|altpll:altpll_component|vga_pll_25_175_altpll:auto_generated|wire_pll1_clk[0] ; PLL_1          ; 41      ; 0                                    ; Global Clock         ; GCLK18           ; --                        ;
 +---------------------------------------------------------------------------------------------------+----------------+---------+--------------------------------------+----------------------+------------------+---------------------------+
+
+
++-------------------------------------------------+
+; Non-Global High Fan-Out Signals                 ;
++---------------------------------------+---------+
+; Name                                  ; Fan-Out ;
++---------------------------------------+---------+
+; vga_controller:VGA_CONTROLL|column[2] ; 2007    ;
+; vga_controller:VGA_CONTROLL|column[1] ; 1921    ;
+; vga_controller:VGA_CONTROLL|column[0] ; 1859    ;
+; objDisp:SCORE_1|Add0~2                ; 1578    ;
+; objDisp:SCORE_1|Add0~0                ; 1535    ;
+; objDisp:SCORE_1|Add0~3                ; 1510    ;
+; vga_controller:VGA_CONTROLL|column[3] ; 1168    ;
+; objDisp:SCORE_1|Add0~5                ; 682     ;
++---------------------------------------+---------+
 
 
 +-------------------------------------------------+
@@ -1490,157 +1512,166 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +-----------------------+-------------------------+
 ; Routing Resource Type ; Usage                   ;
 +-----------------------+-------------------------+
-; Block interconnects   ; 783 / 148,641 ( < 1 % ) ;
-; C16 interconnects     ; 14 / 5,382 ( < 1 % )    ;
-; C4 interconnects      ; 204 / 106,704 ( < 1 % ) ;
-; Direct links          ; 319 / 148,641 ( < 1 % ) ;
+; Block interconnects   ; 8,676 / 148,641 ( 6 % ) ;
+; C16 interconnects     ; 180 / 5,382 ( 3 % )     ;
+; C4 interconnects      ; 4,979 / 106,704 ( 5 % ) ;
+; Direct links          ; 603 / 148,641 ( < 1 % ) ;
 ; Global clocks         ; 5 / 20 ( 25 % )         ;
-; Local interconnects   ; 347 / 49,760 ( < 1 % )  ;
+; Local interconnects   ; 4,459 / 49,760 ( 9 % )  ;
 ; NSLEEPs               ; 0 / 500 ( 0 % )         ;
-; R24 interconnects     ; 11 / 5,406 ( < 1 % )    ;
-; R4 interconnects      ; 401 / 147,764 ( < 1 % ) ;
+; R24 interconnects     ; 217 / 5,406 ( 4 % )     ;
+; R4 interconnects      ; 5,117 / 147,764 ( 3 % ) ;
 +-----------------------+-------------------------+
 
 
-+----------------------------------------------------------------------------+
-; LAB Logic Elements                                                         ;
-+---------------------------------------------+------------------------------+
-; Number of Logic Elements  (Average = 13.46) ; Number of LABs  (Total = 57) ;
-+---------------------------------------------+------------------------------+
-; 1                                           ; 4                            ;
-; 2                                           ; 1                            ;
-; 3                                           ; 1                            ;
-; 4                                           ; 0                            ;
-; 5                                           ; 0                            ;
-; 6                                           ; 0                            ;
-; 7                                           ; 0                            ;
-; 8                                           ; 2                            ;
-; 9                                           ; 1                            ;
-; 10                                          ; 2                            ;
-; 11                                          ; 2                            ;
-; 12                                          ; 0                            ;
-; 13                                          ; 1                            ;
-; 14                                          ; 2                            ;
-; 15                                          ; 6                            ;
-; 16                                          ; 35                           ;
-+---------------------------------------------+------------------------------+
-
-
-+-------------------------------------------------------------------+
-; LAB-wide Signals                                                  ;
-+------------------------------------+------------------------------+
-; LAB-wide Signals  (Average = 1.09) ; Number of LABs  (Total = 57) ;
-+------------------------------------+------------------------------+
-; 1 Clock                            ; 39                           ;
-; 1 Clock enable                     ; 19                           ;
-; 2 Clock enables                    ; 2                            ;
-; 2 Clocks                           ; 2                            ;
-+------------------------------------+------------------------------+
-
-
 +-----------------------------------------------------------------------------+
-; LAB Signals Sourced                                                         ;
-+----------------------------------------------+------------------------------+
-; Number of Signals Sourced  (Average = 16.88) ; Number of LABs  (Total = 57) ;
-+----------------------------------------------+------------------------------+
-; 0                                            ; 0                            ;
-; 1                                            ; 4                            ;
-; 2                                            ; 0                            ;
-; 3                                            ; 1                            ;
-; 4                                            ; 1                            ;
-; 5                                            ; 2                            ;
-; 6                                            ; 0                            ;
-; 7                                            ; 1                            ;
-; 8                                            ; 0                            ;
-; 9                                            ; 1                            ;
-; 10                                           ; 1                            ;
-; 11                                           ; 0                            ;
-; 12                                           ; 2                            ;
-; 13                                           ; 0                            ;
-; 14                                           ; 1                            ;
-; 15                                           ; 3                            ;
-; 16                                           ; 9                            ;
-; 17                                           ; 5                            ;
-; 18                                           ; 1                            ;
-; 19                                           ; 1                            ;
-; 20                                           ; 5                            ;
-; 21                                           ; 2                            ;
-; 22                                           ; 0                            ;
-; 23                                           ; 1                            ;
-; 24                                           ; 5                            ;
-; 25                                           ; 7                            ;
-; 26                                           ; 2                            ;
-; 27                                           ; 2                            ;
-+----------------------------------------------+------------------------------+
+; LAB Logic Elements                                                          ;
++---------------------------------------------+-------------------------------+
+; Number of Logic Elements  (Average = 13.83) ; Number of LABs  (Total = 490) ;
++---------------------------------------------+-------------------------------+
+; 1                                           ; 34                            ;
+; 2                                           ; 7                             ;
+; 3                                           ; 10                            ;
+; 4                                           ; 7                             ;
+; 5                                           ; 1                             ;
+; 6                                           ; 2                             ;
+; 7                                           ; 2                             ;
+; 8                                           ; 1                             ;
+; 9                                           ; 2                             ;
+; 10                                          ; 3                             ;
+; 11                                          ; 3                             ;
+; 12                                          ; 4                             ;
+; 13                                          ; 3                             ;
+; 14                                          ; 19                            ;
+; 15                                          ; 72                            ;
+; 16                                          ; 320                           ;
++---------------------------------------------+-------------------------------+
 
 
-+--------------------------------------------------------------------------------+
-; LAB Signals Sourced Out                                                        ;
-+-------------------------------------------------+------------------------------+
-; Number of Signals Sourced Out  (Average = 8.35) ; Number of LABs  (Total = 57) ;
-+-------------------------------------------------+------------------------------+
-; 0                                               ; 0                            ;
-; 1                                               ; 5                            ;
-; 2                                               ; 3                            ;
-; 3                                               ; 5                            ;
-; 4                                               ; 4                            ;
-; 5                                               ; 2                            ;
-; 6                                               ; 5                            ;
-; 7                                               ; 1                            ;
-; 8                                               ; 2                            ;
-; 9                                               ; 2                            ;
-; 10                                              ; 9                            ;
-; 11                                              ; 4                            ;
-; 12                                              ; 3                            ;
-; 13                                              ; 3                            ;
-; 14                                              ; 1                            ;
-; 15                                              ; 1                            ;
-; 16                                              ; 5                            ;
-; 17                                              ; 1                            ;
-; 18                                              ; 1                            ;
-+-------------------------------------------------+------------------------------+
++--------------------------------------------------------------------+
+; LAB-wide Signals                                                   ;
++------------------------------------+-------------------------------+
+; LAB-wide Signals  (Average = 0.14) ; Number of LABs  (Total = 490) ;
++------------------------------------+-------------------------------+
+; 1 Clock                            ; 41                            ;
+; 1 Clock enable                     ; 23                            ;
+; 2 Clocks                           ; 3                             ;
++------------------------------------+-------------------------------+
 
 
-+-----------------------------------------------------------------------------+
-; LAB Distinct Inputs                                                         ;
-+----------------------------------------------+------------------------------+
-; Number of Distinct Inputs  (Average = 12.39) ; Number of LABs  (Total = 57) ;
-+----------------------------------------------+------------------------------+
-; 0                                            ; 0                            ;
-; 1                                            ; 0                            ;
-; 2                                            ; 1                            ;
-; 3                                            ; 5                            ;
-; 4                                            ; 3                            ;
-; 5                                            ; 0                            ;
-; 6                                            ; 3                            ;
-; 7                                            ; 2                            ;
-; 8                                            ; 2                            ;
-; 9                                            ; 7                            ;
-; 10                                           ; 4                            ;
-; 11                                           ; 0                            ;
-; 12                                           ; 2                            ;
-; 13                                           ; 2                            ;
-; 14                                           ; 5                            ;
-; 15                                           ; 0                            ;
-; 16                                           ; 6                            ;
-; 17                                           ; 1                            ;
-; 18                                           ; 2                            ;
-; 19                                           ; 0                            ;
-; 20                                           ; 2                            ;
-; 21                                           ; 1                            ;
-; 22                                           ; 2                            ;
-; 23                                           ; 2                            ;
-; 24                                           ; 2                            ;
-; 25                                           ; 1                            ;
-; 26                                           ; 0                            ;
-; 27                                           ; 0                            ;
-; 28                                           ; 0                            ;
-; 29                                           ; 0                            ;
-; 30                                           ; 0                            ;
-; 31                                           ; 0                            ;
-; 32                                           ; 0                            ;
-; 33                                           ; 1                            ;
-+----------------------------------------------+------------------------------+
++------------------------------------------------------------------------------+
+; LAB Signals Sourced                                                          ;
++----------------------------------------------+-------------------------------+
+; Number of Signals Sourced  (Average = 14.23) ; Number of LABs  (Total = 490) ;
++----------------------------------------------+-------------------------------+
+; 0                                            ; 0                             ;
+; 1                                            ; 32                            ;
+; 2                                            ; 8                             ;
+; 3                                            ; 9                             ;
+; 4                                            ; 6                             ;
+; 5                                            ; 2                             ;
+; 6                                            ; 3                             ;
+; 7                                            ; 5                             ;
+; 8                                            ; 1                             ;
+; 9                                            ; 3                             ;
+; 10                                           ; 4                             ;
+; 11                                           ; 0                             ;
+; 12                                           ; 3                             ;
+; 13                                           ; 2                             ;
+; 14                                           ; 17                            ;
+; 15                                           ; 69                            ;
+; 16                                           ; 297                           ;
+; 17                                           ; 6                             ;
+; 18                                           ; 1                             ;
+; 19                                           ; 2                             ;
+; 20                                           ; 2                             ;
+; 21                                           ; 1                             ;
+; 22                                           ; 1                             ;
+; 23                                           ; 1                             ;
+; 24                                           ; 5                             ;
+; 25                                           ; 4                             ;
+; 26                                           ; 1                             ;
+; 27                                           ; 3                             ;
+; 28                                           ; 1                             ;
+; 29                                           ; 0                             ;
+; 30                                           ; 0                             ;
+; 31                                           ; 1                             ;
++----------------------------------------------+-------------------------------+
+
+
++---------------------------------------------------------------------------------+
+; LAB Signals Sourced Out                                                         ;
++-------------------------------------------------+-------------------------------+
+; Number of Signals Sourced Out  (Average = 5.21) ; Number of LABs  (Total = 490) ;
++-------------------------------------------------+-------------------------------+
+; 0                                               ; 0                             ;
+; 1                                               ; 48                            ;
+; 2                                               ; 42                            ;
+; 3                                               ; 60                            ;
+; 4                                               ; 72                            ;
+; 5                                               ; 63                            ;
+; 6                                               ; 77                            ;
+; 7                                               ; 44                            ;
+; 8                                               ; 30                            ;
+; 9                                               ; 14                            ;
+; 10                                              ; 11                            ;
+; 11                                              ; 10                            ;
+; 12                                              ; 4                             ;
+; 13                                              ; 3                             ;
+; 14                                              ; 1                             ;
+; 15                                              ; 1                             ;
+; 16                                              ; 8                             ;
+; 17                                              ; 0                             ;
+; 18                                              ; 1                             ;
+; 19                                              ; 0                             ;
+; 20                                              ; 0                             ;
+; 21                                              ; 1                             ;
++-------------------------------------------------+-------------------------------+
+
+
++------------------------------------------------------------------------------+
+; LAB Distinct Inputs                                                          ;
++----------------------------------------------+-------------------------------+
+; Number of Distinct Inputs  (Average = 16.73) ; Number of LABs  (Total = 490) ;
++----------------------------------------------+-------------------------------+
+; 0                                            ; 0                             ;
+; 1                                            ; 0                             ;
+; 2                                            ; 1                             ;
+; 3                                            ; 11                            ;
+; 4                                            ; 26                            ;
+; 5                                            ; 6                             ;
+; 6                                            ; 11                            ;
+; 7                                            ; 8                             ;
+; 8                                            ; 8                             ;
+; 9                                            ; 9                             ;
+; 10                                           ; 20                            ;
+; 11                                           ; 22                            ;
+; 12                                           ; 23                            ;
+; 13                                           ; 19                            ;
+; 14                                           ; 28                            ;
+; 15                                           ; 24                            ;
+; 16                                           ; 28                            ;
+; 17                                           ; 28                            ;
+; 18                                           ; 27                            ;
+; 19                                           ; 22                            ;
+; 20                                           ; 25                            ;
+; 21                                           ; 22                            ;
+; 22                                           ; 17                            ;
+; 23                                           ; 11                            ;
+; 24                                           ; 10                            ;
+; 25                                           ; 15                            ;
+; 26                                           ; 13                            ;
+; 27                                           ; 9                             ;
+; 28                                           ; 5                             ;
+; 29                                           ; 4                             ;
+; 30                                           ; 11                            ;
+; 31                                           ; 10                            ;
+; 32                                           ; 5                             ;
+; 33                                           ; 4                             ;
+; 34                                           ; 4                             ;
+; 35                                           ; 1                             ;
+; 36                                           ; 2                             ;
++----------------------------------------------+-------------------------------+
 
 
 +------------------------------------------+
@@ -1802,11 +1833,11 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +----------------------------------------------------------------+--------------------------------------------------+-------------------+
 ; Source Clock(s)                                                ; Destination Clock(s)                             ; Delay Added in ns ;
 +----------------------------------------------------------------+--------------------------------------------------+-------------------+
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out               ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 5.3               ;
-; MAX10_CLK1_50                                                  ; MAX10_CLK1_50                                    ; 4.3               ;
-; MAX10_CLK1_50                                                  ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 2.9               ;
-; MAX10_CLK1_50,ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.1               ;
-; MAX10_CLK1_50                                                  ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.5               ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out               ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 5.4               ;
+; MAX10_CLK1_50                                                  ; MAX10_CLK1_50                                    ; 4.6               ;
+; MAX10_CLK1_50                                                  ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 4.0               ;
+; MAX10_CLK1_50,ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.3               ;
+; MAX10_CLK1_50                                                  ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 2.2               ;
 +----------------------------------------------------------------+--------------------------------------------------+-------------------+
 Note: For more information on problematic transfers, consider running the Fitter again with the Optimize hold timing option (Settings Menu) turned off.
 This will disable optimization of problematic paths and expose them for further analysis using the Timing Analyzer.
@@ -1817,106 +1848,106 @@ This will disable optimization of problematic paths and expose them for further 
 +-----------------------------------------------------------------------------+--------------------------------------------------+-------------------+
 ; Source Register                                                             ; Destination Register                             ; Delay Added in ns ;
 +-----------------------------------------------------------------------------+--------------------------------------------------+-------------------+
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out                            ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 4.252             ;
-; ship_movement:SHIP_OFFSET_GEN|x_counter_clk                                 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 3.752             ;
-; ship_movement:SHIP_OFFSET_GEN|y_counter_clk                                 ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 3.618             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[31]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[9]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[10]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[11]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[12]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[13]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[14]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[15]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[16]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[2]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[3]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[4]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[5]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[6]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[7]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[8]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[17]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[18]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[19]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[20]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[21]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[22]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[23]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[24]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[25]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[26]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[27]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[28]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[29]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[30]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[1]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.126             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[31]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[30]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[29]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[28]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[27]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[26]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[25]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[24]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[23]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[22]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[21]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[20]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[19]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[18]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[17]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[16]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[15]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[14]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[13]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[12]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[1][3] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[11]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[10]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[9]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[8]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[7]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[6]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[5]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[4]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[3]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[2]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[1]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[0]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][7] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][6] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][4] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][5] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.060             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[31]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[28]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[29]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[30]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[15]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[16]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[17]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[18]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[21]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[22]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[19]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[20]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[13]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[14]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[24]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[25]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[8]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[5]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[4]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[3]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[2]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[1]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[7]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[6]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[10]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[11]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[9]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[12]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
-; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[23]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 0.990             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out                            ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 4.561             ;
+; ship_movement:SHIP_OFFSET_GEN|x_counter_clk                                 ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 3.844             ;
+; ship_movement:SHIP_OFFSET_GEN|y_counter_clk                                 ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 3.843             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[31]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[14]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[15]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[16]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[13]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[12]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[9]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[10]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[11]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[6]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[7]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[8]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[2]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[3]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[4]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[5]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[29]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[30]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[28]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[27]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[25]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[26]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[21]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[22]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[23]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[24]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[17]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[18]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[19]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[20]                          ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|count[1]                           ; ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out ; 2.280             ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[1][3] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[31]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[30]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[29]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[28]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[27]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[26]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[25]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[24]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[23]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[22]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[21]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[20]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[19]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[18]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[17]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[16]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[15]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[14]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[13]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[12]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[11]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[10]                      ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[9]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[8]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[7]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[6]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[5]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[4]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[3]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[2]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[1]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][7] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][6] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][4] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[0][5] ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|\x_clk_divider:count[0]                       ; ship_movement:SHIP_OFFSET_GEN|x_counter_clk      ; 1.243             ;
+; ship_movement:SHIP_OFFSET_GEN|ADXL345_controller:U2|gsensor:U0|memory[3][3] ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[31]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[30]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[29]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[28]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[27]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[26]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[25]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[24]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[23]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[22]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[21]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[20]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[19]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[18]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[17]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[16]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[15]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[14]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[13]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[12]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[11]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[10]                      ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[9]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[8]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[7]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[6]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[5]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
+; ship_movement:SHIP_OFFSET_GEN|\y_clk_divider:count[4]                       ; ship_movement:SHIP_OFFSET_GEN|y_counter_clk      ; 1.036             ;
 +-----------------------------------------------------------------------------+--------------------------------------------------+-------------------+
 Note: This table only shows the top 100 path(s) that have the largest delay added for hold.
 
@@ -1966,11 +1997,11 @@ Info (176353): Automatically promoted node ship_movement:SHIP_OFFSET_GEN|clk_div
 Info (176353): Automatically promoted node ship_movement:SHIP_OFFSET_GEN|x_counter_clk  File: /home/jon/github/FPGADefender/components/ship.vhdl Line: 32
     Info (176355): Automatically promoted destinations to use location or clock signal Global Clock
     Info (176356): Following destination nodes may be non-global or may not use global or regional clocks
-        Info (176357): Destination node ship_movement:SHIP_OFFSET_GEN|x_counter_clk~6 File: /home/jon/github/FPGADefender/components/ship.vhdl Line: 32
+        Info (176357): Destination node ship_movement:SHIP_OFFSET_GEN|x_counter_clk~2 File: /home/jon/github/FPGADefender/components/ship.vhdl Line: 32
 Info (176353): Automatically promoted node ship_movement:SHIP_OFFSET_GEN|y_counter_clk  File: /home/jon/github/FPGADefender/components/ship.vhdl Line: 33
     Info (176355): Automatically promoted destinations to use location or clock signal Global Clock
     Info (176356): Following destination nodes may be non-global or may not use global or regional clocks
-        Info (176357): Destination node ship_movement:SHIP_OFFSET_GEN|y_counter_clk~1 File: /home/jon/github/FPGADefender/components/ship.vhdl Line: 33
+        Info (176357): Destination node ship_movement:SHIP_OFFSET_GEN|y_counter_clk~2 File: /home/jon/github/FPGADefender/components/ship.vhdl Line: 33
 Info (176233): Starting register packing
 Info (176235): Finished register packing
     Extra Info (176219): No registers were packed into other blocks
@@ -2125,30 +2156,30 @@ Warning (15705): Ignored locations or region assignments to the following nodes
     Warning (15706): Node "SW[7]" is assigned to location or region, but does not exist in design
     Warning (15706): Node "SW[8]" is assigned to location or region, but does not exist in design
     Warning (15706): Node "SW[9]" is assigned to location or region, but does not exist in design
-Info (171121): Fitter preparation operations ending: elapsed time is 00:00:04
+Info (171121): Fitter preparation operations ending: elapsed time is 00:00:08
 Info (14896): Fitter has disabled Advanced Physical Optimization because it is not supported for the current family.
 Info (170189): Fitter placement preparation operations beginning
-Info (170190): Fitter placement preparation operations ending: elapsed time is 00:00:00
+Info (170190): Fitter placement preparation operations ending: elapsed time is 00:00:01
 Info (170191): Fitter placement operations beginning
 Info (170137): Fitter placement was successful
-Info (170192): Fitter placement operations ending: elapsed time is 00:00:05
+Info (170192): Fitter placement operations ending: elapsed time is 00:00:08
 Info (170193): Fitter routing operations beginning
-Info (170195): Router estimated average interconnect usage is 0% of the available device resources
-    Info (170196): Router estimated peak interconnect usage is 2% of the available device resources in the region that extends from location X33_Y11 to location X44_Y21
+Info (170195): Router estimated average interconnect usage is 4% of the available device resources
+    Info (170196): Router estimated peak interconnect usage is 36% of the available device resources in the region that extends from location X33_Y11 to location X44_Y21
 Info (170199): The Fitter performed an Auto Fit compilation.  Optimizations were skipped to reduce compilation time.
     Info (170201): Optimizations that may affect the design's routability were skipped
-Info (170194): Fitter routing operations ending: elapsed time is 00:00:02
-Info (11888): Total time spent on timing analysis during the Fitter is 0.74 seconds.
+Info (170194): Fitter routing operations ending: elapsed time is 00:00:09
+Info (11888): Total time spent on timing analysis during the Fitter is 1.43 seconds.
 Info (334003): Started post-fitting delay annotation
 Warning (334000): Timing characteristics of device 10M50DAF484C6GES are preliminary
 Info (334004): Delay annotation completed successfully
 Info (334003): Started post-fitting delay annotation
 Warning (334000): Timing characteristics of device 10M50DAF484C6GES are preliminary
 Info (334004): Delay annotation completed successfully
-Info (11218): Fitter post-fit operations ending: elapsed time is 00:00:02
+Info (11218): Fitter post-fit operations ending: elapsed time is 00:00:07
 Warning (171167): Found invalid Fitter assignments. See the Ignored Assignments panel in the Fitter Compilation Report for more information.
 Warning (169177): 4 pins must meet Intel FPGA requirements for 3.3-, 3.0-, and 2.5-V interfaces. For more information, refer to AN 447: Interfacing MAX 10 Devices with 3.3/3.0/2.5-V LVTTL/LVCMOS I/O Systems.
-    Info (169178): Pin reset_L uses I/O standard 3.3-V LVTTL at AB13 File: /home/jon/github/FPGADefender/project_top_level.vhd Line: 12
+    Info (169178): Pin reset_L uses I/O standard 3.3-V LVTTL at L1 File: /home/jon/github/FPGADefender/project_top_level.vhd Line: 12
     Info (169178): Pin GSENSOR_SDI uses I/O standard 3.3-V LVTTL at V11 File: /home/jon/github/FPGADefender/project_top_level.vhd Line: 24
     Info (169178): Pin GSENSOR_SDO uses I/O standard 3.3-V LVTTL at V12 File: /home/jon/github/FPGADefender/project_top_level.vhd Line: 25
     Info (169178): Pin MAX10_CLK1_50 uses I/O standard 3.3-V LVTTL at P11 File: /home/jon/github/FPGADefender/project_top_level.vhd Line: 11
@@ -2157,10 +2188,10 @@ Warning (169064): Following 2 pins have no output enable or a GND or VCC output 
     Info (169065): Pin GSENSOR_SDO has a permanently disabled output enable File: /home/jon/github/FPGADefender/project_top_level.vhd Line: 25
 Info (144001): Generated suppressed messages file /home/jon/github/FPGADefender/quartus/output_files/final_project.fit.smsg
 Info: Quartus Prime Fitter was successful. 0 errors, 145 warnings
-    Info: Peak virtual memory: 1386 megabytes
-    Info: Processing ended: Mon Nov 15 02:19:18 2021
-    Info: Elapsed time: 00:00:24
-    Info: Total CPU time (on all processors): 00:00:35
+    Info: Peak virtual memory: 1479 megabytes
+    Info: Processing ended: Mon Nov 15 11:46:14 2021
+    Info: Elapsed time: 00:00:48
+    Info: Total CPU time (on all processors): 00:01:44
 
 
 +----------------------------+

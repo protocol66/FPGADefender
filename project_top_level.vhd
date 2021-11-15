@@ -185,8 +185,8 @@ begin
 
     score_box.x_pos <= global_x;
     score_box.y_pos <= global_y;
-    score_box.x_origin <= 400;
-    score_box.y_origin <= 5;
+    score_box.x_origin <= 100;
+    score_box.y_origin <= 100;
 
     ship_box.x_pos <= global_x;
     ship_box.y_pos <= global_y;

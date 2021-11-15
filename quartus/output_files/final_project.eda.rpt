@@ -1,5 +1,5 @@
 EDA Netlist Writer report for final_project
-Mon Nov 15 02:19:32 2021
+Mon Nov 15 11:46:32 2021
 Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
 
 
@@ -37,7 +37,7 @@ https://fpgasoftware.intel.com/eula.
 +-------------------------------------------------------------------+
 ; EDA Netlist Writer Summary                                        ;
 +---------------------------+---------------------------------------+
-; EDA Netlist Writer Status ; Successful - Mon Nov 15 02:19:32 2021 ;
+; EDA Netlist Writer Status ; Successful - Mon Nov 15 11:46:32 2021 ;
 ; Revision Name             ; final_project                         ;
 ; Top-level Entity Name     ; project_top_level                     ;
 ; Family                    ; MAX 10                                ;
@@ -81,14 +81,14 @@ https://fpgasoftware.intel.com/eula.
 Info: *******************************************************************
 Info: Running Quartus Prime EDA Netlist Writer
     Info: Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
-    Info: Processing started: Mon Nov 15 02:19:31 2021
+    Info: Processing started: Mon Nov 15 11:46:30 2021
 Info: Command: quartus_eda --read_settings_files=off --write_settings_files=off final_project -c final_project
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (204019): Generated file final_project.vho in folder "/home/jon/github/FPGADefender/quartus/simulation/modelsim/" for EDA simulation tool
 Info: Quartus Prime EDA Netlist Writer was successful. 0 errors, 1 warning
-    Info: Peak virtual memory: 599 megabytes
-    Info: Processing ended: Mon Nov 15 02:19:32 2021
-    Info: Elapsed time: 00:00:01
-    Info: Total CPU time (on all processors): 00:00:01
+    Info: Peak virtual memory: 636 megabytes
+    Info: Processing ended: Mon Nov 15 11:46:33 2021
+    Info: Elapsed time: 00:00:03
+    Info: Total CPU time (on all processors): 00:00:02
 
 

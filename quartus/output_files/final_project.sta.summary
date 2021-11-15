@@ -3,43 +3,43 @@ Timing Analyzer Summary
 ------------------------------------------------------------
 
 Type  : Slow 1200mV 85C Model Setup 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
-Slack : -6.896
-TNS   : -344.253
+Slack : -7.389
+TNS   : -392.734
 
 Type  : Slow 1200mV 85C Model Setup 'ship_movement:SHIP_OFFSET_GEN|x_counter_clk'
-Slack : -3.080
-TNS   : -27.720
+Slack : -3.024
+TNS   : -27.216
 
 Type  : Slow 1200mV 85C Model Setup 'MAX10_CLK1_50'
-Slack : -1.438
-TNS   : -1.438
+Slack : -1.871
+TNS   : -1.871
 
 Type  : Slow 1200mV 85C Model Setup 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
-Slack : -1.420
-TNS   : -12.780
+Slack : -1.576
+TNS   : -14.184
 
 Type  : Slow 1200mV 85C Model Setup 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 33.892
+Slack : 32.776
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'MAX10_CLK1_50'
 Slack : 0.325
 TNS   : 0.000
 
-Type  : Slow 1200mV 85C Model Hold 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
-Slack : 0.392
-TNS   : 0.000
-
 Type  : Slow 1200mV 85C Model Hold 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 0.423
+Slack : 0.422
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
-Slack : 0.530
+Slack : 0.529
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Hold 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
+Slack : 0.557
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'ship_movement:SHIP_OFFSET_GEN|x_counter_clk'
-Slack : 0.556
+Slack : 0.574
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
@@ -55,51 +55,51 @@ Slack : -1.222
 TNS   : -10.998
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'MAX10_CLK1_50'
-Slack : 9.574
+Slack : 9.584
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 19.620
+Slack : 19.618
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
-Slack : -6.230
-TNS   : -308.710
+Slack : -6.644
+TNS   : -351.329
 
 Type  : Slow 1200mV 0C Model Setup 'ship_movement:SHIP_OFFSET_GEN|x_counter_clk'
-Slack : -2.720
-TNS   : -24.480
-
-Type  : Slow 1200mV 0C Model Setup 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
-Slack : -1.220
-TNS   : -10.980
+Slack : -2.648
+TNS   : -23.832
 
 Type  : Slow 1200mV 0C Model Setup 'MAX10_CLK1_50'
-Slack : -1.206
-TNS   : -1.206
+Slack : -1.607
+TNS   : -1.607
+
+Type  : Slow 1200mV 0C Model Setup 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
+Slack : -1.358
+TNS   : -12.222
 
 Type  : Slow 1200mV 0C Model Setup 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 34.357
+Slack : 33.363
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'MAX10_CLK1_50'
-Slack : 0.294
+Slack : 0.295
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 0.350
-TNS   : 0.000
-
-Type  : Slow 1200mV 0C Model Hold 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
-Slack : 0.355
+Slack : 0.349
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
-Slack : 0.489
+Slack : 0.488
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
+Slack : 0.510
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'ship_movement:SHIP_OFFSET_GEN|x_counter_clk'
-Slack : 0.511
+Slack : 0.527
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
@@ -115,39 +115,35 @@ Slack : -1.222
 TNS   : -10.998
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'MAX10_CLK1_50'
-Slack : 9.586
+Slack : 9.593
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 19.576
+Slack : 19.577
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
-Slack : -2.821
-TNS   : -129.521
+Slack : -3.048
+TNS   : -152.337
 
 Type  : Fast 1200mV 0C Model Setup 'ship_movement:SHIP_OFFSET_GEN|x_counter_clk'
-Slack : -0.937
-TNS   : -8.433
+Slack : -0.943
+TNS   : -8.487
 
 Type  : Fast 1200mV 0C Model Setup 'MAX10_CLK1_50'
-Slack : -0.571
-TNS   : -0.571
+Slack : -0.926
+TNS   : -0.926
 
 Type  : Fast 1200mV 0C Model Setup 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
-Slack : -0.131
-TNS   : -1.179
+Slack : -0.207
+TNS   : -1.863
 
 Type  : Fast 1200mV 0C Model Setup 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 36.991
+Slack : 36.437
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'MAX10_CLK1_50'
 Slack : 0.148
-TNS   : 0.000
-
-Type  : Fast 1200mV 0C Model Hold 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
-Slack : 0.179
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
@@ -159,7 +155,11 @@ Slack : 0.238
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'ship_movement:SHIP_OFFSET_GEN|x_counter_clk'
-Slack : 0.252
+Slack : 0.238
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Hold 'ship_movement:SHIP_OFFSET_GEN|y_counter_clk'
+Slack : 0.239
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'ship_movement:SHIP_OFFSET_GEN|clk_div:U1|clk_out'
@@ -175,11 +175,11 @@ Slack : -1.000
 TNS   : -9.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'MAX10_CLK1_50'
-Slack : 9.329
+Slack : 9.325
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'PLL1|altpll_component|auto_generated|pll1|clk[0]'
-Slack : 19.671
+Slack : 19.664
 TNS   : 0.000
 
 ------------------------------------------------------------
