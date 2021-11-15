@@ -1,17 +1,28 @@
-import builtins
 from PIL import Image
 import numpy as np
+import argparse
 
-IMAGE_FILE = 'utils/test_image.png'
-IMAGE_SIZE_X = 100
-IMAGE_SIZE_Y = 100
+parser = argparse.ArgumentParser(description='Convert image to vhdl code')
+parser.add_argument("-i", "--input_file", required=True,action="store")
+parser.add_argument("-x", "--sizeX", required=True, type=int, action="store")
+parser.add_argument("-y", "--sizeY", required=True, type=int, action="store")
+parser.add_argument("-o", "--output_file", required=False, default="gen_code.txt",action="store")
+
+args = parser.parse_args()
+
+IMAGE_FILE = args.input_file
+OUTPUT_FILE = args.output_file
+
+IMAGE_SIZE_X = args.sizeX
+IMAGE_SIZE_Y = args.sizeY
+
 IMAGE_COLORS = 16
 
 image = Image.open(IMAGE_FILE)
 
 print(f"Loaded image: {IMAGE_FILE}")
 print(f"Format: {image.format}")
-print(f"Color : {image.mode}")
+print(f"Color : {image.mode} -> RGB")
 print(f"Resizing image: {image.size} -> ({IMAGE_SIZE_Y},{IMAGE_SIZE_X})")
 print(f"Quantizing image: {IMAGE_COLORS} colors per subpixel")
 
@@ -19,32 +30,17 @@ image = image.resize((IMAGE_SIZE_X, IMAGE_SIZE_Y))
 image = image.convert("RGB")        # some images have more than 3 channels
 
 #show non-downscaled image
-# image.show()
+image.show()
 
 image_array = np.array(image)
 image_array = image_array / (255.0 / IMAGE_COLORS)  # downscale colors
 image_array = np.array(image_array, dtype=np.int16)
 image_array = np.clip(image_array, 0, IMAGE_COLORS-1)
 
-# for debuging
-# print(image_array.shape)
-# print(np.min(image_array))
-# print(np.max(image_array))
-# print(image_array)
-
 #show downscaled image
-image = Image.fromarray(np.array(image_array*(255 / IMAGE_COLORS), dtype=np.int16), "RGB")
-# image.show()
+image = Image.fromarray(np.array(image_array*(255.0 / IMAGE_COLORS), dtype=np.int8), "RGB")
+image.show()
 
-# print(np.max(image_array))
-# print(bin(image_array[0][2]))
-
-
-# u, indices_r, count = np.unique(image_array[0], axis=0,return_inverse=True, return_counts=True)
-# print(u)
-# print(indices_r)
-# print(count)
-# print("")
 
 def gen_column_string(array):
 
@@ -89,7 +85,6 @@ def gen_column_string(array):
 
 
 master_row_string = "("
-
 for i in range(image_array.shape[0]):
     master_row_string += f"{i} => "
     master_row_string += gen_column_string(image_array[i])
@@ -99,9 +94,6 @@ for i in range(image_array.shape[0]):
 master_row_string = master_row_string[0:-2]
 master_row_string += ");"
 
-# print(master_row_string)
 
-with open("utils/gen_code.txt", "w") as file:
+with open(OUTPUT_FILE, "w") as file:
     file.write(master_row_string)
-
-    
