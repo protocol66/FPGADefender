@@ -5,17 +5,14 @@ use ieee.numeric_std.all;
 use work.my_data_types.all;
 
 package bitmaps is
-    constant screen_HEIGHT : positive := 479;
-    constant screen_WIDTH : positive := 639;
+    constant screen_HEIGHT := 480;
+    constant screen_WIDTH := 640;
 
-    constant line_sizeX : positive := screen_WIDTH;
+    constant line_sizeX : positive := screen_WITDH;
     constant line_sizeY : positive := 2;
 
     constant ship_sizeX : positive := 25;
     constant ship_sizeY : positive := 25;
-    
-    constant laser_sizeX : positive := ship_sizeX;
-    constant laser_sizeY : positive := 1;
 
     constant score_sizeX : positive := 10;
     constant score_sizeY : positive := 10;
@@ -25,7 +22,7 @@ package bitmaps is
 
     constant H_LINE : bit_map_t (0 to line_sizeY-1, 0 to line_sizeX-1) := (others => (others => WHITE));
     constant SHIP : bit_map_t (0 to ship_sizeY-1, 0 to ship_sizeX-1) := (others => (others => TEAL));
-    constant LASER : bit_map_t (0 to laser_sizeY-1, 0 to laser_sizeX-1) := (others => (others => GREEN));
+
     constant ALIEN_1 : bit_map_t (0 to alien1_sizeY-1, 0 to alien1_sizeX-1) := (others => (others => YELLOW)); 
 
 

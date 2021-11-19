@@ -22,7 +22,7 @@ entity ship_movement is
 end ship_movement;
 
 architecture arch of ship_movement is
-    constant MAX_X_OFFSET : integer := 160;
+    constant MAX_X_OFFSET : integer := screen_WIDTH / 4;
     -- constant MAX_Y_OFFSET : integer := 180;
     constant MAX_UP_OFFSET : integer := (480 / 2) - (15 + ship_sizeY);
     constant MAX_DOWN_OFFSET : integer := 480 / 2  - ship_sizeY;
@@ -83,7 +83,7 @@ begin
                                     SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
     U3: counter generic map (SIZE => 9) port map(clk => x_counter_clk, up_down => not data_x(4), reset_L => reset_L, enable => x_enable, cout => x_shift);
     U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => not data_y(4), reset_L => reset_L, enable => y_enable, cout => y_shift);
-
+    
     x_clk_divider : process(clk_10k)
     variable count : integer := 0;
     begin

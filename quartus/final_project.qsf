@@ -432,6 +432,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[33]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[34]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[35]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to reset_L
+set_global_assignment -name VHDL_FILE ../components/alien.vhdl
 set_global_assignment -name SYSTEMVERILOG_FILE ../components/accelerometer/spi.sv
 set_global_assignment -name SYSTEMVERILOG_FILE ../components/accelerometer/gsensor.sv
 set_global_assignment -name VHDL_FILE ../components/accelerometer/ADXL345_controller.vhd
