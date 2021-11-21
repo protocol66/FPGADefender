@@ -11,7 +11,7 @@ package bitmaps is
     constant line_sizeX : positive := screen_WIDTH;
     constant line_sizeY : positive := 2;
 
-    constant ship_sizeX : positive := 74;
+    constant ship_sizeX : positive := 25;
     constant ship_sizeY : positive := 25;
     
     constant laser_sizeX : positive := ship_sizeX;
