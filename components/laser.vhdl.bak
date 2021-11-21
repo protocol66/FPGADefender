@@ -7,6 +7,10 @@ use work.my_data_types.all;
 use work.bitmaps.all;
 
 entity laser_movement is
+    generic (
+        X_SIZE : positive;
+        Y_SIZE : positive
+    );
     port (
         max10_clk : in std_logic;
         shoot : in std_logic;
@@ -17,8 +21,7 @@ end laser_movement;
 
 architecture arch of laser_movement is
     signal x_counter_clk : std_logic;
-    signal x_shift : std_logic_vector(9 downto 0);
-    signal clk_100 : std_logic;
+    signal x_shift : std_logic(8 downto 0);
 
     component clk_div is
         port (
@@ -43,7 +46,7 @@ architecture arch of laser_movement is
     end component;
 
 begin
-    U1: clk_div port map (clk_in => max10_clk, div => 50000, clk_out => clk_100);
-    U2: counter generic map (SIZE => 10) port map(clk => clk_100, up_down => '0', reset_L => shoot, enable => shoot, cout => x_shift);
+    U1: clk_div port map (clk_in => max10_clk, div => 500000, clk_out => clk_10);
+    U2: counter generic map (SIZE => 9) port map(clk => clk_10, up_down => '0', reset_L => not shoot, enable => shoot, cout => x_shift);
     x_loc <= to_integer(unsigned(x_shift));
 end architecture;

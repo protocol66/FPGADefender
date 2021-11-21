@@ -22,10 +22,10 @@ entity alien_movement is
 end alien_movement;
 
 architecture arch of alien_movement is
-    constant MAX_UP : integer := (15 + ship_sizeY);
-    constant MAX_DOWN : integer := screen_HEIGHT - Y_SIZE - 5;
+    constant MAX_UP : integer := 40 + ship_sizeY;
+    constant MAX_DOWN : integer := screen_HEIGHT - Y_SIZE - 10;
 
-    signal spawn_seed : std_logic_vector (7 downto 0);
+    signal spawn_seed : std_logic_vector (7 downto 0) := "01001100";
     signal random_Y : std_logic_vector (7 downto 0);
     signal spawn : integer := screen_HEIGHT / 2;
 
@@ -33,7 +33,7 @@ architecture arch of alien_movement is
     signal y_counter_clk : std_logic;
     signal x_enable : std_logic := '1';
     signal y_enable : std_logic := '1';
-    signal x_shift : std_logic_vector(8 downto 0);
+    signal x_shift : std_logic_vector(9 downto 0);
     signal y_shift : std_logic_vector(8 downto 0);
     signal y_up_down : std_logic := '0';
     signal change_Y : std_logic := '0';
@@ -73,15 +73,15 @@ architecture arch of alien_movement is
     end component;
 
 begin
-    U1: clk_div port map (clk_in => max10_clk, div => 5000000, clk_out => clk_1k);
-    U2: counter generic map (SIZE => 9) port map(clk => clk_1k, up_down => '0', reset_L => reset_L, enable => alive, cout => x_shift);
+    U1: clk_div port map (clk_in => max10_clk, div => 500000, clk_out => clk_1k);
+    U2: counter generic map (SIZE => 10) port map(clk => clk_1k, up_down => '0', reset_L => reset_L, enable => alive, cout => x_shift);
     -- U3: counter generic map (SIZE => 9) port map(clk => clk_1k, up_down => y_up_down, reset_L => reset_L, enable => y_enable, cout => y_shift);
     U4: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random_Y);
     -- U4: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, => random_8 => random_Y);
 
-    y_loc <= spawn;
+    y_loc <= 300;
 
-    x_location : process(reset_L)
+    x_location : process(reset_L, x_shift)
     begin
         if reset_L = '0' then
             x_loc <= screen_WIDTH;
@@ -90,18 +90,16 @@ begin
 		end if;
     end process;
     
-    y_location : process(reset_L)
+    y_location : process(reset_L, random_Y)
     begin
         if reset_L = '0' then
             if to_integer(unsigned(random_Y)) < MAX_UP then
-                spawn <= to_integer(shift_left(unsigned(random_Y),5));
-            elsif to_integer(unsigned(random_Y)) > MAX_DOWN then
-                spawn <= to_integer(shift_right(unsigned(random_Y),5));
+                spawn <= to_integer(unsigned(random_Y)) + MAX_UP;
+            elsif to_integer(unsigned(random_Y)) * 2 > MAX_DOWN then
+                spawn <= to_integer(shift_right(unsigned(random_Y),2));
             else
-                spawn <= to_integer(unsigned(random_Y));
+                spawn <= to_integer(unsigned(random_Y)) * 2;
 			end if;
-        else
-            spawn <= spawn;
 		end if;
     end process;
 

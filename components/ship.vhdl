@@ -25,7 +25,7 @@ architecture arch of ship_movement is
     constant MAX_X_OFFSET : integer := screen_WIDTH / 4;
     -- constant MAX_Y_OFFSET : integer := 180;
     constant MAX_UP_OFFSET : integer := (480 / 2) - (15 + ship_sizeY);
-    constant MAX_DOWN_OFFSET : integer := 480 / 2  - ship_sizeY;
+    constant MAX_DOWN_OFFSET : integer := 480 / 2  - (15 + ship_sizeY);
     signal data_x : std_logic_vector(0 to 15);
     signal data_y : std_logic_vector(0 to 15);
     signal clk_10k : std_logic;
