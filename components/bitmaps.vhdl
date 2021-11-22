@@ -23,11 +23,15 @@ package bitmaps is
     constant alien1_sizeX : positive := 20;
     constant alien1_sizeY : positive := 20;
 
+    constant asteroid_sizeX : positive := 40;
+    constant asteroid_sizeY : positive := 40;
+
     constant H_LINE : bit_map_t (0 to line_sizeY-1, 0 to line_sizeX-1) := (others => (others => WHITE));
     constant SHIP : bit_map_t (0 to ship_sizeY-1, 0 to ship_sizeX-1) := (others => (others => TEAL));
     constant LASER : bit_map_t (0 to laser_sizeY-1, 0 to laser_sizeX-1) := (others => (others => GREEN));
     constant ALIEN_1 : bit_map_t (0 to alien1_sizeY-1, 0 to alien1_sizeX-1) := (others => (others => YELLOW)); 
-
+    constant ASTEROID : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => PURPLE)); 
+    constant SATELLITE : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => GREEN)); 
 
     constant score_bit_test : bit_map_t (0 to score_sizeY-1, 0 to score_sizeX-1) := 
     
