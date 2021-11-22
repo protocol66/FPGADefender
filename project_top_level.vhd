@@ -247,7 +247,9 @@ architecture rtl of project_top_level is
     signal a1_clk : std_logic;
     signal alien_spawn_clk : std_logic;
     signal as_clk : std_logic;
-    signal random_alive_div : std_logic_vector(7 downto 0);
+    signal random_num : std_logic_vector(7 downto 0);
+
+    signal obj : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1);
     
 
 begin
@@ -307,7 +309,7 @@ begin
                         port map (box => ship_box, bit_map => SHIP, enable => ship_alive AND NOT game_over, pixel => ship_pixel);
 
     SCORE_1: objDisp generic map (X_SIZE => score_sizeX, Y_SIZE => score_sizeY)
-                        port map (box => score_box, bit_map => score_bit_test, enable => KEY(0), pixel => score_pixel);
+                        port map (box => score_box, bit_map => score_blank, enable => KEY(0), pixel => score_pixel);
 
     pixel : process(global_x, global_y)
     begin
@@ -529,9 +531,10 @@ begin
             OBJ_SELECT : process(random_num(3))
             begin
                 if random_num(3) = '1' then
-                    obj <= ASTREROID;
+                    obj <= ASTEROID;
                 else
                     obj <= SATELLITE;
+                end if;
             end process;
 
     end generate;
