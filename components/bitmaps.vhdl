@@ -6,6 +6,7 @@ use work.my_data_types.all;
 
 package bitmaps is
     constant BACKGROUND : Pixel_t := BLACK;
+    constant MAIN_CLK_FREQ : integer := 50000000;
 
     constant screen_HEIGHT : positive := 479;
     constant screen_WIDTH : positive := 639;
@@ -40,6 +41,13 @@ package bitmaps is
     constant ALIEN_1 : bit_map_t (0 to alien1_sizeY-1, 0 to alien1_sizeX-1) := (others => (others => YELLOW)); 
     constant ASTEROID : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => PURPLE)); 
     constant SATELLITE : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => GREEN)); 
+
+    constant fx1 : Sound_FX_t := (18, (550, 404, 315, 494, 182, 260, 455, 387, 340, 550, 404, 315, 494, 182, 260, 455, 387, 340, others => 0));
+    constant fx2 : Sound_FX_t := (10, (300, 350, 500, 700, 990, 970, 1050, 1010, 950, 800, 770, 640, 500, 350, 355, others => 0));
+    constant fx3 : Sound_FX_t := (6,  (500, 790, 950, 1300, 1710, 1650, 1300, 800, 700, others=> 0));
+    constant fx4 : Sound_FX_t := (60, (1300, 1650, 1660, 1510, 1309, 1158, 1007, 855, others=> 0));
+    constant fx5 : Sound_FX_t := (25, (300, 210, 310, 170, 250, 210, 310, 120, 220, 170, 160, 90, 290, 230, 140, 320, 200, 100, 250, 290, others => 0));
+    constant fx6 : Sound_FX_t := (15, (700, 702, 698, 701, 699, 700, 250, 251, 249, 252, 248, 130, 131, 129, 132, 128, 130, 130, others=>0));
 
     constant score_9 : bit_map_t (0 to score_sizeY-1, 0 to score_sizeX-1) := (others => (others => BLUE));
     constant score_8 : bit_map_t (0 to score_sizeY-1, 0 to score_sizeX-1) := (others => (others => GREEN));
