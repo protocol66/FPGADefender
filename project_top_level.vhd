@@ -20,6 +20,7 @@ entity project_top_level is
         -- HEX0, HEX1, HEX2, HEX3    : out std_logic_vector(7 downto 0);
         SW : in std_logic_vector(9 downto 0);
         LEDR : out std_logic_vector(9 downto 0);
+        ARDUINO_IO : out std_logic_vector(12 downto 12);
 
         GSENSOR_CS_N : OUT	STD_LOGIC;
         GSENSOR_SCLK : OUT	STD_LOGIC;
@@ -92,6 +93,25 @@ architecture rtl of project_top_level is
             pixel     : out Pixel_t
         );
     end component score;
+
+    component note_gen is
+        port (
+            clk   : in std_logic;       -- must be 44100hz
+            enable : in std_logic;
+            notes : in std_logic_vector(11 downto 0); -- twelve notes in an octave
+            pwm : buffer std_logic := '0'
+        );
+    end component note_gen;
+
+    component sound_fx is
+        port (
+            clk   : in std_logic;   -- make this 50mhz
+            reset_L : in std_logic;
+            enable : in std_logic;
+            fx : in Sound_FX_t;
+            pwm : out std_logic
+        );
+    end component sound_fx;
 
     component objDisp is
         generic (
@@ -251,6 +271,10 @@ architecture rtl of project_top_level is
 
     signal obj : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1);
     
+    signal random_alive_div : std_logic_vector(7 downto 0);
+
+    signal pwm : std_logic_vector(5 downto 0);
+    signal note_clk : std_logic;
 
 begin
 
