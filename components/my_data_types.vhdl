@@ -7,9 +7,9 @@ use ieee.math_real.all;
 package my_data_types is
 
     type Pixel_t is record
-        red : std_logic_vector(3 downto 0);
-        green : std_logic_vector(3 downto 0);
-        blue : std_logic_vector(3 downto 0);
+        red : std_logic_vector(1 downto 0);
+        green : std_logic_vector(1 downto 0);
+        blue : std_logic_vector(1 downto 0);
     end record;
 
 

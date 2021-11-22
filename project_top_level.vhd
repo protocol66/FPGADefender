@@ -81,10 +81,14 @@ architecture rtl of project_top_level is
     end component bin2seg7;
 
     component score is
+        generic (
+                X_SIZE : positive;
+                Y_SIZE : positive
+        );
         port (
             box    : Bounding_Box;
             enable : in std_logic;
-            score_in  : in unsigned(3 downto 0);
+            score_in  : in integer;
             pixel     : out Pixel_t
         );
     end component score;
@@ -189,6 +193,9 @@ architecture rtl of project_top_level is
     signal very_slow_clk_y : std_logic;
 
     signal curr_pixel : Pixel_t;
+
+    signal pepe_box : Bounding_Box;
+    signal pepe_pixel : Pixel_t;
     
     signal Tline_box : Bounding_Box;
     signal top_line_pixel : Pixel_t;
@@ -259,10 +266,15 @@ begin
         n_sync => open
     );
 
-    VGA_R <= curr_pixel.red;
-    VGA_G <= curr_pixel.green;
-    VGA_B <= curr_pixel.blue;
+    --reduced colors to speed up compile time and sanity
+    VGA_R <= curr_pixel.red(1) & curr_pixel.red(1) & curr_pixel.red(0) & curr_pixel.red(0);
+    VGA_G <= curr_pixel.green(1) & curr_pixel.green(1) & curr_pixel.green(0) & curr_pixel.green(0);
+    VGA_B <= curr_pixel.blue(1) & curr_pixel.blue(1) & curr_pixel.blue(0) & curr_pixel.blue(0);
 
+    pepe_box.x_pos <= global_x;
+    pepe_box.y_pos <= global_y;
+    pepe_box.x_origin <= 50;
+    pepe_box.y_origin <= 50;
 
     Tline_box.x_pos <= global_x;
     Tline_box.y_pos <= global_y;
@@ -395,7 +407,7 @@ begin
     --     dispPoint => '0',
     --     HEX => HEX3
     -- );
-    U1: clk_div port map (clk_in => MAX10_CLK1_50, div => SEC, clk_out => very_slow_clk);
+    -- U1: clk_div port map (clk_in => MAX10_CLK1_50, div => SEC, clk_out => very_slow_clk);
 --     process (very_slow_clk)
 --     begin
 --         if rising_edge(very_slow_clk) then
@@ -481,7 +493,6 @@ begin
     ALIENS: for I in 0 to NUM_ENEMIES-1 generate
             ALIEN: objDisp generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
                             port map (box => aliens_box(I), bit_map => ALIEN_1, enable => aliens_alive(I), pixel => aliens_pixels(I));
-            
             ALIEN_LOC: alien_movement generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
                                         port map (max10_clk => MAX10_CLK1_50, reset_L => aliens_alive(I) AND NOT aliens_killed(I), cnt_div => 3 * SEC / 640, alive => aliens_alive(I) AND NOT aliens_killed(I), x_loc => aliens_box(I).x_origin, y_loc => aliens_box(I).y_origin);
             aliens_box(I).x_pos <= global_x;
@@ -521,7 +532,7 @@ begin
                     obj <= ASTREROID;
                 else
                     obj <= SATELLITE;
-            end process ; -- OBJ_SELECT
+            end process;
 
     end generate;
 

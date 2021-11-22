@@ -434,6 +434,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[35]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to reset_L
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LEDR[0]
 set_global_assignment -name VHDL_FILE ../components/obstacle.vhdl
+set_global_assignment -name VHDL_FILE ../components/bin2dec.vhdl
 set_global_assignment -name VHDL_FILE ../components/laser.vhdl
 set_global_assignment -name VHDL_FILE ../components/alien.vhdl
 set_global_assignment -name SYSTEMVERILOG_FILE ../components/accelerometer/spi.sv

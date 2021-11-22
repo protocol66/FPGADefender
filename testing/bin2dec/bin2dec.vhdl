@@ -1,0 +1,1 @@
+../../components/bin2dec.vhdl
