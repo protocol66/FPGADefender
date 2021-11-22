@@ -20,10 +20,9 @@ package my_data_types is
         y_pos    : integer range 0 to 480-1;
     end record;
 
-    type fx_ar_t is array(natural range<>) of integer;
+    type fx_ar_t is array(31 downto 0) of integer range 0 to 2000;  --max frequency is 2000hz
 
     type Sound_FX_t is record
-        SIZE : integer;
         fx_trans_freq : integer;
         fx_ar_freq : fx_ar_t;
     end record;

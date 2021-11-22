@@ -33,25 +33,24 @@ begin
 
     FX_TIMER: clk_div port map (clk_in => clk, div => MAIN_CLK_FREQ / fx.fx_trans_freq, clk_out => fx_timer_clk);
     FX_gen: clk_div port map (clk_in => clk, div => fx_clk_div, clk_out => pwm_out);
-
-    pwm <= pwm_out and enable;
     
     process (fx_timer_clk, reset_L)
-        variable i : integer range 0 to fx.SIZE-1 := fx.SIZE-1;
+        variable i : integer range -1 to 31 := 31;
         variable already_ran : std_logic := '0';
     begin
-        if (already_ran = '0') or (reset_L = '0') then
-            already_ran := '0';
-            i := fx.SIZE-1;
+        pwm <= pwm_out and enable and reset_L and (not already_ran);
 
-            if rising_edge(fx_timer_clk) and (reset_L = '1') then
-                if i = 0 then
+        if (reset_L = '0') then
+            already_ran := '0';
+            i := 31;
+        else    
+            if rising_edge(fx_timer_clk) and (already_ran = '0') and (reset_L = '1') then
+                if i = -1 then
                     already_ran := '1';
                 else
+                    fx_clk_div <= MAIN_CLK_FREQ / fx.fx_ar_freq(i);
                     i := i - 1;
                 end if;
-        
-                fx_clk_div <= MAIN_CLK_FREQ / fx.fx_ar_freq(i);
             end if;
         end if;
     end process;
