@@ -81,10 +81,14 @@ architecture rtl of project_top_level is
     end component bin2seg7;
 
     component score is
+        generic (
+                X_SIZE : positive;
+                Y_SIZE : positive
+        );
         port (
             box    : Bounding_Box;
             enable : in std_logic;
-            score_in  : in unsigned(3 downto 0);
+            score_in  : in integer;
             pixel     : out Pixel_t
         );
     end component score;
@@ -142,7 +146,6 @@ architecture rtl of project_top_level is
     end component;
     
 
-    constant BACKGROUND : Pixel_t := BLACK;
     constant NUM_LIVES : natural := 3;
     constant SHIP_SPAWNX : integer := 160;
     constant SHIP_SPAWNY : integer := 240;
@@ -170,6 +173,9 @@ architecture rtl of project_top_level is
     signal very_slow_clk_y : std_logic;
 
     signal curr_pixel : Pixel_t;
+
+    signal pepe_box : Bounding_Box;
+    signal pepe_pixel : Pixel_t;
     
     signal Tline_box : Bounding_Box;
     signal top_line_pixel : Pixel_t;
@@ -235,10 +241,15 @@ begin
         n_sync => open
     );
 
-    VGA_R <= curr_pixel.red;
-    VGA_G <= curr_pixel.green;
-    VGA_B <= curr_pixel.blue;
+    --reduced colors to speed up compile time and sanity
+    VGA_R <= curr_pixel.red(1) & curr_pixel.red(1) & curr_pixel.red(0) & curr_pixel.red(0);
+    VGA_G <= curr_pixel.green(1) & curr_pixel.green(1) & curr_pixel.green(0) & curr_pixel.green(0);
+    VGA_B <= curr_pixel.blue(1) & curr_pixel.blue(1) & curr_pixel.blue(0) & curr_pixel.blue(0);
 
+    pepe_box.x_pos <= global_x;
+    pepe_box.y_pos <= global_y;
+    pepe_box.x_origin <= 50;
+    pepe_box.y_origin <= 50;
 
     Tline_box.x_pos <= global_x;
     Tline_box.y_pos <= global_y;
@@ -260,81 +271,102 @@ begin
     ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
     ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
 
-    TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
-                        port map (box => Tline_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
-    BOTTOM_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
-                        port map (box => Bline_box, bit_map => H_LINE, enable => '1', pixel => bottom_line_pixel);
+    -- TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
+    --                     port map (box => Tline_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
+    -- BOTTOM_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
+    --                     port map (box => Bline_box, bit_map => H_LINE, enable => '1', pixel => bottom_line_pixel);
 
-    SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
-                                             GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
-    SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
-                        port map (box => ship_box, bit_map => SHIP, enable => ship_alive, pixel => ship_pixel);
+    -- SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
+    --                                          GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
+    -- SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
+    --                     port map (box => ship_box, bit_map => SHIP, enable => ship_alive, pixel => ship_pixel);
 
-    SCORE_1: objDisp generic map (X_SIZE => score_sizeX, Y_SIZE => score_sizeY)
-                        port map (box => score_box, bit_map => score_bit_test, enable => KEY(0), pixel => score_pixel);
+    -- SCORE_1: score 
+    --     generic map (
+    --         X_SIZE => score_board_sizeX,
+    --         Y_SIZE => score_board_sizeY
+    --     )
+    --     port map (
+    --         box => score_box,
+    --         enable => '1',
+    --         score_in => 987654,
+    --         pixel => curr_pixel
+    --     );
 
+    PEPE: objDisp 
+        generic map (
+            X_SIZE => pepe_sizeX,
+            Y_SIZE => pepe_sizeY
+        )
+        port map (
+            box => pepe_box,
+            bit_map => pepe_bit_map,
+            enable => '1',
+            pixel => curr_pixel
+        );
+    
 
-    pixel : process(global_x, global_y)
-    begin
-        curr_pixel <= BACKGROUND;
-        if ship_pixel /= BACKGROUND then
-            curr_pixel <= ship_pixel;
-        end if;
-        for l in 0 to NUM_LIVES-1 loop
-            if ship_life_pixels(l) /= BACKGROUND then
-                curr_pixel <= ship_life_pixels(l);
-            end if;
-        end loop;
-        for s in 0 to NUM_LASERS-1 loop
-            if laser_pixels(s) /= BACKGROUND then
-                curr_pixel <= laser_pixels(s);
-            end if;
-        end loop;
-        for a in 0 to NUM_ENEMIES-1 loop
-            if aliens_pixels(a) /= BACKGROUND then
-                curr_pixel <= aliens_pixels(a);
-            end if;
-        end loop;
-        if score_pixel /= BACKGROUND then
-            curr_pixel <= score_pixel;
-        end if;    
-        if bottom_line_pixel /= BACKGROUND then
-            curr_pixel <= bottom_line_pixel;
-        end if; 
-        if top_line_pixel /= BACKGROUND then
-            curr_pixel <= top_line_pixel;
-        end if;
-    end process;
+    -- pixel : process(global_x, global_y)
+    -- begin
+    --     curr_pixel <= BACKGROUND;
+    --     if ship_pixel /= BACKGROUND then
+    --         curr_pixel <= ship_pixel;
+    --     end if;
+    --     for l in 0 to NUM_LIVES-1 loop
+    --         if ship_life_pixels(l) /= BACKGROUND then
+    --             curr_pixel <= ship_life_pixels(l);
+    --         end if;
+    --     end loop;
+    --     for s in 0 to NUM_LASERS-1 loop
+    --         if laser_pixels(s) /= BACKGROUND then
+    --             curr_pixel <= laser_pixels(s);
+    --         end if;
+    --     end loop;
+    --     for a in 0 to NUM_ENEMIES-1 loop
+    --         if aliens_pixels(a) /= BACKGROUND then
+    --             curr_pixel <= aliens_pixels(a);
+    --         end if;
+    --     end loop;
+    --     if score_pixel /= BACKGROUND then
+    --         curr_pixel <= score_pixel;
+    --     end if;    
+    --     if bottom_line_pixel /= BACKGROUND then
+    --         curr_pixel <= bottom_line_pixel;
+    --     end if; 
+    --     if top_line_pixel /= BACKGROUND then
+    --         curr_pixel <= top_line_pixel;
+    --     end if;
+    -- end process;
 
-    collision : process(global_x, global_y)
-    begin
-        if ship_alive = '0' then
-            -- ship_collision <= '0';
-        end if;
-        if ship_pixel /= BACKGROUND then
-            for a in 0 to NUM_ENEMIES-1 loop
-                if aliens_pixels(a) /= BACKGROUND then
-                    -- ship_collision <= '1';
-                end if;
-            end loop;
-        end if;
-        for l in 0 to NUM_LASERS-1 loop
-            for a in 0 to NUM_ENEMIES-1 loop
-                if laser_pixels(l) /= BACKGROUND then
-                    if aliens_pixels(a) /= BACKGROUND then
-                        aliens_killed(a) <= '1';
-                        laser_hit(l) <= '1';
-                    -- increase score
-                    else
-                        aliens_killed(a) <= '0';
-                        laser_hit(l) <= '0';
-                    end if;
-                end if;
-            end loop;
-        end loop;
-    end process;
+    -- collision : process(global_x, global_y)
+    -- begin
+    --     if ship_alive = '0' then
+    --         -- ship_collision <= '0';
+    --     end if;
+    --     if ship_pixel /= BACKGROUND then
+    --         for a in 0 to NUM_ENEMIES-1 loop
+    --             if aliens_pixels(a) /= BACKGROUND then
+    --                 -- ship_collision <= '1';
+    --             end if;
+    --         end loop;
+    --     end if;
+    --     for l in 0 to NUM_LASERS-1 loop
+    --         for a in 0 to NUM_ENEMIES-1 loop
+    --             if laser_pixels(l) /= BACKGROUND then
+    --                 if aliens_pixels(a) /= BACKGROUND then
+    --                     aliens_killed(a) <= '1';
+    --                     laser_hit(l) <= '1';
+    --                 -- increase score
+    --                 else
+    --                     aliens_killed(a) <= '0';
+    --                     laser_hit(l) <= '0';
+    --                 end if;
+    --             end if;
+    --         end loop;
+    --     end loop;
+    -- end process;
 
-    LEDR(9) <= ship_collision;
+    -- LEDR(9) <= ship_collision;
     -- TEST1: score port map (
     --     box => score_box,
     --     enable => global_display_en,
@@ -368,7 +400,7 @@ begin
     --     dispPoint => '0',
     --     HEX => HEX3
     -- );
-    U1: clk_div port map (clk_in => MAX10_CLK1_50, div => 500000000, clk_out => very_slow_clk);
+    -- U1: clk_div port map (clk_in => MAX10_CLK1_50, div => 500000000, clk_out => very_slow_clk);
 --     process (very_slow_clk)
 --     begin
 --         if rising_edge(very_slow_clk) then
@@ -380,85 +412,86 @@ begin
 --         end if;
 --     end process;
     
-    ship_collision <= SW(9);
+    -- ship_collision <= SW(9);
     
-    ship_main : process(ship_collision)
-    begin
-        if ship_collision = '1' then
-            ship_alive <= '0';
-            ship_reset_L <= '0';
-            LEDR(0) <= '1';
-            if ship_lives = "000" then
-                game_over <= '1';
-            else 
-                ship_lives <= std_logic_vector(shift_left(unsigned(ship_lives), 1));
-			end if;
-        else
-            ship_alive <= '1';
-            ship_reset_L <= '1';
-        end if;
-    end process;
+    -- ship_main : process(ship_collision)
+    -- begin
+    --     if rising_edge(ship_collision) then
+    --         ship_alive <= '0';
+    --         ship_reset_L <= '0';
+    --         if ship_lives = "000" then
+    --             game_over <= '1';
+    --         else 
+    --             ship_lives <= std_logic_vector(shift_left(unsigned(ship_lives), 1));
+    --         end if;
+    --     end if;
+        
+    --     if ship_alive = '0' and game_over = '0' then
+    --         ship_alive <= '1';
+    --         ship_reset_L <= '1';
+    --     end if;
+    -- end process;
      
 ----Ship Lives--------------------------------------------------------------------------------------------------------------------
-    SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
-                    SHIP_LIFE: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
-                                        port map (box => ship_lives_box(I), bit_map => SHIP, enable => ship_lives(I), pixel => ship_life_pixels(I));
+    -- SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
+    --                 SHIP_LIFE: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
+    --                                     port map (box => ship_lives_box(I), bit_map => SHIP, enable => ship_lives(I), pixel => ship_life_pixels(I));
                     
-                    ship_lives_box(I).x_pos <= global_x;
-                    ship_lives_box(I).y_pos <= global_y;
-                    ship_lives_box(I).x_origin <= 10 + ((10 + ship_sizeX) * I);
-                    ship_lives_box(I).y_origin <= 5;
-    end generate;
+    --                 ship_lives_box(I).x_pos <= global_x;
+    --                 ship_lives_box(I).y_pos <= global_y;
+    --                 ship_lives_box(I).x_origin <= 10 + ((10 + ship_sizeX) * I);
+    --                 ship_lives_box(I).y_origin <= 5;
+    -- end generate;
     
 ----Laser-------------------------------------------------------------------------------------------------------------------------
-    LASERS: for I in 0 to NUM_LASERS-1 generate
-            LASER_disp: objDisp generic map (X_SIZE => laser_sizeX, Y_SIZE => laser_sizeY)
-                            port map (box => lasers_box(I), bit_map => LASER, enable => laser_shoot_main(I) AND NOT laser_hit(I), pixel => laser_pixels(I));          
-            LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND NOT laser_hit(I), x_loc => lasers_xloc(I));
-            laser_offset : process(lasers_xloc(I))
-            begin
-                if laser_x(I) + lasers_xloc(I) > screen_WIDTH then
-                    laser_shoot2(I) <= '0';
-                else
-                    lasers_box(I).x_origin <= laser_x(I) + lasers_xloc(I);
-                    laser_shoot2(I) <= '1';
-                end if;
-                lasers_box(I).y_origin <= laser_y(I);
-            end process;
-            lasers_box(I).x_pos <= global_x;
-            lasers_box(I).y_pos <= global_y;
-	end generate;
+    -- LASERS: for I in 0 to NUM_LASERS-1 generate
+    --         LASER_disp: objDisp generic map (X_SIZE => laser_sizeX, Y_SIZE => laser_sizeY)
+    --                         port map (box => lasers_box(I), bit_map => LASER, enable => laser_shoot_main(I) AND NOT laser_hit(I), pixel => laser_pixels(I));          
+    --         LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND NOT laser_hit(I), x_loc => lasers_xloc(I));
+    --         laser_offset : process(lasers_xloc(I))
+    --         begin
+    --             if laser_x(I) + lasers_xloc(I) > screen_WIDTH then
+    --                 laser_shoot2(I) <= '0';
+    --             else
+    --                 lasers_box(I).x_origin <= laser_x(I) + lasers_xloc(I);
+    --                 laser_shoot2(I) <= '1';
+    --             end if;
+    --             lasers_box(I).y_origin <= laser_y(I);
+    --         end process;
+    --         lasers_box(I).x_pos <= global_x;
+    --         lasers_box(I).y_pos <= global_y;
+	-- end generate;
 
-    shoot_laser : process(KEY(0), laser_shoot2)
-    variable en : integer := 0;
-    begin
-        if game_over = '0' then
-            if falling_edge(KEY(0)) then
-                laser_shoot_main(en) <= '1';
-                laser_x(en) <= ship_box.x_origin;
-                laser_y(en) <= ship_box.y_origin + 5;
-                en := (en + 1) mod NUM_LASERS;
-            end if;
-        end if;
-        for i in 0 to NUM_LASERS-1 loop
-            if laser_shoot2(i) = '0' then
-                laser_shoot_main(i) <= '0';
-            end if;
-        end loop;
+    -- shoot_laser : process(KEY(0), laser_shoot2)
+    -- variable en : integer := 0;
+    -- begin
+    --     if game_over = '0' then
+    --         if falling_edge(KEY(0)) then
+    --             laser_shoot_main(en) <= '1';
+    --             laser_x(en) <= ship_box.x_origin;
+    --             laser_y(en) <= ship_box.y_origin + 5;
+    --             en := (en + 1) mod NUM_LASERS;
+    --         end if;
+    --     end if;
+    --     for i in 0 to NUM_LASERS-1 loop
+    --         if laser_shoot2(i) = '0' then
+    --             laser_shoot_main(i) <= '0';
+    --         end if;
+    --     end loop;
 
-    end process;
+    -- end process;
     
 
 ----Aliens-------------------------------------------------------------------------------------------------------------------------      
-    ALIENS: for I in 0 to NUM_ENEMIES-1 generate
-            ALIEN: objDisp generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
-                            port map (box => aliens_box(I), bit_map => ALIEN_1, enable => aliens_alive(I), pixel => aliens_pixels(I));
+    -- ALIENS: for I in 0 to NUM_ENEMIES-1 generate
+    --         ALIEN: objDisp generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
+    --                         port map (box => aliens_box(I), bit_map => ALIEN_1, enable => aliens_alive(I), pixel => aliens_pixels(I));
             
-            ALIEN_LOC: alien_movement generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
-                                        port map (max10_clk => MAX10_CLK1_50, reset_L => aliens_alive(I) AND NOT aliens_killed(I), alive => aliens_alive(I) AND NOT aliens_killed(I), x_loc => aliens_box(I).x_origin, y_loc => aliens_box(I).y_origin);
-            aliens_box(I).x_pos <= global_x;
-            aliens_box(I).y_pos <= global_y;
-	end generate;
+    --         ALIEN_LOC: alien_movement generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
+    --                                     port map (max10_clk => MAX10_CLK1_50, reset_L => aliens_alive(I) AND NOT aliens_killed(I), alive => aliens_alive(I) AND NOT aliens_killed(I), x_loc => aliens_box(I).x_origin, y_loc => aliens_box(I).y_origin);
+    --         aliens_box(I).x_pos <= global_x;
+    --         aliens_box(I).y_pos <= global_y;
+	-- end generate;
 	
     -- RN: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => '1', enable => '1', seed => "01001101", random_8 => random_alive_div);
 

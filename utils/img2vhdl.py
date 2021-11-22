@@ -16,7 +16,7 @@ OUTPUT_FILE = args.output_file
 IMAGE_SIZE_X = args.sizeX
 IMAGE_SIZE_Y = args.sizeY
 
-IMAGE_COLORS = 16
+IMAGE_COLORS = 4
 
 image = Image.open(IMAGE_FILE)
 
@@ -65,7 +65,9 @@ def gen_column_string(array):
         col_string += "=>"
         col_string += " "
 
-        col_string +=  "Pixel_t" + "(" + "X\"" + hex(u[i][0])[2:] + "\"" + "," + "X\"" + hex(u[i][1])[2:] + "\"" + "," + "X\"" + hex(u[i][2])[2:] + "\"" + ")"
+        col_string +=  "Pixel_t" + "(" + "\"" + bin(u[i][0])[2:] + "\"" + "," + "\"" + bin(u[i][1])[2:] + "\"" + "," + "\"" + bin(u[i][2])[2:] + "\"" + ")"
+        col_string = col_string.replace("\"0\"", "\"00\"")  # python will shorten b01 to b1, so unshorten it
+        col_string = col_string.replace("\"1\"", "\"01\"")
         
         master_column_list.append(col_string)
 
