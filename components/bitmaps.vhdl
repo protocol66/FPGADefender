@@ -28,8 +28,14 @@ package bitmaps is
     constant score_board_sizeX : positive := (score_sizeX + score_space_size)*5 + score_sizeY;
     constant score_board_sizeY : positive := score_sizeY;
 
-    constant alien1_sizeX : positive := 20;
-    constant alien1_sizeY : positive := 20;
+    constant alien1_sizeX : positive := 30;
+    constant alien1_sizeY : positive := 30;
+
+    constant alien2_sizeX : positive := 20;
+    constant alien2_sizeY : positive := 20;
+
+    constant alien3_sizeX : positive := 10;
+    constant alien3_sizeY : positive := 10;
 
     constant asteroid_sizeX : positive := 40;
     constant asteroid_sizeY : positive := 40;
@@ -37,7 +43,9 @@ package bitmaps is
     constant H_LINE : bit_map_t (0 to line_sizeY-1, 0 to line_sizeX-1) := (others => (others => WHITE));
     constant SHIP : bit_map_t (0 to ship_sizeY-1, 0 to ship_sizeX-1) := (others => (others => TEAL));
     constant LASER : bit_map_t (0 to laser_sizeY-1, 0 to laser_sizeX-1) := (others => (others => GREEN));
-    constant ALIEN_1 : bit_map_t (0 to alien1_sizeY-1, 0 to alien1_sizeX-1) := (others => (others => YELLOW)); 
+    constant ALIEN_1 : bit_map_t (0 to alien1_sizeY-1, 0 to alien1_sizeX-1) := (others => (others => YELLOW));
+    constant ALIEN_2 : bit_map_t (0 to alien2_sizeY-1, 0 to alien2_sizeX-1) := (others => (others => RED)); 
+    constant ALIEN_3 : bit_map_t (0 to alien3_sizeY-1, 0 to alien3_sizeX-1) := (others => (others => BLUE));  
     constant ASTEROID : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => PURPLE)); 
     constant SATELLITE : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => GREEN)); 
 

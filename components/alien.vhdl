@@ -16,6 +16,8 @@ entity alien_movement is
         reset_L : in std_logic;
         alive : in std_logic;
         cnt_div : positive := 500000;
+        random_Y : in std_logic_vector (7 downto 0);
+
         x_loc : out integer;
         y_loc : out integer
     );        
@@ -29,16 +31,13 @@ architecture arch of alien_movement is
     signal random_Y : std_logic_vector (7 downto 0);
     signal spawn : integer := screen_HEIGHT / 2;
 
-    signal x_counter_clk : std_logic;
-    signal y_counter_clk : std_logic;
-    signal x_enable : std_logic := '1';
-    signal y_enable : std_logic := '1';
     signal x_shift : std_logic_vector(9 downto 0);
     signal y_shift : std_logic_vector(8 downto 0);
     signal y_up_down : std_logic := '0';
-    signal change_Y : std_logic := '0';
-	 
-	signal clk_1k : std_logic;
+	
+    signal random : std_logic_vector (7 downto 0);
+	signal clk_a : std_logic;
+    signal clk_b : std_logic;
     
     component clk_div is
         port (
@@ -73,11 +72,12 @@ architecture arch of alien_movement is
     end component;
 
 begin
-    U1: clk_div port map (clk_in => max10_clk, div => cnt_div, clk_out => clk_1k);
-    U2: counter generic map (SIZE => 10) port map(clk => clk_1k, up_down => '0', reset_L => reset_L, enable => alive, cout => x_shift);
-    -- U3: counter generic map (SIZE => 9) port map(clk => clk_1k, up_down => y_up_down, reset_L => reset_L, enable => y_enable, cout => y_shift);
-    U4: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random_Y);
-    -- U4: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, => random_8 => random_Y);
+    U1: clk_div port map (clk_in => max10_clk, div => cnt_div, clk_out => clk_a);
+    U2: clk_div port map (clk_in => max10_clk, div => 5 * 50000000, clk_out => clk_b);
+    U3: counter generic map (SIZE => 10) port map(clk => clk_a, up_down => '0', reset_L => reset_L, enable => alive, cout => x_shift);
+    -- U4: counter generic map (SIZE => 9) port map(clk => clk_a, up_down => y_up_down, reset_L => reset_L, enable => alive, cout => y_shift);
+    -- U5: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random_Y);
+    -- U6: pseudorandom_8 port map (clk => clk_b, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random);
 
     y_loc <= spawn;
 
@@ -93,13 +93,19 @@ begin
     y_location : process(reset_L, random_Y)
     begin
         if reset_L = '0' then
-            if to_integer(unsigned(random_Y)) < MAX_UP then
-                spawn <= to_integer(unsigned(random_Y)) + MAX_UP;
-            elsif to_integer(unsigned(random_Y)) * 2 > MAX_DOWN then
-                spawn <= to_integer(shift_right(unsigned(random_Y),2));
+            if to_integer(unsigned(random_Y)) + 100 > MAX_DOWN then
+                spawn <= to_integer(unsigned(random_Y));
             else
-                spawn <= to_integer(unsigned(random_Y)) * 2;
+                spawn <= to_integer(unsigned(random_Y)) + 100;
 			end if;
+        else
+            -- if to_integer(signed(y_shift)) + spawn < MAX_UP then
+            --     y_up_down <= '0';
+            -- elsif to_integer(signed(y_shift)) + spawn > MAX_DOWN then
+            --     y_up_down <= '1';
+            -- else
+            --     y_up_down <= random(2) XOR random_Y(4);
+            -- end if;
 		end if;
     end process;
 

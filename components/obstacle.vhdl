@@ -12,8 +12,10 @@ entity obstacle_movement is
     );
     port (
         max10_clk : in std_logic;
+        reset_L : in std_logic;
         active : in std_logic;
         cnt_div : positive := 2500000;
+        random_Y : in std_logic_vector(7 downto 0);
         x_loc : out integer;
         y_loc : out integer
     );        
@@ -72,8 +74,8 @@ architecture arch of obstacle_movement is
 
 begin
     U1: clk_div port map (clk_in => max10_clk, div => cnt_div, clk_out => clk_1k);
-    U2: counter generic map (SIZE => 10) port map(clk => clk_1k, up_down => '0', reset_L => active, enable => active, cout => x_shift);
-    U4: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random_Y);
+    U2: counter generic map (SIZE => 10) port map(clk => clk_1k, up_down => '0', reset_L => reset_L, enable => active, cout => x_shift);
+    -- U4: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random_Y);
 
     x_location : process(active, x_shift)
     begin
@@ -87,12 +89,10 @@ begin
     y_location : process(active, random_Y)
     begin
         if active = '0' then
-            if to_integer(unsigned(random_Y)) < MAX_UP then
-                y_loc <= to_integer(unsigned(random_Y)) + MAX_UP;
-            elsif to_integer(unsigned(random_Y)) * 2 > MAX_DOWN then
-                y_loc <= to_integer(shift_right(unsigned(random_Y),2));
+            if to_integer(unsigned(random_Y)) + 100 > MAX_DOWN then
+                y_loc <= to_integer(unsigned(random_Y));
             else
-                y_loc <= to_integer(unsigned(random_Y)) * 2;
+                y_loc <= to_integer(unsigned(random_Y)) + 100;
 			end if;
 		end if;
     end process;
