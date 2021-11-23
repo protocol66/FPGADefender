@@ -32,7 +32,7 @@ architecture arch of objDisp is
     signal x, y : integer;
     signal addr : std_logic_vector(15 downto 0);
     signal in_bounds : std_logic;
-    signal mem_out : std_logic_vector(5 downto 0);
+    signal mem_out : std_logic(5 downto 0);
 
 begin
     x <= get_bb_x_index(box);

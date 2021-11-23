@@ -457,5 +457,14 @@ set_global_assignment -name VHDL_FILE ../components/score.vhdl
 set_global_assignment -name VHDL_FILE ../components/counter.vhdl
 set_global_assignment -name VHDL_FILE ../components/bin2seg7.vhdl
 set_global_assignment -name VERILOG_FILE DE10_LITE_Golden_Top.v
-set_global_assignment -name QIP_FILE ../components/ram/test_ram.qip
+set_global_assignment -name QIP_FILE ../components/rom/rom1.qip
+set_global_assignment -name ENABLE_OCT_DONE ON
+set_global_assignment -name EXTERNAL_FLASH_FALLBACK_ADDRESS 00000000
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name INTERNAL_FLASH_UPDATE_MODE "SINGLE IMAGE WITH ERAM"
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

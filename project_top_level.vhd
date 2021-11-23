@@ -119,8 +119,9 @@ architecture rtl of project_top_level is
             Y_SIZE : positive
         );
         port (
+            clk : std_logic;
             box : Bounding_Box;
-            bit_map : bit_map_t(0 to Y_SIZE-1, 0 to X_SIZE-1);
+            -- bit_map : bit_map_t(0 to Y_SIZE-1, 0 to X_SIZE-1);
             enable : in std_logic;
             pixel : out Pixel_t
         );
@@ -361,63 +362,63 @@ begin
     -- CALC_NOTE: note_gen port map (clk => note_clk, enable => '1', notes => SW & '0' & '0', pwm => pwm);
     -- ARDUINO_IO(12) <= pwm;
 
-    FX_GEN6: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(5),
-        fx => fx6,
-        pwm => pwm(5)
-    );
-    FX_GEN5: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(4),
-        fx => fx5,
-        pwm => pwm(4)
-    );
-    FX_GEN4: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(3),
-        fx => fx4,
-        pwm => pwm(3)
-    );
-    FX_GEN3: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(2),
-        fx => fx3,
-        pwm => pwm(2)
-    );
-    FX_GEN2: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(1),
-        fx => fx2,
-        pwm => pwm(1)
-    );
-    FX_GEN1: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(0),
-        fx => fx1,
-        pwm => pwm(0)
-    );
+    -- FX_GEN6: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(5),
+    --     fx => fx6,
+    --     pwm => pwm(5)
+    -- );
+    -- FX_GEN5: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(4),
+    --     fx => fx5,
+    --     pwm => pwm(4)
+    -- );
+    -- FX_GEN4: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(3),
+    --     fx => fx4,
+    --     pwm => pwm(3)
+    -- );
+    -- FX_GEN3: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(2),
+    --     fx => fx3,
+    --     pwm => pwm(2)
+    -- );
+    -- FX_GEN2: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(1),
+    --     fx => fx2,
+    --     pwm => pwm(1)
+    -- );
+    -- FX_GEN1: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(0),
+    --     fx => fx1,
+    --     pwm => pwm(0)
+    -- );
 
-    ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
+    -- ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
 
     TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
-                        port map (box => Tline_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
+                        port map (box => Tline_box, clk => MAX10_CLK1_50, enable => '1', pixel => top_line_pixel);
     BOTTOM_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
-                        port map (box => Bline_box, bit_map => H_LINE, enable => '1', pixel => bottom_line_pixel);
+                        port map (box => Bline_box, clk  => MAX10_CLK1_50, enable => '1', pixel => bottom_line_pixel);
 
     SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
                                              GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
     SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
-                        port map (box => ship_box, bit_map => SHIP, enable => ship_alive AND NOT game_over, pixel => ship_pixel);
+                        port map (box => ship_box, clk  => MAX10_CLK1_50, enable => ship_alive AND NOT game_over, pixel => ship_pixel);
 
     SCORE_1: objDisp generic map (X_SIZE => score_sizeX, Y_SIZE => score_sizeY)
-                        port map (box => score_box, bit_map => score_blank, enable => KEY(0), pixel => score_pixel);
+                        port map (box => score_box, clk  => MAX10_CLK1_50, enable => KEY(0), pixel => score_pixel);
 
     pixel : process(global_x, global_y)
     begin
@@ -551,7 +552,7 @@ begin
 ----Ship Lives--------------------------------------------------------------------------------------------------------------------
     SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
                     SHIP_LIFE: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
-                                        port map (box => ship_lives_box(I), bit_map => SHIP, enable => ship_lives(I), pixel => ship_life_pixels(I));
+                                        port map (box => ship_lives_box(I), clk  => MAX10_CLK1_50, enable => ship_lives(I), pixel => ship_life_pixels(I));
                     
                     ship_lives_box(I).x_pos <= global_x;
                     ship_lives_box(I).y_pos <= global_y;
@@ -562,7 +563,7 @@ begin
 ----Laser-------------------------------------------------------------------------------------------------------------------------
     LASERS: for I in 0 to NUM_LASERS-1 generate
             LASER_disp: objDisp generic map (X_SIZE => laser_sizeX, Y_SIZE => laser_sizeY)
-                            port map (box => lasers_box(I), bit_map => LASER, enable => laser_shoot_main(I) AND NOT laser_hit(I), pixel => laser_pixels(I));          
+                            port map (box => lasers_box(I), clk  => MAX10_CLK1_50, enable => laser_shoot_main(I) AND NOT laser_hit(I), pixel => laser_pixels(I));          
             LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND NOT laser_hit(I), x_loc => lasers_xloc(I));
             laser_offset : process(lasers_xloc(I))
             begin
@@ -601,7 +602,7 @@ begin
 ----Aliens-------------------------------------------------------------------------------------------------------------------------      
     ALIENS: for I in 0 to NUM_ENEMIES-1 generate
             ALIEN: objDisp generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
-                            port map (box => aliens_box(I), bit_map => ALIEN_1, enable => aliens_alive(I), pixel => aliens_pixels(I));
+                            port map (box => aliens_box(I), clk => MAX10_CLK1_50, enable => aliens_alive(I), pixel => aliens_pixels(I));
             ALIEN_LOC: alien_movement generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
                                         port map (max10_clk => MAX10_CLK1_50, reset_L => aliens_alive(I) AND NOT aliens_killed(I), cnt_div => 3 * SEC / 640, alive => aliens_alive(I) AND NOT aliens_killed(I), x_loc => aliens_box(I).x_origin, y_loc => aliens_box(I).y_origin);
             aliens_box(I).x_pos <= global_x;
@@ -629,7 +630,7 @@ begin
 
     ASTEROIDS: for I in 0 to NUM_ASTEROIDS-1 generate
             ASTEROID_DISP: objDisp generic map (X_SIZE => asteroid_sizeX, Y_SIZE => asteroid_sizeY) 
-                                port map (box => asteroids_box(I), bit_map => ASTEROID, enable => asteroids_active(I), pixel => asteroids_pixels(I));
+                                port map (box => asteroids_box(I), clk => MAX10_CLK1_50, enable => asteroids_active(I), pixel => asteroids_pixels(I));
             ASTEROID_LOC: obstacle_movement generic map (Y_SIZE => asteroid_sizeY)
                                             port map (max10_clk => MAX10_CLK1_50, active => asteroids_active(I), cnt_div => 25 * SEC / 640, x_loc => asteroids_box(I).x_origin, y_loc => asteroids_box(I).y_origin);
             asteroids_box(I).x_pos <= global_x;
@@ -663,5 +664,4 @@ begin
         end loop;
     end process;
 
-    >>>>>>> a0324b011e56280e68b73a3e8eec59b53da9882f    
 end architecture;
