@@ -433,8 +433,8 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[34]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[35]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to reset_L
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LEDR[0]
+set_global_assignment -name VHDL_FILE ../components/obstacle.vhdl
 set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
-
 set_global_assignment -name VHDL_FILE ../components/sound_fx.vhdl
 set_global_assignment -name VHDL_FILE ../components/note_gen.vhdl
 set_global_assignment -name VHDL_FILE ../components/bin2dec.vhdl
