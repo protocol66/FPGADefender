@@ -20,8 +20,14 @@ package my_data_types is
         y_pos    : integer range 0 to 480-1;
     end record;
 
-    type bit_map_t is array (natural range<>, natural range<>) of Pixel_t;
+    type fx_ar_t is array(31 downto 0) of integer range 0 to 2000;  --max frequency is 2000hz
 
+    type Sound_FX_t is record
+        fx_trans_freq : integer;
+        fx_ar_freq : fx_ar_t;
+    end record;
+
+    type bit_map_t is array (natural range<>, natural range<>) of Pixel_t;
     constant BLACK  : Pixel_t := ((others => '0'), (others => '0'), (others => '0'));
     constant BLUE   : Pixel_t := ((others => '0'), (others => '0'), (others => '1'));
     constant GREEN  : Pixel_t := ((others => '0'), (others => '1'), (others => '0'));

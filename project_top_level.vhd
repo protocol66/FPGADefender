@@ -19,6 +19,7 @@ entity project_top_level is
         -- HEX0, HEX1, HEX2, HEX3    : out std_logic_vector(7 downto 0);
         SW : in std_logic_vector(9 downto 0);
         LEDR : out std_logic_vector(9 downto 0);
+        ARDUINO_IO : out std_logic_vector(12 downto 12);
 
         GSENSOR_CS_N : OUT	STD_LOGIC;
         GSENSOR_SCLK : OUT	STD_LOGIC;
@@ -91,6 +92,25 @@ architecture rtl of project_top_level is
             pixel     : out Pixel_t
         );
     end component score;
+
+    component note_gen is
+        port (
+            clk   : in std_logic;       -- must be 44100hz
+            enable : in std_logic;
+            notes : in std_logic_vector(11 downto 0); -- twelve notes in an octave
+            pwm : buffer std_logic := '0'
+        );
+    end component note_gen;
+
+    component sound_fx is
+        port (
+            clk   : in std_logic;   -- make this 50mhz
+            reset_L : in std_logic;
+            enable : in std_logic;
+            fx : in Sound_FX_t;
+            pwm : out std_logic
+        );
+    end component sound_fx;
 
     component objDisp is
         generic (
@@ -255,8 +275,8 @@ architecture rtl of project_top_level is
     signal asteroids_pixels : asteroids_pixel_vector;
     signal asteroids_active : std_logic_vector(NUM_ASTEROIDS-1 downto 0) := (others => '0');
 
-    -- signal score_box : Bounding_Box;
-    -- signal score_pixel : Pixel_t;
+    signal score_box : Bounding_Box;
+    signal score_pixel : Pixel_t;
 
     signal score1_box : Bounding_Box;
     signal score1_pixel : Pixel_t;
@@ -286,6 +306,9 @@ architecture rtl of project_top_level is
     signal a3_spawn_div : natural;
     signal obs_cnt_div : natural;
     signal obs_spawn_div : natural;
+
+    signal pwm : std_logic_vector(5 downto 0);
+    signal note_clk : std_logic;
 
 begin
 
@@ -356,6 +379,51 @@ begin
     ship_box.y_pos <= global_y;
     ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
     ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
+
+    FX_GEN6: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => SW(5),
+        fx => fx6,
+        pwm => pwm(5)
+    );
+    FX_GEN5: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => SW(4),
+        fx => fx5,
+        pwm => pwm(4)
+    );
+    FX_GEN4: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => SW(3),
+        fx => fx4,
+        pwm => pwm(3)
+    );
+    FX_GEN3: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => SW(2),
+        fx => fx3,
+        pwm => pwm(2)
+    );
+    FX_GEN2: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => SW(1),
+        fx => fx2,
+        pwm => pwm(1)
+    );
+    FX_GEN1: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => SW(0),
+        fx => fx1,
+        pwm => pwm(0)
+    );
+
+    ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
 
     TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
                         port map (box => Tline_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
@@ -808,5 +876,6 @@ begin
             end loop;
         end if;
     end process;
-    
+
+    >>>>>>> a0324b011e56280e68b73a3e8eec59b53da9882f    
 end architecture;
