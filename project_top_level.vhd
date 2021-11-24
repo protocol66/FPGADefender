@@ -309,6 +309,8 @@ architecture rtl of project_top_level is
 
     signal pwm : std_logic_vector(5 downto 0);
     signal note_clk : std_logic;
+    signal alien_killed_fx : std_logic := '0';
+    signal ship_hit_fx : std_logic := '0';
 
 begin
 
@@ -380,31 +382,32 @@ begin
     ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
     ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
 
-    -- FX_GEN6: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(5),
-    --     fx => fx6,
-    --     pwm => pwm(5)
-    -- );
-    -- FX_GEN5: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(4),
-    --     fx => fx5,
-    --     pwm => pwm(4)
-    -- );
-    -- FX_GEN4: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(3),
-    --     fx => fx4,
-    --     pwm => pwm(3)
-    -- );
+    FX_GEN6: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => game_over,
+        enable => game_over,
+        fx => fx6,
+        pwm => pwm(5)
+    );
+
+    FX_GEN5: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => alien_killed_fx,
+        enable => not game_over,
+        fx => fx5,
+        pwm => pwm(4)
+    );
+    FX_GEN4: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => not game_over,
+        fx => fx4,
+        pwm => pwm(3)
+    );
     -- FX_GEN3: sound_fx port map (
     --     clk => MAX10_CLK1_50,
     --     reset_L => KEY(0),
-    --     enable => SW(2),
+    --     enable => not game_over,
     --     fx => fx3,
     --     pwm => pwm(2)
     -- );
@@ -415,15 +418,15 @@ begin
     --     fx => fx2,
     --     pwm => pwm(1)
     -- );
-    -- FX_GEN1: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(0),
-    --     fx => fx1,
-    --     pwm => pwm(0)
-    -- );
+    FX_GEN1: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => not ship_collision,
+        enable => not game_over,
+        fx => fx1,
+        pwm => pwm(0)
+    );
 
-    -- ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
+    ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
 
     TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
                         port map (box => Tline_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
@@ -610,20 +613,24 @@ begin
                     aliens2_killed(a) <= '0';
                     aliens3_killed(a) <= '0';
                     laser_hit(l) <= '0';
+                    alien_killed_fx <= '1';
                     if aliens1_pixels(a) /= BACKGROUND then
                         aliens1_killed(a) <= '1';
                         laser_hit(l) <= '1';
                         curr_score <= curr_score + 150;
+                        alien_killed_fx <= '0';
                     end if;
                     if aliens2_pixels(a) /= BACKGROUND then
                         aliens2_killed(a) <= '1';
                         laser_hit(l) <= '1';
                         curr_score <= curr_score + 300;
+                        alien_killed_fx <= '0';
                     end if;
                     if aliens3_pixels(a) /= BACKGROUND then
                         aliens3_killed(a) <= '1';
                         laser_hit(l) <= '1';
                         curr_score <= curr_score + 600;
+                        alien_killed_fx <= '0';
                     end if;
                 end if;
             end loop;
