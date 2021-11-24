@@ -28,7 +28,6 @@ architecture arch of alien_movement is
     constant MAX_DOWN : integer := screen_HEIGHT - Y_SIZE - 10;
 
     signal spawn_seed : std_logic_vector (7 downto 0) := "01001100";
-    signal random_Y : std_logic_vector (7 downto 0);
     signal spawn : integer := screen_HEIGHT / 2;
 
     signal x_shift : std_logic_vector(9 downto 0);

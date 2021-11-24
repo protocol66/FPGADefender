@@ -713,7 +713,7 @@ begin
             LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND (NOT laser_hit(I)), x_loc => lasers_xloc(I));
             laser_offset : process(lasers_xloc(I))
             begin
-                if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) then
+                if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) = '1' then
                     laser_shoot2(I) <= '0';
                 else
                     lasers_box(I).x_origin <= laser_x(I) + lasers_xloc(I);

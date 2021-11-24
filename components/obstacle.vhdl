@@ -26,7 +26,6 @@ architecture arch of obstacle_movement is
     constant MAX_DOWN : integer := screen_HEIGHT - Y_SIZE - 10;
 
     signal spawn_seed : std_logic_vector (7 downto 0) := "11001010";
-    signal random_Y : std_logic_vector (7 downto 0);
     signal spawn : integer := screen_HEIGHT / 2;
 
     signal x_counter_clk : std_logic;
