@@ -281,7 +281,7 @@ architecture rtl of project_top_level is
     signal score1_box : Bounding_Box;
     signal score1_pixel : Pixel_t;
 
-    signal curr_score : natural := 0;
+    signal curr_score : integer := 0;
     
     signal game_over : std_logic := '0';
     
@@ -380,50 +380,50 @@ begin
     ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
     ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
 
-    FX_GEN6: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(5),
-        fx => fx6,
-        pwm => pwm(5)
-    );
-    FX_GEN5: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(4),
-        fx => fx5,
-        pwm => pwm(4)
-    );
-    FX_GEN4: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(3),
-        fx => fx4,
-        pwm => pwm(3)
-    );
-    FX_GEN3: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(2),
-        fx => fx3,
-        pwm => pwm(2)
-    );
-    FX_GEN2: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(1),
-        fx => fx2,
-        pwm => pwm(1)
-    );
-    FX_GEN1: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(0),
-        fx => fx1,
-        pwm => pwm(0)
-    );
+    -- FX_GEN6: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(5),
+    --     fx => fx6,
+    --     pwm => pwm(5)
+    -- );
+    -- FX_GEN5: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(4),
+    --     fx => fx5,
+    --     pwm => pwm(4)
+    -- );
+    -- FX_GEN4: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(3),
+    --     fx => fx4,
+    --     pwm => pwm(3)
+    -- );
+    -- FX_GEN3: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(2),
+    --     fx => fx3,
+    --     pwm => pwm(2)
+    -- );
+    -- FX_GEN2: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(1),
+    --     fx => fx2,
+    --     pwm => pwm(1)
+    -- );
+    -- FX_GEN1: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(0),
+    --     fx => fx1,
+    --     pwm => pwm(0)
+    -- );
 
-    ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
+    -- ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
 
     TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
                         port map (box => Tline_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
@@ -709,11 +709,11 @@ begin
 ----Laser-------------------------------------------------------------------------------------------------------------------------
     LASERS: for I in 0 to NUM_LASERS-1 generate
             LASER_disp: objDisp generic map (X_SIZE => laser_sizeX, Y_SIZE => laser_sizeY)
-                            port map (box => lasers_box(I), bit_map => LASER, enable => laser_shoot_main(I) AND NOT laser_hit(I), pixel => laser_pixels(I));          
-            LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND NOT laser_hit(I), x_loc => lasers_xloc(I));
+                            port map (box => lasers_box(I), bit_map => LASER, enable => laser_shoot_main(I) AND (NOT laser_hit(I)), pixel => laser_pixels(I));          
+            LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND (NOT laser_hit(I)), x_loc => lasers_xloc(I));
             laser_offset : process(lasers_xloc(I))
             begin
-                if laser_x(I) + lasers_xloc(I) > screen_WIDTH then
+                if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) then
                     laser_shoot2(I) <= '0';
                 else
                     lasers_box(I).x_origin <= laser_x(I) + lasers_xloc(I);
@@ -877,5 +877,4 @@ begin
         end if;
     end process;
 
-    >>>>>>> a0324b011e56280e68b73a3e8eec59b53da9882f    
 end architecture;
