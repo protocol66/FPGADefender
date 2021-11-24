@@ -437,7 +437,7 @@ begin
 
     SCORE_1: objDisp generic map (X_SIZE => score_sizeX, Y_SIZE => score_sizeY)
                         port map (box => score1_box, bit_map => score_0, enable => KEY(0), pixel => score1_pixel);
-   SCORE_BOARD: score generic map (X_SIZE => score_board_sizeX, Y_SIZE => score_board_sizeY)
+    SCORE_BOARD: score generic map (X_SIZE => score_board_sizeX, Y_SIZE => score_board_sizeY)
                        port map (box => score_box, enable => '1', score_in => curr_score, pixel => score_pixel);
 
 ----Pixel--------------------------------------------------------------------------------------------------------------------
