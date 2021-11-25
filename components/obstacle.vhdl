@@ -76,18 +76,18 @@ begin
     U2: counter generic map (SIZE => 10) port map(clk => clk_1k, up_down => '0', reset_L => reset_L, enable => active, cout => x_shift);
     -- U4: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random_Y);
 
-    x_location : process(active, x_shift)
+    x_location : process(reset_L, x_shift)
     begin
-        if active = '0' then
+        if reset_L = '0' then
             x_loc <= screen_WIDTH;
         else 
             x_loc <= screen_WIDTH - to_integer(unsigned(x_shift));
 		end if;
     end process;
     
-    y_location : process(active, random_Y)
+    y_location : process(reset_L, random_Y)
     begin
-        if active = '0' then
+        if reset_L = '0' then
             if to_integer(unsigned(random_Y)) + 100 > MAX_DOWN then
                 y_loc <= to_integer(unsigned(random_Y));
             else

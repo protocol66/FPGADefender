@@ -585,6 +585,9 @@ begin
 ----Collision---------------------------------------------------------------------------------------------------------------------
     collision : process(global_x, global_y)
     begin
+        if start_sticky = '0' then
+            curr_score <= 0;
+        end if;
         if ship_alive = '0' then
             ship_collision <= '0';
         end if;
@@ -720,13 +723,15 @@ begin
             LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND (NOT laser_hit(I)), x_loc => lasers_xloc(I));
             laser_offset : process(lasers_xloc(I))
             begin
-                if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) = '1' then
-                    laser_shoot2(I) <= '0';
-                else
-                    lasers_box(I).x_origin <= laser_x(I) + lasers_xloc(I);
-                    laser_shoot2(I) <= '1';
+                if pause = '0' then
+                    if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) = '1' then
+                        laser_shoot2(I) <= '0';
+                    else
+                        lasers_box(I).x_origin <= laser_x(I) + lasers_xloc(I);
+                        laser_shoot2(I) <= '1';
+                    end if;
+                    lasers_box(I).y_origin <= laser_y(I);
                 end if;
-                lasers_box(I).y_origin <= laser_y(I);
             end process;
             lasers_box(I).x_pos <= global_x;
             lasers_box(I).y_pos <= global_y;
@@ -743,6 +748,8 @@ begin
                     laser_y(en) <= ship_box.y_origin + 5;
                     en := (en + 1) mod NUM_LASERS;
                 end if;
+            else
+                laser_shoot_main(en) <= '0';
             end if;
             for i in 0 to NUM_LASERS-1 loop
                 if laser_shoot2(i) = '0' then
