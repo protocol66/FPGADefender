@@ -433,8 +433,18 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[34]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[35]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to reset_L
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to LEDR[0]
-set_global_assignment -name VHDL_FILE ../components/obstacle.vhdl
 set_global_assignment -name NUM_PARALLEL_PROCESSORS ALL
+set_global_assignment -name ENABLE_OCT_DONE ON
+set_global_assignment -name EXTERNAL_FLASH_FALLBACK_ADDRESS 00000000
+set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name INTERNAL_FLASH_UPDATE_MODE "SINGLE IMAGE WITH ERAM"
+set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
+set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name VHDL_FILE ../components/rom_controller.vhdl
+set_global_assignment -name VHDL_FILE ../components/obstacle.vhdl
 set_global_assignment -name VHDL_FILE ../components/sound_fx.vhdl
 set_global_assignment -name VHDL_FILE ../components/note_gen.vhdl
 set_global_assignment -name VHDL_FILE ../components/bin2dec.vhdl
@@ -453,18 +463,8 @@ set_global_assignment -name VHDL_FILE ../components/rng/pseudorandom_8.vhdl
 set_global_assignment -name VHDL_FILE ../components/rng/lsfr_base.vhdl
 set_global_assignment -name VHDL_FILE ../components/vga/vga_pll_25_175.vhd
 set_global_assignment -name VHDL_FILE ../components/vga/vga_controller.vhd
-set_global_assignment -name VHDL_FILE ../components/score.vhdl
 set_global_assignment -name VHDL_FILE ../components/counter.vhdl
 set_global_assignment -name VHDL_FILE ../components/bin2seg7.vhdl
 set_global_assignment -name VERILOG_FILE DE10_LITE_Golden_Top.v
 set_global_assignment -name QIP_FILE ../components/rom/rom1.qip
-set_global_assignment -name ENABLE_OCT_DONE ON
-set_global_assignment -name EXTERNAL_FLASH_FALLBACK_ADDRESS 00000000
-set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
-set_global_assignment -name INTERNAL_FLASH_UPDATE_MODE "SINGLE IMAGE WITH ERAM"
-set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
-set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
-set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
-set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
-set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

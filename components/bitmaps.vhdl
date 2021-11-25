@@ -8,8 +8,10 @@ package bitmaps is
     constant BACKGROUND : Pixel_t := BLACK;
     constant MAIN_CLK_FREQ : integer := 50000000;
 
+    constant num_roms : positive := 1;
     constant rom_id_bits : positive := 8;      -- allows for using 256 separte roms
     constant rom_addr_bits : positive := 16;    -- amount of words in a rom
+    constant bit_map_addr_bits : positive := rom_id_bits + rom_addr_bits;
 
     constant screen_HEIGHT : positive := 479;
     constant screen_WIDTH : positive := 639;
@@ -38,12 +40,12 @@ package bitmaps is
     constant asteroid_sizeX : positive := 40;
     constant asteroid_sizeY : positive := 40;
 
-    constant H_LINE : bit_map_t (0 to line_sizeY-1, 0 to line_sizeX-1) := (others => (others => WHITE));
-    constant SHIP : bit_map_t (0 to ship_sizeY-1, 0 to ship_sizeX-1) := (others => (others => TEAL));
-    constant LASER : bit_map_t (0 to laser_sizeY-1, 0 to laser_sizeX-1) := (others => (others => GREEN));
-    constant ALIEN_1 : bit_map_t (0 to alien1_sizeY-1, 0 to alien1_sizeX-1) := (others => (others => YELLOW)); 
-    constant ASTEROID : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => PURPLE)); 
-    constant SATELLITE : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => GREEN)); 
+    -- constant H_LINE : bit_map_t (0 to line_sizeY-1, 0 to line_sizeX-1) := (others => (others => WHITE));
+    -- constant SHIP : bit_map_t (0 to ship_sizeY-1, 0 to ship_sizeX-1) := (others => (others => TEAL));
+    -- constant LASER : bit_map_t (0 to laser_sizeY-1, 0 to laser_sizeX-1) := (others => (others => GREEN));
+    -- constant ALIEN_1 : bit_map_t (0 to alien1_sizeY-1, 0 to alien1_sizeX-1) := (others => (others => YELLOW)); 
+    -- constant ASTEROID : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => PURPLE)); 
+    -- constant SATELLITE : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1) := (others => (others => GREEN)); 
 
     constant fx1 : Sound_FX_t := (18, (550, 404, 315, 494, 182, 260, 455, 387, 340, 550, 404, 315, 494, 182, 260, 455, 387, 340, others => 0));
     constant fx2 : Sound_FX_t := (10, (300, 350, 500, 700, 990, 970, 1050, 1010, 950, 800, 770, 640, 500, 350, 355, others => 0));

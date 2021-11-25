@@ -54,163 +54,159 @@ architecture rtl of project_top_level is
 	);
     end component vga_pll_25_175;
 
-    component clk_div is
+    component rom_controller is
         port (
-            clk_in  : in std_logic;
-            div     : in integer;       -- rounds down to closest even number
-            clk_out : buffer std_logic := '0'
-        );
-    end component clk_div;
-
-    component pseudorandom_8 is
-        port (
-            clk      : in std_logic;
-            reset_L  : in std_logic := '0';
-            enable   : in std_logic := '0';
-            seed     : in std_logic_vector(7 downto 0);
-            random_8 : out std_logic_vector(7 downto 0)
-        );
-    end component pseudorandom_8;
-
-    component bin2seg7 is
-        port (
-            inData    : in std_logic_vector(3 downto 0);
-            enable    : in std_logic;
-            dispPoint : in std_logic;
-            HEX : out std_logic_vector(7 downto 0)
-        );
-    end component bin2seg7;
-
-    component score is
-        generic (
-                X_SIZE : positive;
-                Y_SIZE : positive
-        );
-        port (
-            box    : Bounding_Box;
-            enable : in std_logic;
-            score_in  : in integer;
-            pixel     : out Pixel_t
-        );
-    end component score;
-
-    component note_gen is
-        port (
-            clk   : in std_logic;       -- must be 44100hz
-            enable : in std_logic;
-            notes : in std_logic_vector(11 downto 0); -- twelve notes in an octave
-            pwm : buffer std_logic := '0'
-        );
-    end component note_gen;
-
-    component sound_fx is
-        port (
-            clk   : in std_logic;   -- make this 50mhz
-            reset_L : in std_logic;
-            enable : in std_logic;
-            fx : in Sound_FX_t;
-            pwm : out std_logic
-        );
-    end component sound_fx;
-
-    component objDisp is
-        generic (
-            X_SIZE : positive;
-            Y_SIZE : positive
-        );
-        port (
-            clk : std_logic;
-            box : Bounding_Box;
-            -- bit_map : bit_map_t(0 to Y_SIZE-1, 0 to X_SIZE-1);
-            enable : in std_logic;
+            clk   : in std_logic;
+            address : in std_logic_vector(rom_addr_bits + rom_id_bits - 1 downto 0);
             pixel : out Pixel_t
         );
+    end component rom_controller;
+
+    -- component clk_div is
+    --     port (
+    --         clk_in  : in std_logic;
+    --         div     : in integer;       -- rounds down to closest even number
+    --         clk_out : buffer std_logic := '0'
+    --     );
+    -- end component clk_div;
+
+    -- component pseudorandom_8 is
+    --     port (
+    --         clk      : in std_logic;
+    --         reset_L  : in std_logic := '0';
+    --         enable   : in std_logic := '0';
+    --         seed     : in std_logic_vector(7 downto 0);
+    --         random_8 : out std_logic_vector(7 downto 0)
+    --     );
+    -- end component pseudorandom_8;
+
+    -- component bin2seg7 is
+    --     port (
+    --         inData    : in std_logic_vector(3 downto 0);
+    --         enable    : in std_logic;
+    --         dispPoint : in std_logic;
+    --         HEX : out std_logic_vector(7 downto 0)
+    --     );
+    -- end component bin2seg7;
+
+    -- component score is
+    --     generic (
+    --             X_SIZE : positive;
+    --             Y_SIZE : positive
+    --     );
+    --     port (
+    --         box    : Bounding_Box;
+    --         enable : in std_logic;
+    --         score_in  : in integer;
+    --         pixel     : out Pixel_t
+    --     );
+    -- end component score;
+
+    -- component note_gen is
+    --     port (
+    --         clk   : in std_logic;       -- must be 44100hz
+    --         enable : in std_logic;
+    --         notes : in std_logic_vector(11 downto 0); -- twelve notes in an octave
+    --         pwm : buffer std_logic := '0'
+    --     );
+    -- end component note_gen;
+
+    -- component sound_fx is
+    --     port (
+    --         clk   : in std_logic;   -- make this 50mhz
+    --         reset_L : in std_logic;
+    --         enable : in std_logic;
+    --         fx : in Sound_FX_t;
+    --         pwm : out std_logic
+    --     );
+    -- end component sound_fx;
+
+    component objDisp is
+        port (
+            box : in Bounding_Box;
+            bit_map : in bit_map_t;
+            in_bounds : out std_logic := '0';
+            mem_addr : out std_logic_vector(rom_addr_bits + rom_id_bits - 1 downto 0)
+        );
     end component;
 
-    component ship_movement is
-        port (
-            max10_clk : in std_logic;
-            reset_L : in std_logic;
+    -- component ship_movement is
+    --     port (
+    --         max10_clk : in std_logic;
+    --         reset_L : in std_logic;
     
-            x_offset : out integer;
-            y_offset : out integer;component rom1 IS
-            PORT
-            (
-                address		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
-                clock		: IN STD_LOGIC  := '1';
-                q		: OUT STD_LOGIC_VECTOR (5 DOWNTO 0)
-            );
-        end component rom1;
+    --         x_offset : out integer;
+    --         y_offset : out integer;
         
-            GSENSOR_CS_N : OUT	STD_LOGIC;
-            GSENSOR_SCLK : OUT	STD_LOGIC;
-            GSENSOR_SDI  : INOUT	STD_LOGIC;
-            GSENSOR_SDO  : INOUT	STD_LOGIC
-        );
-    end component;
+    --         GSENSOR_CS_N : OUT	STD_LOGIC;
+    --         GSENSOR_SCLK : OUT	STD_LOGIC;
+    --         GSENSOR_SDI  : INOUT	STD_LOGIC;
+    --         GSENSOR_SDO  : INOUT	STD_LOGIC
+    --     );
+    -- end component;
 
-    component laser_movement is
-        port (
-            max10_clk : in std_logic;
-            shoot : in std_logic;
+    -- component laser_movement is
+    --     port (
+    --         max10_clk : in std_logic;
+    --         shoot : in std_logic;
     
-            x_loc : out integer
-        );    
-    end component;
+    --         x_loc : out integer
+    --     );    
+    -- end component;
 
-    component alien_movement is
-        generic (
-            X_SIZE : positive;
-            Y_SIZE : positive
-        );
-        port (
-            max10_clk : in std_logic;
-            reset_L : in std_logic;
-            alive : in std_logic;
-            cnt_div : positive := 500000;
+    -- component alien_movement is
+    --     generic (
+    --         X_SIZE : positive;
+    --         Y_SIZE : positive
+    --     );
+    --     port (
+    --         max10_clk : in std_logic;
+    --         reset_L : in std_logic;
+    --         alive : in std_logic;
+    --         cnt_div : positive := 500000;
     
-            x_loc : out integer;
-            y_loc : out integer
-        );        
-    end component;
+    --         x_loc : out integer;
+    --         y_loc : out integer
+    --     );        
+    -- end component;
 
-    component obstacle_movement is
-        generic (
-            Y_SIZE : positive
-        );
-        port (
-            max10_clk : in std_logic;
-            active : in std_logic;
-            cnt_div : positive := 2500000;
-            x_loc : out integer;
-            y_loc : out integer
-        );        
-    end component;
+    -- component obstacle_movement is
+    --     generic (
+    --         Y_SIZE : positive
+    --     );
+    --     port (
+    --         max10_clk : in std_logic;
+    --         active : in std_logic;
+    --         cnt_div : positive := 2500000;
+    --         x_loc : out integer;
+    --         y_loc : out integer
+    --     );        
+    -- end component;
     
-    constant SEC : positive := 50000000;
+    -- constant SEC : positive := 50000000;
 
-    constant BACKGROUND : Pixel_t := BLACK;
-    constant NUM_LIVES : positive := 3;
-    constant SHIP_SPAWNX : positive := 160;
-    constant SHIP_SPAWNY : positive := 240;
-    constant NUM_LASERS : positive := 40;
+    -- constant BACKGROUND : Pixel_t := BLACK;
+    -- constant NUM_LIVES : positive := 3;
+    -- constant SHIP_SPAWNX : positive := 160;
+    -- constant SHIP_SPAWNY : positive := 240;
+    -- constant NUM_LASERS : positive := 40;
 
-    constant NUM_ENEMIES : positive := 16;
-    constant NUM_ASTEROIDS : positive := 5;
+    -- constant NUM_ENEMIES : positive := 16;
+    -- constant NUM_ASTEROIDS : positive := 5;
 
 
-    type ship_lives_boxes is array (NUM_LIVES-1 downto 0) of Bounding_Box;
-    type ship_lives_pixel_vector is array (NUM_LIVES-1 downto 0) of Pixel_t;
+    -- type ship_lives_boxes is array (NUM_LIVES-1 downto 0) of Bounding_Box;
+    -- type ship_lives_pixel_vector is array (NUM_LIVES-1 downto 0) of Pixel_t;
 
-    type laser_boxes is array (NUM_LASERS-1 downto 0) of Bounding_Box;
-    type laser_pixel_vector is array (NUM_LASERS-1 downto 0) of Pixel_t;
-    type laser_loc_vector is array (NUM_LASERS-1 downto 0) of integer;
+    -- type laser_boxes is array (NUM_LASERS-1 downto 0) of Bounding_Box;
+    -- type laser_pixel_vector is array (NUM_LASERS-1 downto 0) of Pixel_t;
+    -- type laser_loc_vector is array (NUM_LASERS-1 downto 0) of integer;
 
-    type aliens_boxes is array (NUM_ENEMIES-1 downto 0) of Bounding_Box;
-    type aliens_pixel_vector is array (NUM_ENEMIES-1 downto 0) of Pixel_t;
+    -- type aliens_boxes is array (NUM_ENEMIES-1 downto 0) of Bounding_Box;
+    -- type aliens_pixel_vector is array (NUM_ENEMIES-1 downto 0) of Pixel_t;
 
-    type asteroids_boxes is array (NUM_ASTEROIDS-1 downto 0) of Bounding_Box;
-    type asteroids_pixel_vector is array (NUM_ASTEROIDS-1 downto 0) of Pixel_t;
+    -- type asteroids_boxes is array (NUM_ASTEROIDS-1 downto 0) of Bounding_Box;
+    -- type asteroids_pixel_vector is array (NUM_ASTEROIDS-1 downto 0) of Pixel_t;
 
     signal vga_clk              : std_logic;
     signal global_display_en    : std_logic;
@@ -223,65 +219,69 @@ architecture rtl of project_top_level is
     signal curr_pixel : Pixel_t;
 
     signal pepe_box : Bounding_Box;
+    signal pepe_bit_map : bit_map_t;
     signal pepe_pixel : Pixel_t;
+    signal pepe_inbounds : std_logic;
+    signal pepe_mem_addr : std_logic_vector(bit_map_addr_bits-1 downto 0);
     
-    signal Tline_box : Bounding_Box;
-    signal top_line_pixel : Pixel_t;
-    signal Bline_box : Bounding_Box;
-    signal bottom_line_pixel : Pixel_t;
+    -- signal Tline_box : Bounding_Box;
+    -- signal top_line_pixel : Pixel_t;
+    -- signal Bline_box : Bounding_Box;
+    -- signal bottom_line_pixel : Pixel_t;
     
-    signal ship_box : Bounding_Box;
-    signal ship_pixel : Pixel_t;
-    signal ship_life_pixels : ship_lives_pixel_vector;
-    signal ship_lives_box : ship_lives_boxes;
-    signal ship_lives : std_logic_vector(NUM_LIVES-1 downto 0) := (others => '1'); -- one-hot ship lives
+    -- signal ship_box : Bounding_Box;
+    -- signal ship_pixel : Pixel_t;
+    -- signal ship_life_pixels : ship_lives_pixel_vector;
+    -- signal ship_lives_box : ship_lives_boxes;
+    -- signal ship_lives : std_logic_vector(NUM_LIVES-1 downto 0) := (others => '1'); -- one-hot ship lives
     
-    signal ship_reset_L : std_logic := '1';
-    signal ship_alive : std_logic := '1';
-    signal ship_collision : std_logic := '0';
-    signal shipX_offset : integer := 0;
-    signal shipY_offset : integer := 0;
+    -- signal ship_reset_L : std_logic := '1';
+    -- signal ship_alive : std_logic := '1';
+    -- signal ship_collision : std_logic := '0';
+    -- signal shipX_offset : integer := 0;
+    -- signal shipY_offset : integer := 0;
     
-    signal lasers_box : laser_boxes;
-    signal laser_pixels : laser_pixel_vector;
-    signal laser_shoot_main : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
-    signal laser_hit : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
-    signal laser_shoot2 : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
-    signal laser_x : laser_loc_vector;
-    signal laser_y : laser_loc_vector;
+    -- signal lasers_box : laser_boxes;
+    -- signal laser_pixels : laser_pixel_vector;
+    -- signal laser_shoot_main : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
+    -- signal laser_hit : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
+    -- signal laser_shoot2 : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
+    -- signal laser_x : laser_loc_vector;
+    -- signal laser_y : laser_loc_vector;
     
-    signal laser_box : Bounding_Box;
-    signal laser_pixel : Pixel_t;
-    signal laser_shoot : std_logic;
-    signal laser_xloc : integer;
+    -- signal laser_box : Bounding_Box;
+    -- signal laser_pixel : Pixel_t;
+    -- signal laser_shoot : std_logic;
+    -- signal laser_xloc : integer;
     
-    signal lasers_xloc : laser_loc_vector;
+    -- signal lasers_xloc : laser_loc_vector;
     
-    signal aliens_box : aliens_boxes;
-    signal aliens_pixels : aliens_pixel_vector;
-    signal aliens_alive : std_logic_vector(NUM_ENEMIES-1 downto 0) := (0|1|2 => '1', others => '0'); -- one-hot aliens
-    signal aliens_killed : std_logic_vector(NUM_ENEMIES-1 downto 0) := (others => '0'); -- one-hot aliens
+    -- signal aliens_box : aliens_boxes;
+    -- signal aliens_pixels : aliens_pixel_vector;
+    -- signal aliens_alive : std_logic_vector(NUM_ENEMIES-1 downto 0) := (0|1|2 => '1', others => '0'); -- one-hot aliens
+    -- signal aliens_killed : std_logic_vector(NUM_ENEMIES-1 downto 0) := (others => '0'); -- one-hot aliens
 
-    signal asteroids_box : asteroids_boxes;
-    signal asteroids_pixels : asteroids_pixel_vector;
-    signal asteroids_active : std_logic_vector(NUM_ASTEROIDS-1 downto 0) := (others => '0');
+    -- signal asteroids_box : asteroids_boxes;
+    -- signal asteroids_pixels : asteroids_pixel_vector;
+    -- signal asteroids_active : std_logic_vector(NUM_ASTEROIDS-1 downto 0) := (others => '0');
 
-    signal score_box : Bounding_Box;
-    signal score_pixel : Pixel_t;
+    -- signal score_box : Bounding_Box;
+    -- signal score_pixel : Pixel_t;
     
-    signal game_over : std_logic := '0';
+    -- signal game_over : std_logic := '0';
     
-    signal very_slow_clk : std_logic;
-    signal a1_clk : std_logic;
-    signal alien_spawn_clk : std_logic;
-    signal as_clk : std_logic;
-    signal random_num : std_logic_vector(7 downto 0);
+    -- signal very_slow_clk : std_logic;
+    -- signal a1_clk : std_logic;
+    -- signal alien_spawn_clk : std_logic;
+    -- signal as_clk : std_logic;
+    -- signal random_num : std_logic_vector(7 downto 0);
 
-    signal obj : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1);
-    signal random_alive_div : std_logic_vector(7 downto 0);
+    -- signal obj : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1);
+    -- signal random_alive_div : std_logic_vector(7 downto 0);
 
-    signal pwm : std_logic_vector(5 downto 0);
-    signal note_clk : std_logic;
+    -- signal pwm : std_logic_vector(5 downto 0);
+    -- signal note_clk : std_logic;
+
 
 begin
 
@@ -300,34 +300,57 @@ begin
     );
 
     --reduced colors to speed up compile time and sanity
-    VGA_R <= curr_pixel.red(1) & curr_pixel.red(1) & curr_pixel.red(0) & curr_pixel.red(0);
-    VGA_G <= curr_pixel.green(1) & curr_pixel.green(1) & curr_pixel.green(0) & curr_pixel.green(0);
-    VGA_B <= curr_pixel.blue(1) & curr_pixel.blue(1) & curr_pixel.blue(0) & curr_pixel.blue(0);
+    VGA_R <= curr_pixel.red;
+    VGA_G <= curr_pixel.green;
+    VGA_B <= curr_pixel.blue;
+
 
     pepe_box.x_pos <= global_x;
     pepe_box.y_pos <= global_y;
     pepe_box.x_origin <= 50;
     pepe_box.y_origin <= 50;
+    pepe_box.x_size <= 255;
+    pepe_box.y_size <= 255;
 
-    Tline_box.x_pos <= global_x;
-    Tline_box.y_pos <= global_y;
-    Tline_box.x_origin <= 0;
-    Tline_box.y_origin <= 10 + ship_sizeY;
+    pepe_bit_map.rom_id <= 0;
+    pepe_bit_map.addr_offset <= 0;
 
-    Bline_box.x_pos <= global_x;
-    Bline_box.y_pos <= global_y;
-    Bline_box.x_origin <= 0;
-    Bline_box.y_origin <= screen_HEIGHT - 10;
+    curr_pixel <= pepe_pixel when (pepe_inbounds = '1') else BACKGROUND;
 
-    score_box.x_pos <= global_x;
-    score_box.y_pos <= global_y;
-    score_box.x_origin <= 100;
-    score_box.y_origin <= 100;
+    OBJ: objDisp port map (
+        box => pepe_box,
+        bit_map => pepe_bit_map,
+        in_bounds => pepe_inbounds,
+        mem_addr => pepe_mem_addr
+    );
 
-    ship_box.x_pos <= global_x;
-    ship_box.y_pos <= global_y;
-    ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
-    ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
+    ROM_CRL: rom_controller port map (
+        clk => vga_clk,
+        address => pepe_mem_addr,
+        pixel => pepe_pixel
+    );
+
+
+
+    -- Tline_box.x_pos <= global_x;
+    -- Tline_box.y_pos <= global_y;
+    -- Tline_box.x_origin <= 0;
+    -- Tline_box.y_origin <= 10 + ship_sizeY;
+
+    -- Bline_box.x_pos <= global_x;
+    -- Bline_box.y_pos <= global_y;
+    -- Bline_box.x_origin <= 0;
+    -- Bline_box.y_origin <= screen_HEIGHT - 10;
+
+    -- score_box.x_pos <= global_x;
+    -- score_box.y_pos <= global_y;
+    -- score_box.x_origin <= 100;
+    -- score_box.y_origin <= 100;
+
+    -- ship_box.x_pos <= global_x;
+    -- ship_box.y_pos <= global_y;
+    -- ship_box.x_origin <= SHIP_SPAWNX + shipX_offset;
+    -- ship_box.y_origin <= SHIP_SPAWNY + shipY_offset;
 
     -- TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
     --                     port map (box => Tline_box, bit_map => H_LINE, enable => '1', pixel => top_line_pixel);
@@ -369,50 +392,50 @@ begin
     -- CALC_NOTE: note_gen port map (clk => note_clk, enable => '1', notes => SW & '0' & '0', pwm => pwm);
     -- ARDUINO_IO(12) <= pwm;
 
-    FX_GEN6: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(5),
-        fx => fx6,
-        pwm => pwm(5)
-    );
-    FX_GEN5: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(4),
-        fx => fx5,
-        pwm => pwm(4)
-    );
-    FX_GEN4: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(3),
-        fx => fx4,
-        pwm => pwm(3)
-    );
-    FX_GEN3: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(2),
-        fx => fx3,
-        pwm => pwm(2)
-    );
-    FX_GEN2: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(1),
-        fx => fx2,
-        pwm => pwm(1)
-    );
-    FX_GEN1: sound_fx port map (
-        clk => MAX10_CLK1_50,
-        reset_L => KEY(0),
-        enable => SW(0),
-        fx => fx1,
-        pwm => pwm(0)
-    );
+    -- FX_GEN6: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(5),
+    --     fx => fx6,
+    --     pwm => pwm(5)
+    -- );
+    -- FX_GEN5: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(4),
+    --     fx => fx5,
+    --     pwm => pwm(4)
+    -- );
+    -- FX_GEN4: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(3),
+    --     fx => fx4,
+    --     pwm => pwm(3)
+    -- );
+    -- FX_GEN3: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(2),
+    --     fx => fx3,
+    --     pwm => pwm(2)
+    -- );
+    -- FX_GEN2: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(1),
+    --     fx => fx2,
+    --     pwm => pwm(1)
+    -- );
+    -- FX_GEN1: sound_fx port map (
+    --     clk => MAX10_CLK1_50,
+    --     reset_L => KEY(0),
+    --     enable => SW(0),
+    --     fx => fx1,
+    --     pwm => pwm(0)
+    -- );
 
-    ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
+    -- ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
 
 --     TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
 --                         port map (box => Tline_box, clk => MAX10_CLK1_50, enable => '1', pixel => top_line_pixel);
