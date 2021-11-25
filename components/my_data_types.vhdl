@@ -18,6 +18,8 @@ package my_data_types is
         y_origin : integer range 0 to 480-1;
         x_pos    : integer range 0 to 640-1;
         y_pos    : integer range 0 to 480-1;
+        x_size   : integer range 0 to 640-1;
+        y_size   : integer range 0 to 480-1;
     end record;
 
     type fx_ar_t is array(31 downto 0) of integer range 0 to 2000;  --max frequency is 2000hz
@@ -27,7 +29,12 @@ package my_data_types is
         fx_ar_freq : fx_ar_t;
     end record;
 
-    type bit_map_t is array (natural range<>, natural range<>) of Pixel_t;
+    type bit_map_t is record
+        rom_id : natural;
+        addr_offset : natural;
+    end record;
+
+
     constant BLACK  : Pixel_t := ((others => '0'), (others => '0'), (others => '0'));
     constant BLUE   : Pixel_t := ((others => '0'), (others => '0'), (others => '1'));
     constant GREEN  : Pixel_t := ((others => '0'), (others => '1'), (others => '0'));
@@ -55,9 +62,9 @@ package body my_data_types is
         return b.y_pos - b.y_origin;
     end function;
 
-    function check_bb_bounds (b : Bounding_Box; x_size : integer; y_size : integer) return std_logic is
+    function check_bb_bounds (b : Bounding_Box ) return std_logic is
     begin
-        if ((b.x_pos >= b.x_origin) and (b.x_pos < b.x_origin + x_size) and (b.y_pos >= b.y_origin) and (b.y_pos < b.y_origin + y_size)) then
+        if ((b.x_pos >= b.x_origin) and (b.x_pos < b.x_origin + b.x_size) and (b.y_pos >= b.y_origin) and (b.y_pos < b.y_origin + b.y_size)) then
             return '1';
         else
             return '0';

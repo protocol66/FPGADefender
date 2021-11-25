@@ -133,7 +133,14 @@ architecture rtl of project_top_level is
             reset_L : in std_logic;
     
             x_offset : out integer;
-            y_offset : out integer;
+            y_offset : out integer;component rom1 IS
+            PORT
+            (
+                address		: IN STD_LOGIC_VECTOR (15 DOWNTO 0);
+                clock		: IN STD_LOGIC  := '1';
+                q		: OUT STD_LOGIC_VECTOR (5 DOWNTO 0)
+            );
+        end component rom1;
         
             GSENSOR_CS_N : OUT	STD_LOGIC;
             GSENSOR_SCLK : OUT	STD_LOGIC;
