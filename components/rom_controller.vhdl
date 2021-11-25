@@ -4,6 +4,7 @@ use ieee.numeric_std.all;
 use ieee.math_real.all;
 
 use work.my_data_types.all;
+use work.constants.all;
 use work.bitmaps.all;
 
 entity rom_controller is

@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
+use work.constants.all;
 use work.my_data_types.all;
 use work.bitmaps.all;
 
@@ -218,11 +219,7 @@ architecture rtl of project_top_level is
 
     signal curr_pixel : Pixel_t;
 
-    signal pepe_box : Bounding_Box;
-    signal pepe_bit_map : bit_map_t;
-    signal pepe_pixel : Pixel_t;
-    signal pepe_inbounds : std_logic;
-    signal pepe_mem_addr : std_logic_vector(bit_map_addr_bits-1 downto 0);
+    signal pepe : OBJ := DEFUALT_OBJ;
     
     -- signal Tline_box : Bounding_Box;
     -- signal top_line_pixel : Pixel_t;
@@ -305,29 +302,32 @@ begin
     VGA_B <= curr_pixel.blue;
 
 
-    pepe_box.x_pos <= global_x;
-    pepe_box.y_pos <= global_y;
-    pepe_box.x_origin <= 50;
-    pepe_box.y_origin <= 50;
-    pepe_box.x_size <= 255;
-    pepe_box.y_size <= 255;
+    pepe.box.x_pos <= global_x;
+    pepe.box.y_pos <= global_y;
+    pepe.box.x_origin <= 50;
+    pepe.box.y_origin <= 50;
+    -- pepe.box.size_overwride <= '1';
+    -- pepe.box.x_size <= 100;
+    -- pepe.box.y_size <= 200;
 
-    pepe_bit_map.rom_id <= 0;
-    pepe_bit_map.addr_offset <= 0;
+    pepe.bit_map.rom_id <= 0;
+    pepe.bit_map.addr_offset <= 0;
+    pepe.bit_map.x_size <= 200;
+    pepe.bit_map.y_size <= 100;
 
-    curr_pixel <= pepe_pixel when (pepe_inbounds = '1') else BACKGROUND;
+    curr_pixel <= pepe.pixel when (pepe.in_bounds = '1') else BACKGROUND;
 
     OBJ: objDisp port map (
-        box => pepe_box,
-        bit_map => pepe_bit_map,
-        in_bounds => pepe_inbounds,
-        mem_addr => pepe_mem_addr
+        box => pepe.box,
+        bit_map => pepe.bit_map,
+        in_bounds => pepe.in_bounds,
+        mem_addr => pepe.abs_mem_addr
     );
 
     ROM_CRL: rom_controller port map (
         clk => vga_clk,
-        address => pepe_mem_addr,
-        pixel => pepe_pixel
+        address => pepe.abs_mem_addr,
+        pixel => pepe.pixel
     );
 
 

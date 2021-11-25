@@ -85,8 +85,8 @@ def process_images(image_file, size, show_img=False):
 
 
 
-img_array = process_images("pepe.png", (255,255))
+img_array = process_images("pepe.png", (200,100))
 
-img_array = img_array.reshape(1,255,255)
+img_array = img_array.reshape(1,200,100)
 
 write_mem_file(img_array, 'rom1.mif')

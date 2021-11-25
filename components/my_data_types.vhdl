@@ -3,6 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
+use work.constants.all;
 
 package my_data_types is
 
@@ -18,8 +19,24 @@ package my_data_types is
         y_origin : integer range 0 to 480-1;
         x_pos    : integer range 0 to 640-1;
         y_pos    : integer range 0 to 480-1;
+        size_overwride : std_logic;
         x_size   : integer range 1 to 640-1;
         y_size   : integer range 1 to 480-1;
+    end record;
+
+    type bit_map_t is record
+        rom_id : natural;
+        addr_offset : natural;
+        x_size   : integer range 1 to 640-1;
+        y_size   : integer range 1 to 480-1;
+    end record;
+
+    type obj is record
+        box : Bounding_Box;
+        bit_map : bit_map_t;
+        abs_mem_addr : std_logic_vector(bit_map_addr_bits-1 downto 0);
+        in_bounds : std_logic;
+        pixel : Pixel_t;
     end record;
 
     type fx_ar_t is array(31 downto 0) of integer range 0 to 2000;  --max frequency is 2000hz
@@ -27,11 +44,6 @@ package my_data_types is
     type Sound_FX_t is record
         fx_trans_freq : integer;
         fx_ar_freq : fx_ar_t;
-    end record;
-
-    type bit_map_t is record
-        rom_id : natural;
-        addr_offset : natural;
     end record;
 
 

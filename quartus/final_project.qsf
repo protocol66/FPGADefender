@@ -443,6 +443,7 @@ set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_global_assignment -name VHDL_FILE ../components/constants.vhdl
 set_global_assignment -name VHDL_FILE ../components/rom_controller.vhdl
 set_global_assignment -name VHDL_FILE ../components/obstacle.vhdl
 set_global_assignment -name VHDL_FILE ../components/sound_fx.vhdl

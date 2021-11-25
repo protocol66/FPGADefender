@@ -3,7 +3,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 use work.my_data_types.all;
-use work.bitmaps.all;
+use work.constants.all;
 
 entity objDisp is
     port (
@@ -20,18 +20,26 @@ architecture arch of objDisp is
     signal addr : std_logic_vector(15 downto 0);
 begin
 
-    process (box)
+    process (box, bit_map)
     begin
         x <= box.x_pos - box.x_origin;
         y <= box.y_pos - box.y_origin;
 
-        if ((box.x_pos >= box.x_origin) and (box.x_pos < box.x_origin + box.x_size) and (box.y_pos >= box.y_origin) and (box.y_pos < box.y_origin + box.y_size)) then
-            in_bounds <= '1';
-        else
-            in_bounds <= '0';
+        if box.size_overwride = '0' then
+            if ((box.x_pos >= box.x_origin) and (box.x_pos < box.x_origin + bit_map.x_size) and (box.y_pos >= box.y_origin) and (box.y_pos < box.y_origin + bit_map.y_size)) then
+                in_bounds <= '1';
+            else
+                in_bounds <= '0';
+            end if;
+        else 
+            if ((box.x_pos >= box.x_origin) and (box.x_pos < box.x_origin + box.x_size) and (box.y_pos >= box.y_origin) and (box.y_pos < box.y_origin + box.y_size)) then
+                in_bounds <= '1';
+            else
+                in_bounds <= '0';
+            end if;
         end if;
     end process;
 
-    mem_addr <= std_logic_vector(to_unsigned(bit_map.rom_id, rom_id_bits)) & std_logic_vector(to_unsigned(bit_map.addr_offset + (y * box.x_size) + x, rom_addr_bits));
+    mem_addr <= std_logic_vector(to_unsigned(bit_map.rom_id, rom_id_bits)) & std_logic_vector(to_unsigned(bit_map.addr_offset + (y * bit_map.x_size) + x, rom_addr_bits));
 
 end architecture; 
