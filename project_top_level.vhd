@@ -766,8 +766,8 @@ begin
             ALIEN1: objDisp generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
                             port map (box => aliens1_box(I), bit_map => ALIEN_1, enable => aliens1_alive(I) AND start_sticky, pixel => aliens1_pixels(I));
             ALIEN1_LOC: alien_movement generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
-                                        port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky, 
-                                                cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause,
+                                        port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT ship_collision, 
+                                                cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause AND NOT ship_collision,
                                                 x_loc => aliens1_box(I).x_origin, y_loc => aliens1_box(I).y_origin, random_Y => random_num);
             aliens1_box(I).x_pos <= global_x;
             aliens1_box(I).y_pos <= global_y;
@@ -797,8 +797,8 @@ begin
             ALIEN2: objDisp generic map (X_SIZE => alien2_sizeX, Y_SIZE => alien2_sizeY)
                             port map (box => aliens2_box(I), bit_map => ALIEN_2, enable => aliens2_alive(I) AND start_sticky, pixel => aliens2_pixels(I));
             ALIEN2_LOC: alien_movement generic map (X_SIZE => alien2_sizeX, Y_SIZE => alien2_sizeY)
-                                        port map (max10_clk => MAX10_CLK1_50, reset_L => aliens2_alive(I) AND NOT aliens2_killed(I) AND start_sticky, 
-                                                cnt_div => a2_cnt_div, alive => aliens2_alive(I) AND NOT aliens2_killed(I) AND start_sticky AND NOT pause, 
+                                        port map (max10_clk => MAX10_CLK1_50, reset_L => aliens2_alive(I) AND NOT aliens2_killed(I) AND start_sticky AND NOT ship_collision, 
+                                                cnt_div => a2_cnt_div, alive => aliens2_alive(I) AND NOT aliens2_killed(I) AND start_sticky AND NOT pause AND NOT ship_collision, 
                                                 x_loc => aliens2_box(I).x_origin, y_loc => aliens2_box(I).y_origin, random_Y => random_num);
             aliens2_box(I).x_pos <= global_x;
             aliens2_box(I).y_pos <= global_y;
@@ -828,8 +828,8 @@ begin
             ALIEN3: objDisp generic map (X_SIZE => alien3_sizeX, Y_SIZE => alien3_sizeY)
                             port map (box => aliens3_box(I), bit_map => ALIEN_3, enable => aliens3_alive(I) AND start_sticky, pixel => aliens3_pixels(I));
             ALIEN3_LOC: alien_movement generic map (X_SIZE => alien3_sizeX, Y_SIZE => alien3_sizeY)
-                                        port map (max10_clk => MAX10_CLK1_50, reset_L => aliens3_alive(I) AND NOT aliens3_killed(I) AND start_sticky,
-                                                cnt_div => a3_cnt_div, alive => aliens3_alive(I) AND NOT aliens3_killed(I) AND start_sticky AND NOT pause, 
+                                        port map (max10_clk => MAX10_CLK1_50, reset_L => aliens3_alive(I) AND NOT aliens3_killed(I) AND start_sticky AND NOT ship_collision,
+                                                cnt_div => a3_cnt_div, alive => aliens3_alive(I) AND NOT aliens3_killed(I) AND start_sticky AND NOT pause AND NOT ship_collision, 
                                                 x_loc => aliens3_box(I).x_origin, y_loc => aliens3_box(I).y_origin, random_Y => random_num);
             aliens3_box(I).x_pos <= global_x;
             aliens3_box(I).y_pos <= global_y;
@@ -860,8 +860,8 @@ begin
             ASTEROID_DISP: objDisp generic map (X_SIZE => asteroid_sizeX, Y_SIZE => asteroid_sizeY) 
                                 port map (box => asteroids_box(I), bit_map => obs(I), enable => asteroids_active(I) AND start_sticky, pixel => asteroids_pixels(I));
             ASTEROID_LOC: obstacle_movement generic map (Y_SIZE => asteroid_sizeY)
-                                            port map (max10_clk => MAX10_CLK1_50, reset_L => asteroids_active(I) AND start_sticky,
-                                                     active => asteroids_active(I) AND start_sticky AND NOT pause, cnt_div => obs_cnt_div, 
+                                            port map (max10_clk => MAX10_CLK1_50, reset_L => asteroids_active(I) AND start_sticky AND NOT ship_collision,
+                                                     active => asteroids_active(I) AND start_sticky AND NOT pause AND NOT ship_collision, cnt_div => obs_cnt_div, 
                                                      x_loc => asteroids_box(I).x_origin, y_loc => asteroids_box(I).y_origin, random_Y => random_num);
             asteroids_box(I).x_pos <= global_x;
             asteroids_box(I).y_pos <= global_y;
