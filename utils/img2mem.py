@@ -26,7 +26,7 @@ def to_pad_bin(bin_in, size):
         return "0"*size + s
 
 
-def write_mem_file(array, file):
+def write_mem_file(img_list, file):
     with open(file, 'w') as f:
         for s in START_MSG:
             f.write(s + '\n')
@@ -34,14 +34,15 @@ def write_mem_file(array, file):
         f.write('\n')
 
         mem_addr = 0
-        for data in np.nditer(array):
-            if(mem_addr == NUM_WORDS):
-                print("RAN OUT OF MEMORY")
-                break;
+        for img in img_list:
+            for data in np.nditer(img):
+                if(mem_addr == NUM_WORDS):
+                    print("RAN OUT OF MEMORY")
+                    break;
 
-            s = f"{to_pad_hex(mem_addr, HEX_PER_WORDS)} : {to_pad_bin(data, BITS_PER_WORD)};\n"
-            mem_addr += 1
-            f.write(s)
+                s = f"{to_pad_hex(mem_addr, HEX_PER_WORDS)} : {to_pad_bin(data, BITS_PER_WORD)};\n"
+                mem_addr += 1
+                f.write(s)
 
         if(mem_addr < NUM_WORDS):
             f.write("\n")
@@ -50,7 +51,7 @@ def write_mem_file(array, file):
         f.write('\n')
         f.write("END;")
 
-def process_images(image_file, size, show_img=False):
+def process_image(image_file, size, show_img=False):
     image = Image.open(image_file)
 
     print(f"Loaded image: {image_file}")
@@ -84,9 +85,60 @@ def process_images(image_file, size, show_img=False):
     return comp_array
 
 
+def read_img_list_file(file):
+    imgs = []
 
-img_array = process_images("pepe.png", (200,100))
+    with open(file, 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                line.replace(" ", "")
+                name = line.split("=")[0]
+                name = name.replace(" ", "")
+                size = line.split("=")[1]
+                x_size = int(size.split(",")[0][2:])
+                y_size = int(size.split(",")[1][:-1])
+                imgs.append([name, (x_size, y_size)])
 
-img_array = img_array.reshape(1,200,100)
+    return imgs
 
-write_mem_file(img_array, 'rom1.mif')
+def write_const_file(name_list, offset_list, file):
+    with open(file, "w") as f:
+
+        for i in range(len(name_list)):
+            basename = name_list[i][0].split(".")[0]
+            basename = basename.upper()
+            rom_id = 0
+            x_size = name_list[i][1][0]
+            y_size = name_list[i][1][1]
+            mem_offset = offset_list[i]
+
+            string = f"constant {basename}_BITMAP : bit_map_t := bit_map_t'({0}, {mem_offset}, {x_size}, {y_size});"
+            f.write(string + '\n')
+
+
+
+parser = argparse.ArgumentParser(description='Convert image to vhdl code')
+parser.add_argument("-i", "--img_list", required=True,action="store")
+parser.add_argument("-rom", "--rom_out_file", required=True, action="store")
+parser.add_argument("-c", "--constants_out_file", required=True, action="store")
+args = parser.parse_args()
+
+img_list = read_img_list_file(args.img_list)
+proc_img_list = []
+mem_offset_list = []
+mem_count = 0
+
+for img in img_list:
+    mem_offset_list.append(mem_count)
+    print('-'*40)
+    proc_img = process_image(img[0], img[1])
+    mem_count += proc_img.size
+    proc_img_list.append(proc_img)
+
+print('-'*40)
+print(f"Total words used: {mem_count-1}")
+print('-'*40)
+
+write_mem_file(proc_img_list, args.rom_out_file)
+write_const_file(img_list, mem_offset_list, args.constants_out_file)

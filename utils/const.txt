@@ -1,0 +1,2 @@
+constant PEPE_BITMAP : bit_map_t := bit_map_t'(0, 0, 210, 150);
+constant USSENTERPRISE_BITMAP : bit_map_t := bit_map_t'(0, 31500, 74, 25);

@@ -306,14 +306,13 @@ begin
     pepe.box.y_pos <= global_y;
     pepe.box.x_origin <= 50;
     pepe.box.y_origin <= 50;
-    -- pepe.box.size_overwride <= '1';
-    -- pepe.box.x_size <= 100;
-    -- pepe.box.y_size <= 200;
+    -- pepe.box.size_overwride <= '1';      --do not use these unless you need to crop the image
+    -- pepe.box.x_size <= 210;
+    -- pepe.box.y_size <= 400;
 
-    pepe.bit_map.rom_id <= 0;
-    pepe.bit_map.addr_offset <= 0;
-    pepe.bit_map.x_size <= 200;
-    pepe.bit_map.y_size <= 100;
+
+    pepe.bit_map <= PEPE_BITMAP;    -- bit map keeps track of size
+
 
     curr_pixel <= pepe.pixel when (pepe.in_bounds = '1') else BACKGROUND;
 
