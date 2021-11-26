@@ -216,8 +216,11 @@ architecture rtl of project_top_level is
 
     signal vga_clk              : std_logic;
     signal global_display_en    : std_logic;
-    signal global_x             : integer;
-    signal global_y             : integer;
+    
+    signal vga_x                : natural;
+    signal vga_y                : natural;
+    signal global_x             : natural;
+    signal global_y             : natural;
 
     signal very_slow_clk_x : std_logic;
     signal very_slow_clk_y : std_logic;
@@ -321,15 +324,46 @@ begin
         h_sync => VGA_HS,
         v_sync => VGA_VS,
         disp_ena => global_display_en,
-        column => global_x,
-        row    => global_y,
+        column => vga_x,
+        row    => vga_y,
         n_blank => open,
         n_sync => open
     );
 
+    FUTUR_XY: process (vga_clk)     -- welcome to piplineing, DON'T CHANGE THIS
+        variable x : natural;
+        variable y : natural;
+    begin
+        if rising_edge(vga_clk) then
+            x := vga_x + 1;     -- there is a latency of 1.5 clock cycles
+            y := vga_y;
+
+            if(x > screen_WIDTH) then
+                x := vga_x - x;
+                y := y + 1;
+            end if;
+            if(y > screen_HEIGHT) then
+                y := 0;
+            end if;
+
+            global_x <= x;
+            global_y <= y;
+        end if;
+    end process;
+
     BITMAP_LOOKUP: rom_controller port map (clk => vga_clk, address => curr_mem_addr, pixel => rom_pixel);
 
-    curr_pixel <= rom_pixel when show_background = '1' else BACKGROUND;
+    CURRENT_PIXEL: process (vga_clk)
+    begin
+        if falling_edge(vga_clk) then
+            if(show_background = '1') then
+                curr_pixel <= BACKGROUND;
+            else 
+                curr_pixel <= rom_pixel;
+            end if;
+        end if;
+    end process;
+
     VGA_R <= curr_pixel.red;
     VGA_G <= curr_pixel.green;
     VGA_B <= curr_pixel.blue;
@@ -338,7 +372,7 @@ begin
     Tline.box.x_pos <= global_x;
     Tline.box.y_pos <= global_y;
     Tline.box.x_origin <= 0;
-    Tline.box.y_origin <= 10 + ship.bit_map.y_size;
+    Tline.box.y_origin <= 10 + ship_sizeY;
     Tline.enable <= '1';
     Tline.bit_map <= LINE_BITMAP;
 
@@ -349,14 +383,14 @@ begin
     Bline.enable <= '1';
     Bline.bit_map <= LINE_BITMAP;
 
-    score.box.x_pos <= global_x;
-    score.box.y_pos <= global_y;
-    score.box.x_origin <= 100;
-    score.box.y_origin <= 100;
+    -- score.box.x_pos <= global_x;
+    -- score.box.y_pos <= global_y;
+    -- score.box.x_origin <= 100;
+    -- score.box.y_origin <= 100;
 
     ship.box.x_pos <= global_x;
     ship.box.y_pos <= global_y;
-    ship.box.x_origin <= SHIP_SPAWNX + shipX_offset;
+    ship.box.x_origin <= SHIP_SPAWNX + shipX_offset;    -- rom lags by 2 pixels, pixel proccess lags by 1
     ship.box.y_origin <= SHIP_SPAWNY + shipY_offset;
     ship.enable <= '1';
     ship.bit_map <= SHIP_BITMAP;
@@ -459,7 +493,10 @@ begin
 
     SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
                                              GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
-
+    -- score.box.x_pos <= global_x;
+    -- score.box.y_pos <= global_y;
+    -- score.box.x_origin <= 100;
+    -- score.box.y_origin <= 100;
 
 --     pixel : process(global_x, global_y)
 --     begin
@@ -498,55 +535,57 @@ begin
 --         end if;
 --     end process;
 
-pixel : process(global_x, global_y)
+pixel : process(vga_clk)
     begin
-        show_background <= '1';
-        if (ship.in_bounds and ship.enable)= '1' then
-            curr_mem_addr <= ship.abs_mem_addr;
-            show_background <= '0';
-        end if;
+        if(falling_edge(vga_clk)) then
 
-        for l in 0 to NUM_LIVES-1 loop
-            if (ship_lives(l).in_bounds and ship_lives(l).in_bounds) = '1' then
-               curr_mem_addr <= ship_lives(l).abs_mem_addr;
-               show_background <= '0';
-            end if;
-        end loop;
-
-        for s in 0 to NUM_LASERS-1 loop
-            if (lasers(s).in_bounds and lasers(s).enable) = '1' then
-                curr_mem_addr <= lasers(s).abs_mem_addr;
+            show_background <= '1';
+            if (ship.in_bounds and ship.enable)= '1' then
+                curr_mem_addr <= ship.abs_mem_addr;
                 show_background <= '0';
             end if;
-        end loop;
 
-        for a in 0 to NUM_ENEMIES-1 loop
-            if (aliens(a).in_bounds and aliens(a).enable) = '1' then
-                curr_mem_addr <= aliens(a).abs_mem_addr;
+            for l in 0 to NUM_LIVES-1 loop
+                if (ship_lives(l).in_bounds and ship_lives(l).in_bounds) = '1' then
+                   curr_mem_addr <= ship_lives(l).abs_mem_addr;
+                   show_background <= '0';
+                end if;
+            end loop;
+            for s in 0 to NUM_LASERS-1 loop
+                if (lasers(s).in_bounds and lasers(s).enable) = '1' then
+                    curr_mem_addr <= lasers(s).abs_mem_addr;
+                    show_background <= '0';
+                end if;
+            end loop;
+
+            for a in 0 to NUM_ENEMIES-1 loop
+                if (aliens(a).in_bounds and aliens(a).enable) = '1' then
+                    curr_mem_addr <= aliens(a).abs_mem_addr;
+                    show_background <= '0';
+                end if;
+            end loop;
+
+            for a in 0 to NUM_ASTEROIDS-1 loop
+                if (asteroids(a).in_bounds and asteroids(a).enable) = '1' then
+                    curr_mem_addr <= asteroids(a).abs_mem_addr;
+                    show_background <= '0';
+                end if;
+            end loop;
+
+            if (score.in_bounds and score.enable) = '1' then
+                curr_mem_addr <= score.abs_mem_addr;
+                show_background <= '0';
+            end if;    
+
+            if (Bline.in_bounds and Bline.enable) = '1' then
+                curr_mem_addr <= Bline.abs_mem_addr;
+                show_background <= '0';
+            end if; 
+
+            if (Tline.in_bounds and Tline.enable) = '1' then
+                curr_mem_addr <= Tline.abs_mem_addr;
                 show_background <= '0';
             end if;
-        end loop;
-
-        for a in 0 to NUM_ASTEROIDS-1 loop
-            if (asteroids(a).in_bounds and asteroids(a).enable) = '1' then
-                curr_mem_addr <= asteroids(a).abs_mem_addr;
-                show_background <= '0';
-            end if;
-        end loop;
-
-        if (score.in_bounds and score.enable) = '1' then
-            curr_mem_addr <= score.abs_mem_addr;
-            show_background <= '0';
-        end if;    
-
-        if (Bline.in_bounds and Bline.enable) = '1' then
-            curr_mem_addr <= Bline.abs_mem_addr;
-            show_background <= '0';
-        end if; 
-
-        if (Tline.in_bounds and Tline.enable) = '1' then
-            curr_mem_addr <= Tline.abs_mem_addr;
-            show_background <= '0';
         end if;
     end process;
 
@@ -643,15 +682,15 @@ pixel : process(global_x, global_y)
 --     end process;
      
 -- ----Ship Lives--------------------------------------------------------------------------------------------------------------------
-    SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
-                    SHIP_LIFE: objDisp port map (box => ship_lives(I).box, bit_map => ship_lives(I).bit_map, in_bounds => ship_lives(I).in_bounds, mem_addr => ship_lives(I).abs_mem_addr);
+    -- SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
+    --                 SHIP_LIFE: objDisp port map (box => ship_lives(I).box, bit_map => ship_lives(I).bit_map, in_bounds => ship_lives(I).in_bounds, mem_addr => ship_lives(I).abs_mem_addr);
                     
-                    ship_lives(I).box.x_pos <= global_x;
-                    ship_lives(I).box.y_pos <= global_y;
-                    ship_lives(I).box.x_origin <= 10 + ((10 + ship_sizeX) * I);
-                    ship_lives(I).box.y_origin <= 5;
-                    ship_lives(I).bit_map <= SHIP_BITMAP;
-    end generate;
+    --                 ship_lives(I).box.x_pos <= global_x;
+    --                 ship_lives(I).box.y_pos <= global_y;
+    --                 ship_lives(I).box.x_origin <= 10 + ((10 + ship_sizeX) * I);
+    --                 ship_lives(I).box.y_origin <= 5;
+    --                 ship_lives(I).bit_map <= SHIP_BITMAP;
+    -- end generate;
     
 -- ----Laser-------------------------------------------------------------------------------------------------------------------------
 --     LASERS: for I in 0 to NUM_LASERS-1 generate

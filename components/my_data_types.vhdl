@@ -20,8 +20,8 @@ package my_data_types is
         x_pos    : integer range 0 to 640-1;
         y_pos    : integer range 0 to 480-1;
         size_overwride : std_logic;
-        x_size   : integer range 1 to 640-1;
-        y_size   : integer range 1 to 480-1;
+        x_size   : integer range 1 to 640;
+        y_size   : integer range 1 to 480;
     end record;
 
     type bit_map_t is record

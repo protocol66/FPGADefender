@@ -38,7 +38,7 @@ begin
     );
     
     rom1_addr <= address(15 downto 0);
-    rom_clk <= not clk;     -- give combo logic half a clock cycle to finish
+    rom_clk <= clk; -- rom will run one pixel behind
 
     pixel <= Pixel_t'(rom1_out(11 downto 8), rom1_out(7 downto 4), rom1_out(3 downto 0));    -- get er out a here, were running low on time
 
