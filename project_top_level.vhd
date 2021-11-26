@@ -338,14 +338,16 @@ begin
     Tline.box.x_pos <= global_x;
     Tline.box.y_pos <= global_y;
     Tline.box.x_origin <= 0;
-    Tline.box.y_origin <= 10 + ship_sizeY;
+    Tline.box.y_origin <= 10 + ship.bit_map.y_size;
     Tline.enable <= '1';
+    Tline.bit_map <= LINE_BITMAP;
 
     Bline.box.x_pos <= global_x;
     Bline.box.y_pos <= global_y;
     Bline.box.x_origin <= 0;
     Bline.box.y_origin <= screen_HEIGHT - 10;
     Bline.enable <= '1';
+    Bline.bit_map <= LINE_BITMAP;
 
     score.box.x_pos <= global_x;
     score.box.y_pos <= global_y;
@@ -356,6 +358,8 @@ begin
     ship.box.y_pos <= global_y;
     ship.box.x_origin <= SHIP_SPAWNX + shipX_offset;
     ship.box.y_origin <= SHIP_SPAWNY + shipY_offset;
+    ship.enable <= '1';
+    ship.bit_map <= SHIP_BITMAP;
 
     -- SCORE_1: score 
     --     generic map (
@@ -541,7 +545,7 @@ pixel : process(global_x, global_y)
         end if; 
 
         if (Tline.in_bounds and Tline.enable) = '1' then
-            curr_mem_addr <= Tline.in_bounds;
+            curr_mem_addr <= Tline.abs_mem_addr;
             show_background <= '0';
         end if;
     end process;
@@ -640,12 +644,13 @@ pixel : process(global_x, global_y)
      
 -- ----Ship Lives--------------------------------------------------------------------------------------------------------------------
     SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
-                    SHIP_LIFE: objDisp port map (box => ship_lives(I).box, bit_map => ship_lives(I).bit_map, in_bounds => ship_lives(I).in_bounds, ship_lives(I).abs_mem_addr);
+                    SHIP_LIFE: objDisp port map (box => ship_lives(I).box, bit_map => ship_lives(I).bit_map, in_bounds => ship_lives(I).in_bounds, mem_addr => ship_lives(I).abs_mem_addr);
                     
                     ship_lives(I).box.x_pos <= global_x;
                     ship_lives(I).box.y_pos <= global_y;
                     ship_lives(I).box.x_origin <= 10 + ((10 + ship_sizeX) * I);
                     ship_lives(I).box.y_origin <= 5;
+                    ship_lives(I).bit_map <= SHIP_BITMAP;
     end generate;
     
 -- ----Laser-------------------------------------------------------------------------------------------------------------------------

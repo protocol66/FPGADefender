@@ -27,8 +27,8 @@ package my_data_types is
     type bit_map_t is record
         rom_id : natural;
         addr_offset : natural;
-        x_size   : integer range 1 to 640-1;
-        y_size   : integer range 1 to 480-1;
+        x_size   : integer range 1 to 640;
+        y_size   : integer range 1 to 480;
     end record;
 
     type obj is record

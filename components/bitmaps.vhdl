@@ -10,13 +10,14 @@ package bitmaps is
     constant DEFUALT_OBJ : OBJ := (box => Bounding_Box'(0,0,0,0,'0', 1, 1), 
                                    bit_map => bit_map_t'(0, 0, 1, 1), 
                                    abs_mem_addr => (others=>'0'),
-                                   enabled => '0', 
+                                   enable => '0', 
                                    in_bounds => '0', 
                                    pixel => BACKGROUND);
 
 
-    constant PEPE_BITMAP : bit_map_t := bit_map_t'(0, 0, 210, 150);
-    constant USSENTERPRISE_BITMAP : bit_map_t := bit_map_t'(0, 31500, 74, 25);
+    constant LINE_BITMAP : bit_map_t := bit_map_t'(0, 0, 640, 2);
+    constant SHIP_BITMAP : bit_map_t := bit_map_t'(0, 1280, 74, 25);
+                                   
 
 
 
