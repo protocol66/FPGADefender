@@ -17,12 +17,8 @@ package bitmaps is
 
     constant LINE_BITMAP : bit_map_t := bit_map_t'(0, 0, 640, 2);
     constant SHIP_BITMAP : bit_map_t := bit_map_t'(0, 1280, 74, 25);
+    constant ALIEN1_BITMAP : bit_map_t := bit_map_t'(0, 3130, 30, 30);
                                    
-
-
-
-
-
 
     -- constant H_LINE : bit_map_t (0 to line_sizeY-1, 0 to line_sizeX-1) := (others => (others => WHITE));
     -- constant SHIP : bit_map_t (0 to ship_sizeY-1, 0 to ship_sizeX-1) := (others => (others => TEAL));

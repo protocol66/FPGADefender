@@ -11,7 +11,6 @@ entity project_top_level is
     port (
         MAX10_CLK1_50   : in std_logic;
         reset_L : in std_logic;
-        pause   : in std_logic;
 
         KEY : in std_logic_vector(1 downto 0);
 
@@ -66,7 +65,7 @@ architecture rtl of project_top_level is
     component clk_div is
         port (
             clk_in  : in std_logic;
-            div     : in integer;       -- rounds down to closest even number
+            div     : in natural;       -- rounds down to closest even number
             clk_out : buffer std_logic := '0'
         );
     end component clk_div;
@@ -165,6 +164,7 @@ architecture rtl of project_top_level is
             reset_L : in std_logic;
             alive : in std_logic;
             cnt_div : positive := 500000;
+            random_Y : in std_logic_vector (7 downto 0);
     
             x_loc : out integer;
             y_loc : out integer
@@ -230,41 +230,19 @@ architecture rtl of project_top_level is
     signal show_background : std_logic := '0';
     signal curr_mem_addr : std_logic_vector(bit_map_addr_bits-1 downto 0) := (others => '0');
     
-    -- signal Tline_box : Bounding_Box;
-    -- signal top_line_pixel : Pixel_t;
-    -- signal Bline_box : Bounding_Box;
-    -- signal bottom_line_pixel : Pixel_t;
     signal Tline : obj := DEFUALT_OBJ;
     signal Bline : obj := DEFUALT_OBJ;
     
-    -- signal ship_box : Bounding_Box;
-    -- signal ship_pixel : Pixel_t;
-    -- signal ship_life_pixels : ship_lives_pixel_vector;
-    -- signal ship_lives_box : ship_lives_boxes;
-    -- signal ship_lives : std_logic_vector(NUM_LIVES-1 downto 0) := (others => '1'); -- one-hot ship lives
     signal ship : obj := DEFUALT_OBJ;
     signal ship_lives : ship_lives_ar_t := (others => DEFUALT_OBJ);
     signal ship_lives_one_hot : std_logic_vector(NUM_LIVES-1 downto 0) := (others => '1'); -- one-hot ship lives
     
-    -- signal ship_reset_L : std_logic := '1';
-    -- signal ship_alive : std_logic := '1';
-    -- signal ship_collision : std_logic := '0';
-    -- signal shipX_offset : integer := 0;
-    -- signal shipY_offset : integer := 0;
     signal ship_reset_L : std_logic := '1';
     signal ship_alive : std_logic := '1';
     signal ship_collision : std_logic := '0';
     signal shipX_offset : integer := 0;
     signal shipY_offset : integer := 0;
     
-    
-    -- signal lasers_box : laser_boxes;
-    -- signal laser_pixels : laser_pixel_vector;
-    -- signal laser_shoot_main : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
-    -- signal laser_hit : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
-    -- signal laser_shoot2 : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
-    -- signal laser_x : laser_loc_vector;
-    -- signal laser_y : laser_loc_vector;
     signal lasers : laser_ar_t := (others => DEFUALT_OBJ);
     signal laser_shoot_main : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
     signal laser_hit : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
@@ -272,46 +250,62 @@ architecture rtl of project_top_level is
     signal laser_x : laser_loc_ar_t;
     signal laser_y : laser_loc_ar_t;
 
-    -- signal laser_box : Bounding_Box;
-    -- signal laser_pixel : Pixel_t;
-    -- signal laser_shoot : std_logic;
-    -- signal laser_xloc : integer;
-    -- signal lasers_xloc : laser_loc_vector;
+
     signal laser : obj := DEFUALT_OBJ;
     signal laser_shoot : std_logic;
     signal laser_xloc : integer;
     signal lasers_xloc : laser_loc_ar_t;
     
-    -- signal aliens_box : aliens_boxes;
-    -- signal aliens_pixels : aliens_pixel_vector;
-    -- signal aliens_alive : std_logic_vector(NUM_ENEMIES-1 downto 0) := (0|1|2 => '1', others => '0'); -- one-hot aliens
-    -- signal aliens_killed : std_logic_vector(NUM_ENEMIES-1 downto 0) := (others => '0'); -- one-hot aliens
-    signal aliens : alien_ar_t := (others => DEFUALT_OBJ);
-    signal aliens_alive : std_logic_vector(NUM_ENEMIES-1 downto 0) := (0|1|2 => '1', others => '0'); -- one-hot aliens
-    signal aliens_killed : std_logic_vector(NUM_ENEMIES-1 downto 0) := (others => '0'); -- one-hot aliens
 
-    -- signal asteroids_box : asteroids_boxes;
-    -- signal asteroids_pixels : asteroids_pixel_vector;
-    -- signal asteroids_active : std_logic_vector(NUM_ASTEROIDS-1 downto 0) := (others => '0');
+    signal aliens1 : alien_ar_t := (others => DEFUALT_OBJ);
+    signal aliens1_alive : std_logic_vector(NUM_ENEMIES-1 downto 0) := (0|1|2 => '1', others => '0'); -- one-hot aliens
+    signal aliens1_killed : std_logic_vector(NUM_ENEMIES-1 downto 0) := (others => '0'); -- one-hot aliens
+    signal a1_clk : std_logic;
+
+    signal aliens2 : alien_ar_t := (others => DEFUALT_OBJ);
+    signal aliens2_alive : std_logic_vector(NUM_ENEMIES-1 downto 0) := (0|1|2 => '1', others => '0'); -- one-hot aliens
+    signal aliens2_killed : std_logic_vector(NUM_ENEMIES-1 downto 0) := (others => '0'); -- one-hot aliens
+    signal a2_clk : std_logic;
+
+    signal aliens3 : alien_ar_t := (others => DEFUALT_OBJ);
+    signal aliens3_alive : std_logic_vector(NUM_ENEMIES-1 downto 0) := (0|1|2 => '1', others => '0'); -- one-hot aliens
+    signal aliens3_killed : std_logic_vector(NUM_ENEMIES-1 downto 0) := (others => '0'); -- one-hot aliens
+    signal a3_clk : std_logic;
+
+
     signal asteroids : asteroids_ar_t := (others => DEFUALT_OBJ);
+    signal asteroids_active : std_logic_vector(NUM_ASTEROIDS-1 downto 0) := (others => '0');
 
-    -- signal score_box : Bounding_Box;
-    -- signal score_pixel : Pixel_t;
-    signal score : obj := DEFUALT_OBJ;
+    signal score_disp : obj := DEFUALT_OBJ;
     
+    signal curr_score : natural := 0;
+
     signal game_over : std_logic := '0';
     
     signal very_slow_clk : std_logic;
-    signal a1_clk : std_logic;
-    signal alien_spawn_clk : std_logic;
     signal as_clk : std_logic;
     signal random_num : std_logic_vector(7 downto 0);
+    
+    signal pause : std_logic := '0';
+    signal start_sticky : std_logic := '0';
 
-    -- signal obj : bit_map_t (0 to asteroid_sizeY-1, 0 to asteroid_sizeX-1);
-    -- signal random_alive_div : std_logic_vector(7 downto 0);
+    signal a2_en : std_logic := '0';
+    signal a3_en : std_logic := '0';
+    signal obs_en : std_logic := '0';
+
+    signal a1_cnt_div : natural;
+    signal a1_spawn_div : natural;
+    signal a2_cnt_div : natural;
+    signal a2_spawn_div : natural;
+    signal a3_cnt_div : natural;
+    signal a3_spawn_div : natural;
+    signal obs_cnt_div : natural;
+    signal obs_spawn_div : natural;
 
     signal pwm : std_logic_vector(5 downto 0);
     signal note_clk : std_logic;
+    signal alien_killed_fx : std_logic := '0';
+    signal ship_hit_fx : std_logic := '0';
 
 
 begin
@@ -559,8 +553,16 @@ pixel : process(vga_clk)
             end loop;
 
             for a in 0 to NUM_ENEMIES-1 loop
-                if (aliens(a).in_bounds and aliens(a).enable) = '1' then
-                    curr_mem_addr <= aliens(a).abs_mem_addr;
+                if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
+                    curr_mem_addr <= aliens1(a).abs_mem_addr;
+                    show_background <= '0';
+                end if;
+                if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
+                    curr_mem_addr <= aliens2(a).abs_mem_addr;
+                    show_background <= '0';
+                end if;
+                if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
+                    curr_mem_addr <= aliens3(a).abs_mem_addr;
                     show_background <= '0';
                 end if;
             end loop;
@@ -572,8 +574,8 @@ pixel : process(vga_clk)
                 end if;
             end loop;
 
-            if (score.in_bounds and score.enable) = '1' then
-                curr_mem_addr <= score.abs_mem_addr;
+            if (score_disp.in_bounds and score_disp.enable) = '1' then
+                curr_mem_addr <= score_disp.abs_mem_addr;
                 show_background <= '0';
             end if;    
 
@@ -588,6 +590,101 @@ pixel : process(vga_clk)
             end if;
         end if;
     end process;
+
+    ------------------- Dificulty --------------------------------------------------------------------------------------
+    enable : process(curr_score)
+    begin
+        if curr_score > 500 then
+            a2_en <= '1';
+        else
+            a2_en <= '0';
+        end if;
+        if curr_score > 2000 then
+            obs_en <= '1';
+        else
+            obs_en <= '0';
+        end if;
+        if curr_score > 5000 then
+            a3_en <= '1';
+        else
+            a3_en <= '0';
+        end if;
+        if curr_score > 500000 then
+            a1_cnt_div <= 2 * SEC / 640;
+            a1_spawn_div <= SEC;
+
+            a2_cnt_div <= 2 * SEC / 640;
+            a2_spawn_div <= 2 * SEC;
+
+            a3_cnt_div <= 2 * SEC / 640;
+            a3_spawn_div <= 5 * SEC;
+
+            obs_cnt_div <= 4 * SEC / 640;
+            obs_spawn_div <= 5 * SEC;
+        elsif curr_score > 200000 then
+            a1_cnt_div <= 4 * SEC / 640;
+            a1_spawn_div <= 2 * SEC;
+
+            a2_cnt_div <= 4 * SEC / 640;
+            a2_spawn_div <= 4 * SEC;
+
+            a3_cnt_div <= 2 * SEC / 640;
+            a3_spawn_div <= 5 * SEC;
+
+            obs_cnt_div <= 6 * SEC / 640;
+            obs_spawn_div <= 10 * SEC;
+        elsif curr_score > 150000 then
+            a1_cnt_div <= 4 * SEC / 640;
+            a1_spawn_div <= 2 * SEC;
+            
+            a2_cnt_div <= 4 * SEC / 640;
+            a2_spawn_div <= 4 * SEC;
+
+            a3_cnt_div <= 4 * SEC / 640;
+            a3_spawn_div <= 10 * SEC;
+
+            obs_cnt_div <= 8 * SEC / 640;
+            obs_spawn_div <= 15 * SEC;
+        elsif curr_score > 100000 then
+            a1_cnt_div <= 6 * SEC / 640;
+            a1_spawn_div <= 3 * SEC;
+            
+            a2_cnt_div <= 6 * SEC / 640;
+            a2_spawn_div <= 6 * SEC;
+
+            a3_cnt_div <= 4 * SEC / 640;
+            a3_spawn_div <= 10 * SEC;
+
+            obs_cnt_div <= 10 * SEC / 640;
+            obs_spawn_div <= 20 * SEC;
+        elsif curr_score > 10000 then
+            a1_cnt_div <= 8 * SEC / 640;
+            a1_spawn_div <= 4 * SEC;
+
+            a2_cnt_div <= 6 * SEC / 640;
+            a2_spawn_div <= 8 * SEC;
+
+            a3_cnt_div <= 5 * SEC / 640;
+            a3_spawn_div <= 15 * SEC;
+
+            obs_cnt_div <= 15 * SEC / 640;
+            obs_spawn_div <= 25 * SEC;
+        else
+            a1_cnt_div <= 10 * SEC / 640;
+            a1_spawn_div <= 5 * SEC;
+            
+            a2_cnt_div <= 8 * SEC / 640;
+            a2_spawn_div <= 10 * SEC;
+
+            a3_cnt_div <= 5 * SEC / 640;
+            a3_spawn_div <= 20 * SEC;
+
+            obs_cnt_div <= 20 * SEC / 640;
+            obs_spawn_div <= 30 * SEC;
+        end if;
+    end process;
+
+    ------------------- Collision --------------------------------------------------------------------------------------
 
 --     collision : process(global_x, global_y)
 --     begin
@@ -616,81 +713,46 @@ pixel : process(vga_clk)
 --             end loop;
 --         end loop;
 --     end process;
---     -- TEST1: score port map (
---     --     box => score_box,
---     --     enable => global_display_en,
---     --     score_in => "0000",
---     --     pixel => score_pixel
---     -- );
 
---     -- DIAGNOSTIC1: bin2seg7 port map (
---     --     inData => rand_x_pos(3 downto 0),
---     --     enable => '1',
---     --     dispPoint => '0',
---     --     HEX => HEX0
---     -- );
+------- Diagnostics -----------------------------------------------------------------
 
---     -- DIAGNOSTIC2: bin2seg7 port map (
---     --     inData => rand_x_pos(7 downto 4),
---     --     enable => '1',
---     --     dispPoint => '0',
---     --     HEX => HEX1
---     -- );
---     -- DIAGNOSTIC3: bin2seg7 port map (
---     --     inData => rand_y_pos(3 downto 0),
---     --     enable => '1',
---     --     dispPoint => '0',
---     --     HEX => HEX2
---     -- );
+    -- DIAGNOSTIC1: bin2seg7 port map (
+    --     inData => rand_x_pos(3 downto 0),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX0
+    -- );
 
---     -- DIAGNOSTIC4: bin2seg7 port map (
---     --     inData => rand_y_pos(7 downto 4),
---     --     enable => '1',
---     --     dispPoint => '0',
---     --     HEX => HEX3
---     -- );
---     -- U1: clk_div port map (clk_in => MAX10_CLK1_50, div => SEC, clk_out => very_slow_clk);
--- --     process (very_slow_clk)
--- --     begin
--- --         if rising_edge(very_slow_clk) then
--- --             -- if (score_box.x_origin < 600)  then
--- --             --     score_box.x_origin <= score_box.x_origin + 1;
--- --             -- else 
--- --             --     score_box.x_origin <= 0;
--- -- --            end if;
--- --         end if;
--- --     end process;
-    
---     -- ship_collision <= not KEY(1);
-    
---     ship_main : process(ship_collision)
---     begin
---         if rising_edge(ship_collision) then
---             ship_alive <= '0';
---             ship_reset_L <= '0';
---             if ship_lives = "000" then
---                 game_over <= '1';
---             else 
---                 ship_lives <= std_logic_vector(shift_left(unsigned(ship_lives), 1));
--- 			end if;
---         end if;
-        
---         if ship_alive = '0' then
---             ship_alive <= '1';
---             ship_reset_L <= '1';
---         end if;
---     end process;
+    -- DIAGNOSTIC2: bin2seg7 port map (
+    --     inData => rand_x_pos(7 downto 4),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX1
+    -- );
+    -- DIAGNOSTIC3: bin2seg7 port map (
+    --     inData => rand_y_pos(3 downto 0),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX2
+    -- );
+
+    -- DIAGNOSTIC4: bin2seg7 port map (
+    --     inData => rand_y_pos(7 downto 4),
+    --     enable => '1',
+    --     dispPoint => '0',
+    --     HEX => HEX3
+    -- );
      
 -- ----Ship Lives--------------------------------------------------------------------------------------------------------------------
-    -- SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
-    --                 SHIP_LIFE: objDisp port map (box => ship_lives(I).box, bit_map => ship_lives(I).bit_map, in_bounds => ship_lives(I).in_bounds, mem_addr => ship_lives(I).abs_mem_addr);
+    SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
+                    SHIP_LIFE: objDisp port map (box => ship_lives(I).box, bit_map => ship_lives(I).bit_map, in_bounds => ship_lives(I).in_bounds, mem_addr => ship_lives(I).abs_mem_addr);
                     
-    --                 ship_lives(I).box.x_pos <= global_x;
-    --                 ship_lives(I).box.y_pos <= global_y;
-    --                 ship_lives(I).box.x_origin <= 10 + ((10 + ship_sizeX) * I);
-    --                 ship_lives(I).box.y_origin <= 5;
-    --                 ship_lives(I).bit_map <= SHIP_BITMAP;
-    -- end generate;
+                    ship_lives(I).box.x_pos <= global_x;
+                    ship_lives(I).box.y_pos <= global_y;
+                    ship_lives(I).box.x_origin <= 10 + ((10 + ship_lives(I).bit_map.x_size) * I);
+                    ship_lives(I).box.y_origin <= 5;
+                    ship_lives(I).bit_map <= SHIP_BITMAP;
+    end generate;
     
 -- ----Laser-------------------------------------------------------------------------------------------------------------------------
 --     LASERS: for I in 0 to NUM_LASERS-1 generate
@@ -732,68 +794,40 @@ pixel : process(vga_clk)
     
 
 -- ----Aliens-------------------------------------------------------------------------------------------------------------------------      
---     ALIENS: for I in 0 to NUM_ENEMIES-1 generate
---             ALIEN: objDisp generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
---                             port map (box => aliens_box(I), clk => MAX10_CLK1_50, enable => aliens_alive(I), pixel => aliens_pixels(I));
---             ALIEN_LOC: alien_movement generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
---                                         port map (max10_clk => MAX10_CLK1_50, reset_L => aliens_alive(I) AND NOT aliens_killed(I), cnt_div => 3 * SEC / 640, alive => aliens_alive(I) AND NOT aliens_killed(I), x_loc => aliens_box(I).x_origin, y_loc => aliens_box(I).y_origin);
---             aliens_box(I).x_pos <= global_x;
---             aliens_box(I).y_pos <= global_y;
--- 	end generate;
-	
---     RN: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => '1', enable => '1', seed => "01001101", random_8 => random_num);
+ALIENS_GEN1: for I in 0 to NUM_ENEMIES-1 generate
+    ALIEN1: objDisp port map (box => aliens1(I).box, bit_map => aliens1(I).bit_map, in_bounds => aliens1(I).in_bounds, mem_addr => aliens1(I).abs_mem_addr);
+    ALIEN1_LOC: alien_movement generic map (X_SIZE => alien1_sizeX, Y_SIZE => alien1_sizeY)
+                                port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT ship_collision, 
+                                        cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause AND NOT ship_collision,
+                                        x_loc => aliens1(I).box.x_origin, y_loc => aliens1(I).box.y_origin, random_Y => random_num);
 
---     CLK_A1: clk_div port map (clk_in => MAX10_CLK1_50, div => 5 * SEC, clk_out => a1_clk);
---     ALIEN_SPAWN: process(a1_clk)
---     variable en :integer := 0;
---     begin
---         if rising_edge(a1_clk) then
---             if aliens_alive(en) = '0' then
---                 aliens_alive(en) <= '1';
---                 en := (en + 1) mod NUM_ENEMIES;
---             end if;
---         end if;
---         for i in 0 to NUM_ENEMIES-1 loop
---             if aliens_box(i).x_origin > screen_WIDTH then
---                 aliens_alive(i) <= '0';
---             end if;
---         end loop;
---     end process;
+    aliens1(I).box.x_pos <= global_x;
+    aliens1(I).box.y_pos <= global_y;
+    -- aliens1(I).enable <= aliens1_alive(I) AND start_sticky;
+    aliens1(I).enable <= '1';
+    aliens1(I).bit_map <= ALIEN1_BITMAP;
 
---     ASTEROIDS: for I in 0 to NUM_ASTEROIDS-1 generate
---             ASTEROID_DISP: objDisp generic map (X_SIZE => asteroid_sizeX, Y_SIZE => asteroid_sizeY) 
---                                 port map (box => asteroids_box(I), clk => MAX10_CLK1_50, enable => asteroids_active(I), pixel => asteroids_pixels(I));
---             ASTEROID_LOC: obstacle_movement generic map (Y_SIZE => asteroid_sizeY)
---                                             port map (max10_clk => MAX10_CLK1_50, active => asteroids_active(I), cnt_div => 25 * SEC / 640, x_loc => asteroids_box(I).x_origin, y_loc => asteroids_box(I).y_origin);
---             asteroids_box(I).x_pos <= global_x;
---             asteroids_box(I).y_pos <= global_y;
-            
---             OBJ_SELECT : process(random_num(3))
---             begin
---                 if random_num(3) = '1' then
---                     obj <= ASTEROID;
---                 else
---                     obj <= SATELLITE;
---                 end if;
---             end process;
+end generate;
 
---     end generate;
 
---     CLK_AS: clk_div port map (clk_in => MAX10_CLK1_50, div => 30 * SEC, clk_out => as_clk);
---     ASTEROID_SPAWN: process(as_clk)
---     variable en :integer := 0;
---     begin
---         if rising_edge(as_clk) then
---             if asteroids_active(en) = '0' then
---                 asteroids_active(en) <= '1';
---                 en := (en + 1) mod NUM_ASTEROIDS;
---             end if;
---         end if;
---         for i in 0 to NUM_ASTEROIDS-1 loop
---             if asteroids_box(i).x_origin > screen_WIDTH then
---                 asteroids_active(i) <= '0';
---             end if;
---         end loop;
---     end process;
+CLK_A1: clk_div port map (clk_in => MAX10_CLK1_50, div => a1_spawn_div, clk_out => a1_clk);
+ALIEN1_SPAWN: process(a1_clk)
+variable en :integer := 0;
+begin
+if start_sticky = '1' and pause = '0' then
+    if rising_edge(a1_clk) then
+        if aliens1_alive(en) = '0' then
+            aliens1_alive(en) <= '1';
+            en := (en + 1) rem NUM_ENEMIES;
+        end if;
+    end if;
+    for i in 0 to NUM_ENEMIES-1 loop
+        if aliens1(i).box.x_origin > screen_WIDTH then
+            aliens1_alive(i) <= '0';
+        end if;
+    end loop;
+end if;
+end process;
+-------------------------------------------------------
 
 end architecture;
