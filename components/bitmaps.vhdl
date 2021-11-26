@@ -7,7 +7,12 @@ use work.my_data_types.all;
 package bitmaps is
     constant BACKGROUND : Pixel_t := BLACK;
 
-    constant DEFUALT_OBJ : OBJ := (Bounding_Box'(0,0,0,0,'0', 1, 1), bit_map_t'(0, 0, 1, 1), (others=>'0'), '0', BACKGROUND);
+    constant DEFUALT_OBJ : OBJ := (box => Bounding_Box'(0,0,0,0,'0', 1, 1), 
+                                   bit_map => bit_map_t'(0, 0, 1, 1), 
+                                   abs_mem_addr => (others=>'0'),
+                                   enabled => '0', 
+                                   in_bounds => '0', 
+                                   pixel => BACKGROUND);
 
 
     constant PEPE_BITMAP : bit_map_t := bit_map_t'(0, 0, 210, 150);

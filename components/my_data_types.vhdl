@@ -35,6 +35,7 @@ package my_data_types is
         box : Bounding_Box;
         bit_map : bit_map_t;
         abs_mem_addr : std_logic_vector(bit_map_addr_bits-1 downto 0);
+        enable : std_logic;
         in_bounds : std_logic;
         pixel : Pixel_t;
     end record;
