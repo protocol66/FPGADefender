@@ -15,10 +15,10 @@ package my_data_types is
 
 
     type Bounding_Box is record
-        x_origin : integer range 0 to 640-1;
-        y_origin : integer range 0 to 480-1;
-        x_pos    : integer range 0 to 640-1;
-        y_pos    : integer range 0 to 480-1;
+        x_origin : integer range -1024 to 1024;
+        y_origin : integer range -1024 to 1024;
+        x_pos    : integer range -1024 to 1024;
+        y_pos    : integer range -1024 to 1024;
         size_overwride : std_logic;
         x_size   : integer range 1 to 640;
         y_size   : integer range 1 to 480;

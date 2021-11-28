@@ -3,14 +3,15 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 use ieee.math_real.all;
 
-use work.constants.all;
 use work.my_data_types.all;
 use work.bitmaps.all;
+use work.constants.all;
 
 entity ship_movement is
     port (
         max10_clk : in std_logic;
         reset_L : in std_logic;
+        en : in std_logic;
 
         x_offset : out integer;
         y_offset : out integer;
@@ -82,8 +83,8 @@ begin
     U1: clk_div port map (clk_in => max10_clk, div => 500, clk_out => clk_10k);
     U2: ADXL345_controller port map(reset_n => '1', clk => max10_clk, data_valid => open, data_x => data_x, data_y => data_y, data_z => open, 
                                     SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
-    U3: counter generic map (SIZE => 9) port map(clk => x_counter_clk, up_down => not data_x(4), reset_L => reset_L, enable => x_enable, cout => x_shift);
-    U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => not data_y(4), reset_L => reset_L, enable => y_enable, cout => y_shift);
+    U3: counter generic map (SIZE => 9) port map(clk => x_counter_clk, up_down => not data_x(4), reset_L => reset_L, enable => x_enable AND en, cout => x_shift);
+    U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => not data_y(4), reset_L => reset_L, enable => y_enable AND en, cout => y_shift);
     
     x_clk_divider : process(clk_10k)
     variable count : integer := 0;
@@ -157,4 +158,4 @@ begin
     end process;
 
 
-end architecture ; -- arch
+end architecture;

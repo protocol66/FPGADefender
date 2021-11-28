@@ -1,3 +1,4 @@
 line.bmp = (640, 2)
 ship.jpg = (74 , 25)
-alien1.png = (30,30)
+alien1.bmp = (30,30)
+laser.bmp = (12, 3)

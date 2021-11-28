@@ -28,7 +28,7 @@ architecture arch of alien_movement is
     constant MAX_UP : integer := 40 + ship_sizeY;
     constant MAX_DOWN : integer := screen_HEIGHT - Y_SIZE - 10;
 
-    signal spawn_seed : std_logic_vector (7 downto 0) := "01001100";
+    -- signal spawn_seed : std_logic_vector (7 downto 0) := "01001100";
     signal spawn : integer := screen_HEIGHT / 2;
 
     signal x_shift : std_logic_vector(9 downto 0);
@@ -61,21 +61,21 @@ architecture arch of alien_movement is
         );
     end component;
 
-    component pseudorandom_8 is
-        port (
-            clk      : in std_logic;
-            reset_L  : in std_logic := '0';
-            enable   : in std_logic := '0';
-            seed     : in std_logic_vector(7 downto 0);
-            random_8 : out std_logic_vector(7 downto 0)
-        );
-    end component;
+    -- component pseudorandom_8 is
+    --     port (
+    --         clk      : in std_logic;
+    --         reset_L  : in std_logic := '0';
+    --         enable   : in std_logic := '0';
+    --         seed     : in std_logic_vector(7 downto 0);
+    --         random_8 : out std_logic_vector(7 downto 0)
+    --     );
+    -- end component;
 
 begin
     U1: clk_div port map (clk_in => max10_clk, div => cnt_div, clk_out => clk_a);
-    U2: clk_div port map (clk_in => max10_clk, div => 5 * 50000000, clk_out => clk_b);
+    -- U2: clk_div port map (clk_in => max10_clk, div => 5 * 50000000, clk_out => clk_b);
     U3: counter generic map (SIZE => 10) port map(clk => clk_a, up_down => '0', reset_L => reset_L, enable => alive, cout => x_shift);
-    -- U4: counter generic map (SIZE => 9) port map(clk => clk_a, up_down => y_up_down, reset_L => reset_L, enable => alive, cout => y_shift);
+    U4: counter generic map (SIZE => 9) port map(clk => clk_a, up_down => y_up_down, reset_L => reset_L, enable => alive, cout => y_shift);
     -- U5: pseudorandom_8 port map (clk => max10_clk, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random_Y);
     -- U6: pseudorandom_8 port map (clk => clk_b, reset_L => '1', enable => '1', seed => spawn_seed, random_8 => random);
 
@@ -99,15 +99,14 @@ begin
                 spawn <= to_integer(unsigned(random_Y)) + 100;
 			end if;
         else
-            -- if to_integer(signed(y_shift)) + spawn < MAX_UP then
-            --     y_up_down <= '0';
-            -- elsif to_integer(signed(y_shift)) + spawn > MAX_DOWN then
-            --     y_up_down <= '1';
-            -- else
-            --     y_up_down <= random(2) XOR random_Y(4);
-            -- end if;
+            if to_integer(signed(y_shift)) + spawn < MAX_UP then
+                y_up_down <= '0';
+            elsif to_integer(signed(y_shift)) + spawn > MAX_DOWN then
+                y_up_down <= '1';
+            else
+                y_up_down <= random(2) XOR random_Y(4);
+            end if;
 		end if;
     end process;
-
 
 end architecture;
