@@ -687,61 +687,63 @@ pixel : process(vga_clk)
 
     ---- Collision --------------------------------------------------------------------------------------
 
-    collision : process(global_x, global_y)
+    collision : process(vga_clk)
     begin
-        if start_sticky = '0' then
-            curr_score <= 0;
-        end if;
-        if ship_alive = '0' then
-            ship_collision <= '0';
-        end if;
-        if (ship.in_bounds and ship.enable) = '1' then
-            for a in 0 to NUM_ENEMIES-1 loop
-                if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
-                    ship_collision <= '1';
-                end if;
-                if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
-                    ship_collision <= '1';
-                end if;
-                if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
-                    ship_collision <= '1';
-                end if;
-            end loop;
-            for o in 0 to NUM_ASTEROIDS-1 loop
-                if (asteroids(o).in_bounds and asteroids(o).enable) = '1' then
-                    ship_collision <= '1';
-                end if;
-            end loop;
-        end if;
-        for l in 0 to NUM_LASERS-1 loop
-            for a in 0 to NUM_ENEMIES-1 loop
-                if (lasers(l).in_bounds and lasers(l).enable) = '1' then
-                    aliens1_killed(a) <= '0';
-                    aliens2_killed(a) <= '0';
-                    aliens3_killed(a) <= '0';
-                    laser_hit(l) <= '0';
-                    alien_killed_fx <= '1';
+        if(rising_edge(vga_clk)) then
+            if start_sticky = '0' then
+                curr_score <= 0;
+            end if;
+            if ship_alive = '0' then
+                ship_collision <= '0';
+            end if;
+            if (ship.in_bounds and ship.enable) = '1' then
+                for a in 0 to NUM_ENEMIES-1 loop
                     if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
-                        aliens1_killed(a) <= '1';
-                        laser_hit(l) <= '1';
-                        curr_score <= curr_score + 150;
-                        alien_killed_fx <= '0';
+                        ship_collision <= '1';
                     end if;
                     if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
-                        aliens2_killed(a) <= '1';
-                        laser_hit(l) <= '1';
-                        curr_score <= curr_score + 300;
-                        alien_killed_fx <= '0';
+                        ship_collision <= '1';
                     end if;
                     if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
-                        aliens3_killed(a) <= '1';
-                        laser_hit(l) <= '1';
-                        curr_score <= curr_score + 600;
-                        alien_killed_fx <= '0';
+                        ship_collision <= '1';
                     end if;
-                end if;
+                end loop;
+                for o in 0 to NUM_ASTEROIDS-1 loop
+                    if (asteroids(o).in_bounds and asteroids(o).enable) = '1' then
+                        ship_collision <= '1';
+                    end if;
+                end loop;
+            end if;
+            for l in 0 to NUM_LASERS-1 loop
+                for a in 0 to NUM_ENEMIES-1 loop
+                    if (lasers(l).in_bounds and lasers(l).enable) = '1' then
+                        aliens1_killed(a) <= '0';
+                        aliens2_killed(a) <= '0';
+                        aliens3_killed(a) <= '0';
+                        laser_hit(l) <= '0';
+                        alien_killed_fx <= '1';
+                        if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
+                            aliens1_killed(a) <= '1';
+                            laser_hit(l) <= '1';
+                            curr_score <= curr_score + 150;
+                            alien_killed_fx <= '0';
+                        end if;
+                        if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
+                            aliens2_killed(a) <= '1';
+                            laser_hit(l) <= '1';
+                            curr_score <= curr_score + 300;
+                            alien_killed_fx <= '0';
+                        end if;
+                        if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
+                            aliens3_killed(a) <= '1';
+                            laser_hit(l) <= '1';
+                            curr_score <= curr_score + 600;
+                            alien_killed_fx <= '0';
+                        end if;
+                    end if;
+                end loop;
             end loop;
-        end loop;
+        end if;
     end process;
 
 ------- Diagnostics -----------------------------------------------------------------
@@ -827,20 +829,23 @@ LASERS_GEN: for I in 0 to NUM_LASERS-1 generate
         lasers(I).bit_map <= LASER_BITMAP;
     end generate;       
 
-    shoot_laser : process(KEY(0), laser_shoot2)
+    shoot_laser : process(KEY(0), laser_shoot2, vga_clk)
     variable en : integer := 0;
     begin
-    if start_sticky = '1' and pause = '0' then
-        if game_over = '0' then
-            if falling_edge(KEY(0)) then
-                laser_shoot_main(en) <= '1';
-                laser_x(en) <= ship.box.x_origin;
-                laser_y(en) <= ship.box.y_origin + 5;
-                en := (en + 1) mod NUM_LASERS;
+        if start_sticky = '1' and pause = '0' then
+            if game_over = '0' then
+                if falling_edge(KEY(0)) then
+                    laser_shoot_main(en) <= '1';
+                    laser_x(en) <= ship.box.x_origin;
+                    laser_y(en) <= ship.box.y_origin + 5;
+                    en := en + 1;
+                    if en = NUM_ENEMIES then
+                        en := 0;
+                    end if;
+                end if;
+            else
+                laser_shoot_main(en) <= '0';
             end if;
-        else
-            laser_shoot_main(en) <= '0';
-        end if;
 
             for i in 0 to NUM_LASERS-1 loop
                 if laser_shoot2(i) = '0' then
