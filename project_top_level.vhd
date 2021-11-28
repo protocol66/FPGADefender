@@ -536,7 +536,7 @@ pixel : process(vga_clk)
             end if;
 
             for l in 0 to NUM_LIVES-1 loop
-                if (ship_lives(l).in_bounds and ship_lives(l).in_bounds) = '1' then
+                if (ship_lives(l).in_bounds and ship_lives(l).enable) = '1' then
                    curr_mem_addr <= ship_lives(l).abs_mem_addr;
                    show_background <= '0';
                 end if;
@@ -803,7 +803,7 @@ pixel : process(vga_clk)
                     ship_lives(I).box.y_pos <= global_y;
                     ship_lives(I).box.x_origin <= 10 + ((10 + ship_lives(I).bit_map.x_size) * I);
                     ship_lives(I).box.y_origin <= 5;
-                    ship_lives(I).enable <= ship_lives_one_hot(I);
+                    ship_lives(I).enable <= ship_lives_one_hot((NUM_LIVES-1) - I);
                     ship_lives(I).bit_map <= SHIP_BITMAP;
     end generate;
     
