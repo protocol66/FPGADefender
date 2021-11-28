@@ -16,8 +16,21 @@ end objDisp;
 
 architecture arch of objDisp is
 
-    signal x, y : integer;
+    component hw_mult IS
+	port
+	(
+		dataa		: IN STD_LOGIC_VECTOR (9 DOWNTO 0);
+		datab		: IN STD_LOGIC_VECTOR (9 DOWNTO 0);
+		result		: OUT STD_LOGIC_VECTOR (19 DOWNTO 0)
+	);
+    end component;
+
+
+    signal x : integer range 0 to screen_WIDTH;
+	signal y : integer range 0 to screen_HEIGHT;
     signal addr : std_logic_vector(15 downto 0);
+
+    signal mult_out : std_logic_vector(19 downto 0);
 begin
 
     process (box, bit_map)
@@ -40,6 +53,8 @@ begin
         end if;
     end process;
 
-    mem_addr <= std_logic_vector(to_unsigned(bit_map.rom_id, rom_id_bits)) & std_logic_vector(to_unsigned(bit_map.addr_offset + (y * bit_map.x_size) + x, rom_addr_bits));
+    HW_MULTIPLY: hw_mult port map (std_logic_vector(to_unsigned(y, 10)), std_logic_vector(to_unsigned(bit_map.x_size, 10)), mult_out);  -- calc offset with hw acceleration
+
+    mem_addr <= std_logic_vector(to_unsigned(bit_map.rom_id, rom_id_bits)) & std_logic_vector(to_unsigned(bit_map.addr_offset + to_integer(unsigned(mult_out)) + x, rom_addr_bits));
 
 end architecture; 

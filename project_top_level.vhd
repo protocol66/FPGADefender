@@ -254,7 +254,6 @@ architecture rtl of project_top_level is
 
     signal laser : obj := DEFUALT_OBJ;
     signal laser_shoot : std_logic;
-    signal laser_xloc : integer;
     signal lasers_xloc : laser_loc_ar_t;
     
 
@@ -414,7 +413,7 @@ begin
     ship.box.y_pos <= global_y;
     ship.box.x_origin <= SHIP_SPAWNX + shipX_offset;    -- rom lags by 2 pixels, pixel proccess lags by 1
     ship.box.y_origin <= SHIP_SPAWNY + shipY_offset;
-    ship.enable <= '1';
+    ship.enable <= not ship_collision and not game_over;
     ship.bit_map <= SHIP_BITMAP;
 
     -- SCORE_1: score 
@@ -693,9 +692,7 @@ pixel : process(vga_clk)
             if start_sticky = '0' then
                 curr_score <= 0;
             end if;
-            if ship_alive = '0' then
-                ship_collision <= '0';
-            end if;
+            ship_collision <= '0';
             if (ship.in_bounds and ship.enable) = '1' then
                 for a in 0 to NUM_ENEMIES-1 loop
                     if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
@@ -715,12 +712,12 @@ pixel : process(vga_clk)
                 end loop;
             end if;
             for l in 0 to NUM_LASERS-1 loop
+                laser_hit(l) <= '0';
                 for a in 0 to NUM_ENEMIES-1 loop
                     if (lasers(l).in_bounds and lasers(l).enable) = '1' then
                         aliens1_killed(a) <= '0';
                         aliens2_killed(a) <= '0';
                         aliens3_killed(a) <= '0';
-                        laser_hit(l) <= '0';
                         alien_killed_fx <= '1';
                         if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
                             aliens1_killed(a) <= '1';
@@ -811,6 +808,7 @@ pixel : process(vga_clk)
 LASERS_GEN: for I in 0 to NUM_LASERS-1 generate
     LASER_disp: objDisp port map (box => lasers(I).box, bit_map => lasers(I).bit_map, in_bounds => lasers(I).in_bounds, mem_addr => lasers(I).abs_mem_addr);          
     LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND (NOT laser_hit(I)), x_loc => lasers_xloc(I));
+
     laser_offset : process(lasers_xloc(I))
         begin
             if pause = '0' then
@@ -839,7 +837,7 @@ LASERS_GEN: for I in 0 to NUM_LASERS-1 generate
                     laser_x(en) <= ship.box.x_origin;
                     laser_y(en) <= ship.box.y_origin + 5;
                     en := en + 1;
-                    if en = NUM_ENEMIES then
+                    if en = NUM_LASERS then
                         en := 0;
                     end if;
                 end if;
@@ -862,8 +860,8 @@ RN: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => '1', enable => '1'
 ALIENS_GEN1: for I in 0 to NUM_ENEMIES-1 generate
     ALIEN1: objDisp port map (box => aliens1(I).box, bit_map => aliens1(I).bit_map, in_bounds => aliens1(I).in_bounds, mem_addr => aliens1(I).abs_mem_addr);
     ALIEN1_LOC: alien_movement generic map (X_SIZE => ALIEN1_BITMAP.x_size, Y_SIZE => ALIEN1_BITMAP.y_size)
-                                port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT ship_collision, 
-                                        cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause AND NOT ship_collision,
+                                port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky,
+                                        cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause,
                                         x_loc => aliens1(I).box.x_origin, y_loc => aliens1(I).box.y_origin, random_Y => random_num);
 
     aliens1(I).box.x_pos <= global_x;
@@ -889,7 +887,7 @@ begin
             end if;
         end if;
         for i in 0 to NUM_ENEMIES-1 loop
-            if aliens1(i).box.x_origin = 0 then
+            if aliens1(i).box.x_origin = 0 or ship_collision = '1' then
                 aliens1_alive(i) <= '0';
             end if;
         end loop;

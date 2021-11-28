@@ -15,13 +15,13 @@ package my_data_types is
 
 
     type Bounding_Box is record
-        x_origin : integer range -1024 to 1024;
-        y_origin : integer range -1024 to 1024;
-        x_pos    : integer range -1024 to 1024;
-        y_pos    : integer range -1024 to 1024;
+        x_origin : integer range 0 to screen_WIDTH;
+        y_origin : integer range 0 to screen_HEIGHT;
+        x_pos    : integer range 0 to screen_WIDTH;
+        y_pos    : integer range 0 to screen_HEIGHT;
         size_overwride : std_logic;
-        x_size   : integer range 1 to 640;
-        y_size   : integer range 1 to 480;
+        x_size   : integer range 1 to screen_WIDTH + 1;
+        y_size   : integer range 1 to screen_HEIGHT + 1;
     end record;
 
     type bit_map_t is record
