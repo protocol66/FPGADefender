@@ -197,7 +197,7 @@ architecture rtl of project_top_level is
     constant NUM_LIVES : positive := 3;
     constant SHIP_SPAWNX : positive := 160;
     constant SHIP_SPAWNY : positive := 240;
-    constant NUM_LASERS : positive := 10;
+    constant NUM_LASERS : positive := 16;
 
     constant NUM_ENEMIES : positive := 4;       -- max of 32 - 8ish due to the random_num
     constant NUM_ASTEROIDS : positive := 3;
@@ -508,7 +508,7 @@ begin
         begin
             if(falling_edge(vga_clk)) then
                 show_background <= '1';
-                curr_mem_addr <= (others => '1');       -- needed for collision
+                curr_mem_addr <= (others => '0');       -- needed for collision
                 if (ship.in_bounds and ship.enable)= '1' then
                     curr_mem_addr <= ship.abs_mem_addr;
                     ship.pixel <= rom_pixel;
@@ -676,25 +676,25 @@ begin
 
     collision : process(vga_clk)
     begin
-        if(rising_edge(vga_clk)) then
+        if(falling_edge(vga_clk)) then
             if start_sticky = '0' then
                 curr_score <= 0;
             end if;
             ship_collision <= '0';
-            if (ship.in_bounds and ship.enable) = '1' then
+            if ((ship.in_bounds and ship.enable) = '1') and (ship.pixel /= BACKGROUND) then
                 for a in 0 to NUM_ENEMIES-1 loop
-                    if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
+                    if ((aliens1(a).in_bounds and aliens1(a).enable) = '1') and (aliens1(a).pixel /= BACKGROUND) then
                         ship_collision <= '1';
                     end if;
-                    if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
+                    if ((aliens2(a).in_bounds and aliens2(a).enable) = '1') and (aliens2(a).pixel /= BACKGROUND) then
                         ship_collision <= '1';
                     end if;
-                    if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
+                    if ((aliens3(a).in_bounds and aliens3(a).enable) = '1') and (aliens3(a).pixel /= BACKGROUND) then
                         ship_collision <= '1';
                     end if;
                 end loop;
                 for o in 0 to NUM_ASTEROIDS-1 loop
-                    if (asteroids(o).in_bounds and asteroids(o).enable) = '1' then
+                    if ((asteroids(o).in_bounds and asteroids(o).enable) = '1') and (asteroids(o).pixel /= BACKGROUND) then
                         ship_collision <= '1';
                     end if;
                 end loop;
@@ -703,25 +703,25 @@ begin
                 laser_hit(l) <= '0';
                 alien_killed_fx <= '1';
 
-                    if (lasers(l).in_bounds and lasers(l).enable) = '1' then
+                    if ((lasers(l).in_bounds and lasers(l).enable) = '1') and (lasers(l).pixel /= BACKGROUND) then
                     for a in 0 to NUM_ENEMIES-1 loop
                         
                         aliens1_killed(a) <= '0';
                         aliens2_killed(a) <= '0';
                         aliens3_killed(a) <= '0';
-                        if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
+                        if ((aliens1(a).in_bounds and aliens1(a).enable) = '1') and (aliens1(a).pixel /= BACKGROUND) then
                             aliens1_killed(a) <= '1';
                             laser_hit(l) <= '1';
                             curr_score <= curr_score + 150;
                             alien_killed_fx <= '0';
                         end if;
-                        if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
+                        if ((aliens2(a).in_bounds and aliens2(a).enable) = '1') and (aliens2(a).pixel /= BACKGROUND) then
                             aliens2_killed(a) <= '1';
                             laser_hit(l) <= '1';
                             curr_score <= curr_score + 300;
                             alien_killed_fx <= '0';
                         end if;
-                        if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
+                        if ((aliens3(a).in_bounds and aliens3(a).enable) = '1') and (aliens3(a).pixel /= BACKGROUND) then
                             aliens3_killed(a) <= '1';
                             laser_hit(l) <= '1';
                             curr_score <= curr_score + 600;
@@ -730,7 +730,7 @@ begin
                 end loop;
 
                 for a in 0 to NUM_ASTEROIDS-1 loop
-                    if (asteroids(a).in_bounds and asteroids(a).enable) = '1' then
+                    if ((asteroids(a).in_bounds and asteroids(a).enable) = '1') and (asteroids(a).pixel /= BACKGROUND) then
                         laser_hit(l) <= '1';
                     end if;
                 end loop;
