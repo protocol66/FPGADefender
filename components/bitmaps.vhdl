@@ -19,6 +19,16 @@ package bitmaps is
     constant SHIP_BITMAP : bit_map_t := bit_map_t'(0, 1280, 74, 25);
     constant ALIEN1_BITMAP : bit_map_t := bit_map_t'(0, 3130, 30, 30);
     constant LASER_BITMAP : bit_map_t := bit_map_t'(0, 4030, 12, 3);
+    constant SCORE_0_BITMAP : bit_map_t := bit_map_t'(0, 4066, 15, 25);
+    constant SCORE_1_BITMAP : bit_map_t := bit_map_t'(0, 4441, 15, 25);
+    constant SCORE_2_BITMAP : bit_map_t := bit_map_t'(0, 4816, 15, 25);
+    constant SCORE_3_BITMAP : bit_map_t := bit_map_t'(0, 5191, 15, 25);
+    constant SCORE_4_BITMAP : bit_map_t := bit_map_t'(0, 5566, 15, 25);
+    constant SCORE_5_BITMAP : bit_map_t := bit_map_t'(0, 5941, 15, 25);
+    constant SCORE_6_BITMAP : bit_map_t := bit_map_t'(0, 6316, 15, 25);
+    constant SCORE_7_BITMAP : bit_map_t := bit_map_t'(0, 6691, 15, 25);
+    constant SCORE_8_BITMAP : bit_map_t := bit_map_t'(0, 7066, 15, 25);
+    constant SCORE_9_BITMAP : bit_map_t := bit_map_t'(0, 7441, 15, 25);
                                    
 
     -- constant H_LINE : bit_map_t (0 to line_sizeY-1, 0 to line_sizeX-1) := (others => (others => WHITE));

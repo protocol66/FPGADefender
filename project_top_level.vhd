@@ -17,7 +17,7 @@ entity project_top_level is
         VGA_HS  : out std_logic;
         VGA_VS  : out std_logic;
 
-        -- HEX0, HEX1, HEX2, HEX3    : out std_logic_vector(7 downto 0);
+        HEX0, HEX1, HEX2, HEX3, HEX4, HEX5    : out std_logic_vector(7 downto 0);
         SW : in std_logic_vector(9 downto 0);
         LEDR : out std_logic_vector(9 downto 0);
         ARDUINO_IO : out std_logic_vector(12 downto 12);
@@ -129,6 +129,19 @@ architecture rtl of project_top_level is
             mem_addr : out std_logic_vector(rom_addr_bits + rom_id_bits - 1 downto 0)
         );
     end component;
+
+    component bin2dec is
+        port (
+            bin  : in integer range 0 to 999999;
+            
+            hun_th : out std_logic_vector(3 downto 0);
+            ten_th : out std_logic_vector(3 downto 0);
+            tho : out std_logic_vector(3 downto 0);
+            hun : out std_logic_vector(3 downto 0);
+            ten : out std_logic_vector(3 downto 0);
+            one : out std_logic_vector(3 downto 0)
+        );
+    end component bin2dec;
 
     component ship_movement is
         port (
@@ -275,10 +288,12 @@ architecture rtl of project_top_level is
 
     signal asteroids : asteroids_ar_t := (others => DEFUALT_OBJ);
     signal asteroids_active : std_logic_vector(NUM_ASTEROIDS-1 downto 0) := (others => '0');
-
-    signal score_disp : obj := DEFUALT_OBJ;
     
     signal curr_score : natural := 200000;
+    type score_disp_t is array(5 downto 0) of obj;
+    signal score_disp : score_disp_t := (others => DEFUALT_OBJ);
+    type dec6_t is array (5 downto 0) of std_logic_vector(3 downto 0);
+    signal score_dec6 : dec6_t;
 
     signal game_over : std_logic := '0';
     
@@ -404,11 +419,6 @@ begin
     Bline.enable <= '1';
     Bline.bit_map <= LINE_BITMAP;
 
-    -- score.box.x_pos <= global_x;
-    -- score.box.y_pos <= global_y;
-    -- score.box.x_origin <= 100;
-    -- score.box.y_origin <= 100;
-
     ship.box.x_pos <= global_x;
     ship.box.y_pos <= global_y;
     ship.box.x_origin <= SHIP_SPAWNX + shipX_offset;    -- rom lags by 2 pixels, pixel proccess lags by 1
@@ -515,10 +525,50 @@ begin
     SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, en => start_sticky AND NOT pause, x_offset => shipX_offset, y_offset => shipY_offset, 
         GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
 
-    -- score.box.x_pos <= global_x;
-    -- score.box.y_pos <= global_y;
-    -- score.box.x_origin <= 100;
-    -- score.box.y_origin <= 100;
+    
+
+
+
+    ---- Score Display --------------------------------------------------------------------------------------------------------------------------------
+    BINARY2DEC: bin2dec
+            port map (
+                bin => curr_score,
+                hun_th => score_dec6(5),
+                ten_th => score_dec6(4),
+                tho => score_dec6(3),
+                hun => score_dec6(2),
+                ten => score_dec6(1),
+                one => score_dec6(0)
+            );
+
+    CREATE_SCORES: for i in 5 downto 0 generate
+        NEW_SCORE: objDisp port map (box => score_disp(i).box, bit_map => score_disp(i).bit_map, in_bounds => score_disp(i).in_bounds, mem_addr => score_disp(i).abs_mem_addr);
+
+        score_disp(i).box.x_pos <= global_x;
+        score_disp(i).box.y_pos <= global_y;
+        score_disp(i).box.x_origin <= 500 + ((score_space_size + score_sizeX) * (5-i));     -- 5-i fixes the order, 480 is just the x pos
+        score_disp(i).box.y_origin <= 10;
+        score_disp(i).enable <= '1';
+    end generate;
+
+    BITMAP_SEL : for i in 5 downto 0 generate
+        process (score_dec6)
+        begin
+            case score_dec6(i) is
+                when "0000" => score_disp(i).bit_map <= SCORE_0_BITMAP;
+                when "0001" => score_disp(i).bit_map <= SCORE_1_BITMAP;
+                when "0010" => score_disp(i).bit_map <= SCORE_2_BITMAP;
+                when "0011" => score_disp(i).bit_map <= SCORE_3_BITMAP;
+                when "0100" => score_disp(i).bit_map <= SCORE_4_BITMAP;
+                when "0101" => score_disp(i).bit_map <= SCORE_5_BITMAP;
+                when "0110" => score_disp(i).bit_map <= SCORE_6_BITMAP;
+                when "0111" => score_disp(i).bit_map <= SCORE_7_BITMAP;
+                when "1000" => score_disp(i).bit_map <= SCORE_8_BITMAP;
+                when "1001" => score_disp(i).bit_map <= SCORE_9_BITMAP;
+                when others => score_disp(i).bit_map <= SCORE_8_BITMAP;
+            end case;            
+        end process;
+    end generate;
 
     ---- Bitmap Select --------------------------------------------------------------------------------------------------------------------------------
 
@@ -574,10 +624,12 @@ pixel : process(vga_clk)
                 end if;
             end loop;
 
-            if (score_disp.in_bounds and score_disp.enable) = '1' then
-                curr_mem_addr <= score_disp.abs_mem_addr;
-                show_background <= '0';
-            end if;    
+            for i in 5 downto 0 loop
+                if (score_disp(i).in_bounds and score_disp(i).enable) = '1' then
+                    curr_mem_addr <= score_disp(i).abs_mem_addr;
+                    show_background <= '0';
+                end if;
+            end loop;
 
             if (Bline.in_bounds and Bline.enable) = '1' then
                 curr_mem_addr <= Bline.abs_mem_addr;
@@ -745,32 +797,46 @@ pixel : process(vga_clk)
 
 ------- Diagnostics -----------------------------------------------------------------
 
-    -- DIAGNOSTIC1: bin2seg7 port map (
-    --     inData => rand_x_pos(3 downto 0),
-    --     enable => '1',
-    --     dispPoint => '0',
-    --     HEX => HEX0
-    -- );
+    DIAGNOSTIC1: bin2seg7 port map (
+        inData =>score_dec6(0),
+        enable => '1',
+        dispPoint => '0',
+        HEX => HEX0
+    );
 
-    -- DIAGNOSTIC2: bin2seg7 port map (
-    --     inData => rand_x_pos(7 downto 4),
-    --     enable => '1',
-    --     dispPoint => '0',
-    --     HEX => HEX1
-    -- );
-    -- DIAGNOSTIC3: bin2seg7 port map (
-    --     inData => rand_y_pos(3 downto 0),
-    --     enable => '1',
-    --     dispPoint => '0',
-    --     HEX => HEX2
-    -- );
+    DIAGNOSTIC2: bin2seg7 port map (
+        inData => score_dec6(1),
+        enable => '1',
+        dispPoint => '0',
+        HEX => HEX1
+    );
+    DIAGNOSTIC3: bin2seg7 port map (
+        inData => score_dec6(2),
+        enable => '1',
+        dispPoint => '0',
+        HEX => HEX2
+    );
 
-    -- DIAGNOSTIC4: bin2seg7 port map (
-    --     inData => rand_y_pos(7 downto 4),
-    --     enable => '1',
-    --     dispPoint => '0',
-    --     HEX => HEX3
-    -- );
+    DIAGNOSTIC4: bin2seg7 port map (
+        inData => score_dec6(3),
+        enable => '1',
+        dispPoint => '0',
+        HEX => HEX3
+    );
+
+    DIAGNOSTIC5: bin2seg7 port map (
+        inData => score_dec6(4),
+        enable => '1',
+        dispPoint => '0',
+        HEX => HEX4
+    );
+
+    DIAGNOSTIC6: bin2seg7 port map (
+        inData => score_dec6(5),
+        enable => '1',
+        dispPoint => '0',
+        HEX => HEX5
+    );
      
 
 ----Ship-----------------------------------------------------------------------------------------------------------------------
