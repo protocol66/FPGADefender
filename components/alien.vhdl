@@ -68,8 +68,7 @@ begin
     U2: clk_div port map (clk_in => max10_clk, div => to_integer(shift_left(to_unsigned(cnt_div, 32), 6)), clk_out => clk_b);   -- multiply by 64 using bit shifting
     U3: counter generic map (SIZE => 10) port map(clk => clk_a, up_down => '0', reset_L => reset_L, enable => alive, cout => x_shift);
 
-        -- the size needs to be one larger than necessary to prevent roll over
-    U4: counter generic map (SIZE => 10, STEP => 2, SEED => 512) port map(clk => clk_a, up_down => y_up_down, reset_L => reset_L, enable => alive and sync_random(7), cout => y_shift);
+    U4: counter generic map (SIZE => 10, STEP => 2, SEED => 512, OVERFLOW => '0') port map(clk => clk_a, up_down => y_up_down, reset_L => reset_L, enable => alive and sync_random(7), cout => y_shift);
 
 
     y_loc <= spawn + to_integer(unsigned(y_shift)) - 512;   -- make the counter add or subtract

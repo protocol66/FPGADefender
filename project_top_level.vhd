@@ -244,6 +244,7 @@ architecture rtl of project_top_level is
     signal laser_shoot_main : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
     signal laser_hit : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
     signal laser_shoot2 : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
+    signal laser_shoot3 : std_logic_vector(NUM_LASERS-1 downto 0) := (others => '0');
     signal laser_x : laser_loc_ar_t;
     signal laser_y : laser_loc_ar_t;
 
@@ -829,51 +830,52 @@ begin
 
         lasers(I).box.x_pos <= global_x;
         lasers(I).box.y_pos <= global_y;
-        lasers(I).enable <= laser_shoot_main(I) AND NOT laser_hit(I) and start_sticky;
+        lasers(I).enable <= laser_shoot_main(I) AND NOT laser_hit(I) and start_sticky and not game_over;
         lasers(I).bit_map <= LASER_BITMAP;
         
-        SYNC_LASER: process (vga_clk)
+        LASER_OFFSET: process (vga_clk)
         begin
             if rising_edge(vga_clk) then
-                lasers_xloc(I) <= async_lasers_xloc(I);
+                lasers_xloc(I) <= async_lasers_xloc(I);     -- sync location
+
+                if pause = '0' then
+                    if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) = '1' then
+                        laser_shoot2(I) <= '0';
+                    else
+                        lasers(I).box.x_origin <= laser_x(I) + lasers_xloc(I);
+                        laser_shoot2(I) <= '1';
+                    end if;
+                    lasers(I).box.y_origin <= laser_y(I);
+                end if;
+            end if; 
+        end process; 
+
+    end generate; 
+        
+        LASER_BUFFER: process (vga_clk)
+        begin
+            if falling_edge(vga_clk) then
+                laser_shoot3 <= laser_shoot2;   -- buffer it just in case
             end if;
         end process;
 
-        laser_offset : process(lasers_xloc(I))
-            begin
-                    if pause = '0' then
-                        if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) = '1' then
-                            laser_shoot2(I) <= '0';
-                        else
-                            lasers(I).box.x_origin <= laser_x(I) + lasers_xloc(I);
-                            laser_shoot2(I) <= '1';
-                        end if;
-                        lasers(I).box.y_origin <= laser_y(I);
-                    end if;
-            end process;
-            
-        end generate;       
 
-        shoot_laser : process(KEY(0), laser_shoot2)
+        shoot_laser : process(KEY(0), laser_shoot3)
         variable en : integer := 0;
         begin
             if start_sticky = '1' and pause = '0' then
-                if game_over = '0' then
-                    if falling_edge(KEY(0)) then
-                        laser_shoot_main(en) <= '1';
-                        laser_x(en) <= ship.box.x_origin;
-                        laser_y(en) <= ship.box.y_origin + 5;
-                        en := en + 1;
-                        if en = NUM_LASERS then
-                            en := 0;
-                        end if;
+                if falling_edge(KEY(0)) then
+                    laser_shoot_main(en) <= '1';
+                    laser_x(en) <= ship.box.x_origin;
+                    laser_y(en) <= ship.box.y_origin + 5;
+                    en := en + 1;
+                    if en = NUM_LASERS then
+                        en := 0;
                     end if;
-                else
-                    laser_shoot_main(en) <= '0';
                 end if;
 
                 for i in 0 to NUM_LASERS-1 loop
-                    if laser_shoot2(i) = '0' then
+                    if laser_shoot3(i) = '0' then
                         laser_shoot_main(i) <= '0';
                     end if;
                 end loop;
