@@ -227,6 +227,7 @@ architecture rtl of project_top_level is
     signal curr_mem_addr : std_logic_vector(bit_map_addr_bits-1 downto 0) := (others => '0');
     
     signal start : obj := DEFUALT_OBJ;
+    signal game_over_disp : obj := DEFUALT_OBJ;
     signal Tline : obj := DEFUALT_OBJ;
     signal Bline : obj := DEFUALT_OBJ;
     
@@ -437,6 +438,13 @@ begin
     start.enable <= not start_sticky;
     start.bit_map <= START_BITMAP;
 
+    game_over_disp.box.x_pos <= global_x;
+    game_over_disp.box.y_pos <= global_y;
+    game_over_disp.box.x_origin <= 130;
+    game_over_disp.box.y_origin <= 203;
+    game_over_disp.enable <= game_over;
+    game_over_disp.bit_map <= GAME_OVER_BITMAP;
+
     Tline.box.x_pos <= global_x;
     Tline.box.y_pos <= global_y;
     Tline.box.x_origin <= 0;
@@ -459,6 +467,7 @@ begin
     ship.bit_map <= SHIP_BITMAP;
 
     START_DISP: objDisp port map (box => start.box, bit_map => start.bit_map, in_bounds => start.in_bounds, mem_addr => start.abs_mem_addr);
+    YOU_DIED: objDisp port map (box => game_over_disp.box, bit_map => game_over_disp.bit_map, in_bounds => game_over_disp.in_bounds, mem_addr => game_over_disp.abs_mem_addr);
     TOP_LINE: objDisp port map (box => Tline.box, bit_map => Tline.bit_map, in_bounds => Tline.in_bounds, mem_addr => Tline.abs_mem_addr);
     BOTTOM_LINE: objDisp port map (box => Bline.box, bit_map => Bline.bit_map, in_bounds => Bline.in_bounds, mem_addr => Bline.abs_mem_addr);
 
@@ -575,6 +584,11 @@ begin
 
                 if (start.in_bounds and start.enable) = '1' then
                     curr_mem_addr <= start.abs_mem_addr;
+                    show_background <= '0';
+                end if;
+
+                if (game_over_disp.in_bounds and game_over_disp.enable) = '1' then
+                    curr_mem_addr <= game_over_disp.abs_mem_addr;
                     show_background <= '0';
                 end if;
             end if;

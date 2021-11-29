@@ -34,6 +34,7 @@ package bitmaps is
     constant ALIEN3_BITMAP : bit_map_t := bit_map_t'(0, 8423, 20, 13);
     constant ASTEROID_BITMAP : bit_map_t := bit_map_t'(0, 8683, 40, 40);
     constant START_BITMAP : bit_map_t := bit_map_t'(0, 10283, 250, 100);
+    constant GAME_OVER_BITMAP : bit_map_t := bit_map_t'(0, 35283, 380, 73);
     
     
     
