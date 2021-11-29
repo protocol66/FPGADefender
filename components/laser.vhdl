@@ -32,7 +32,8 @@ architecture arch of laser_movement is
         generic (
             SIZE : positive := 1;
             STEP : positive := 1;
-            SEED : natural := 0
+            SEED : natural := 0;
+            OVERFLOW : std_logic := '1'
             );
         port (
             clk     : in std_logic;
@@ -47,6 +48,6 @@ begin
     U1: clk_div port map (clk_in => max10_clk, div => 50000, clk_out => clk_100);
 
     -- counter is 12 instead of 10 to reduce risk of overflow
-    U2: counter generic map (SIZE => 12) port map(clk => clk_100, up_down => '0', reset_L => shoot, enable => shoot, cout => x_shift);
+    U2: counter generic map (SIZE => 12, OVERFLOW => '0') port map(clk => clk_100, up_down => '0', reset_L => shoot, enable => shoot, cout => x_shift);
     x_loc <= to_integer(unsigned(x_shift(9 downto 0)));
 end architecture;

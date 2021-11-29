@@ -51,7 +51,8 @@ architecture arch of alien_movement is
         generic (
             SIZE : positive := 1;
             STEP : positive := 1;
-            SEED : natural := 0
+            SEED : natural := 0;
+            OVERFLOW : std_logic := '1'
             );
         port (
             clk     : in std_logic;

@@ -50,8 +50,10 @@ architecture arch of obstacle_movement is
 
     component counter is
         generic (
-            SIZE : integer := 1;
-            STEP : integer := 1
+            SIZE : positive := 1;
+            STEP : positive := 1;
+            SEED : natural := 0;
+            OVERFLOW : std_logic := '1'
             );
         port (
             clk     : in std_logic;
@@ -60,7 +62,7 @@ architecture arch of obstacle_movement is
             up_down : in std_logic := '0';
             cout    : out std_logic_vector(SIZE-1 downto 0)
         );
-    end component;
+    end component counter;
 
     component pseudorandom_8 is
         port (
