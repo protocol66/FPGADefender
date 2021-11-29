@@ -29,10 +29,11 @@ package bitmaps is
     constant SCORE_8_BITMAP : bit_map_t := bit_map_t'(0, 6166, 15, 25);
     constant SCORE_9_BITMAP : bit_map_t := bit_map_t'(0, 6541, 15, 25);
     constant ALIEN1_BITMAP : bit_map_t := bit_map_t'(0, 6916, 39, 30);
-    constant ALIEN2_BITMAP : bit_map_t := bit_map_t'(0, 8086, 25, 10);
-    constant ALIEN3_BITMAP : bit_map_t := bit_map_t'(0, 8336, 15, 10);
-    constant ASTEROID_BITMAP : bit_map_t := bit_map_t'(0, 8486, 40, 40);
-    constant START_BITMAP : bit_map_t := bit_map_t'(0, 10086, 250, 100);
+    constant ALIEN2_BITMAP : bit_map_t := bit_map_t'(0, 8086, 28, 12);
+    constant ALIEN3_BITMAP : bit_map_t := bit_map_t'(0, 8422, 20, 13);
+    constant ASTEROID_BITMAP : bit_map_t := bit_map_t'(0, 8682, 40, 40);
+    constant START_BITMAP : bit_map_t := bit_map_t'(0, 10282, 250, 100);
+    
     
                                    
 

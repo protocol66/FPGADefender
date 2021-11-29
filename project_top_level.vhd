@@ -285,7 +285,7 @@ architecture rtl of project_top_level is
     signal as_clk : std_logic;
     signal random_num : std_logic_vector(31 downto 0);
     
-    signal pause : std_logic := '1';        -- for some reason at start of the game, pause needs to be on
+    signal pause : std_logic := '0';
     signal start_sticky : std_logic := '0'; 
 
     signal a2_en : std_logic := '0';
