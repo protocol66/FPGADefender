@@ -702,8 +702,10 @@ begin
             for l in 0 to NUM_LASERS-1 loop
                 laser_hit(l) <= '0';
                 alien_killed_fx <= '1';
-                for a in 0 to NUM_ENEMIES-1 loop
+
                     if (lasers(l).in_bounds and lasers(l).enable) = '1' then
+                    for a in 0 to NUM_ENEMIES-1 loop
+                        
                         aliens1_killed(a) <= '0';
                         aliens2_killed(a) <= '0';
                         aliens3_killed(a) <= '0';
@@ -725,7 +727,6 @@ begin
                             curr_score <= curr_score + 600;
                             alien_killed_fx <= '0';
                         end if;
-                    end if;
                 end loop;
 
                 for a in 0 to NUM_ASTEROIDS-1 loop
@@ -733,6 +734,7 @@ begin
                         laser_hit(l) <= '1';
                     end if;
                 end loop;
+                end if;
 
             end loop;
         end if;
