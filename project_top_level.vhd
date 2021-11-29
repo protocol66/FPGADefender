@@ -33,6 +33,8 @@ end entity project_top_level;
 
 architecture rtl of project_top_level is
 
+-------- Components --------------------------------------------------------------------------------------------------------------------------------------------
+
     component vga_controller is
 	port(
 		pixel_clk	:	IN		STD_LOGIC;	--pixel clock at frequency of VGA mode being used
@@ -88,19 +90,6 @@ architecture rtl of project_top_level is
             HEX : out std_logic_vector(7 downto 0)
         );
     end component bin2seg7;
-
-    -- component score is
-    --     generic (
-    --             X_SIZE : positive;
-    --             Y_SIZE : positive
-    --     );
-    --     port (
-    --         box    : Bounding_Box;
-    --         enable : in std_logic;
-    --         score_in  : in integer;
-    --         pixel     : out Pixel_t
-    --     );
-    -- end component score;
 
     component note_gen is
         port (
@@ -192,12 +181,16 @@ architecture rtl of project_top_level is
         port (
             max10_clk : in std_logic;
             active : in std_logic;
+            reset_L : in std_logic;
             cnt_div : positive := 2500000;
+            random_Y : in std_logic_vector (7 downto 0);
             x_loc : out integer;
             y_loc : out integer
         );        
     end component;
     
+-------- Constants ---------------------------------------------------------------------------------------------------------------------------------------------
+
     constant SEC : positive := 50000000;
 
     constant BACKGROUND : Pixel_t := BLACK;
@@ -207,25 +200,14 @@ architecture rtl of project_top_level is
     constant NUM_LASERS : positive := 10;
 
     constant NUM_ENEMIES : positive := 4;       -- max of 32 - 8ish due to the random_num
-    constant NUM_ASTEROIDS : positive := 5;
+    constant NUM_ASTEROIDS : positive := 3;
 
+-------- Signals -----------------------------------------------------------------------------------------------------------------------------------------------
 
-    -- type ship_lives_boxes is array (NUM_LIVES-1 downto 0) of Bounding_Box;
-    -- type ship_lives_pixel_vector is array (NUM_LIVES-1 downto 0) of Pixel_t;
     type ship_lives_ar_t is array (NUM_LIVES-1 downto 0) of obj;
-
-    -- type laser_boxes is array (NUM_LASERS-1 downto 0) of Bounding_Box;
-    -- type laser_pixel_vector is array (NUM_LASERS-1 downto 0) of Pixel_t;
-    -- type laser_loc_vector is array (NUM_LASERS-1 downto 0) of integer;
     type laser_ar_t is array (NUM_LASERS-1 downto 0) of obj;
     type laser_loc_ar_t is array (NUM_LASERS-1 downto 0) of integer;
-
-    -- type aliens_boxes is array (NUM_ENEMIES-1 downto 0) of Bounding_Box;
-    -- type aliens_pixel_vector is array (NUM_ENEMIES-1 downto 0) of Pixel_t;
     type alien_ar_t is array (NUM_ENEMIES-1 downto 0) of obj;
-
-    -- type asteroids_boxes is array (NUM_ASTEROIDS-1 downto 0) of Bounding_Box;
-    -- type asteroids_pixel_vector is array (NUM_ASTEROIDS-1 downto 0) of Pixel_t;
     type asteroids_ar_t is array (NUM_ASTEROIDS-1 downto 0) of obj;
 
     signal vga_clk              : std_logic;
@@ -325,7 +307,7 @@ architecture rtl of project_top_level is
 
 begin
 
-    ---- VGA -------------------------------------------------------------------------------------------------------------------------
+-------- VGA ---------------------------------------------------------------------------------------------------------------------------------------------------
 
     PLL1 : vga_pll_25_175 port map (MAX10_CLK1_50, vga_clk);
 
@@ -363,7 +345,7 @@ begin
     end process;
 
 
-    ---- Pixel Update ---------------------------------------------------------------------------------------------------------------------------------------
+-------- Pixel Update ------------------------------------------------------------------------------------------------------------------------------------------
 
     BITMAP_LOOKUP: rom_controller port map (clk => vga_clk, address => curr_mem_addr, pixel => rom_pixel);
 
@@ -379,7 +361,7 @@ begin
     end process;
 
 
-    ---- Pause ------------------------------------------------------------------------------------------------------------------
+-------- Pause -------------------------------------------------------------------------------------------------------------------------------------------------
 
     pause_btn : process(KEY(1))
     begin
@@ -398,7 +380,7 @@ begin
         end if;
     end process;
 
-    ---- Single Boxes -----------------------------------------------------------------------------------------------------------
+-------- Single Boxes ------------------------------------------------------------------------------------------------------------------------------------------
 
     VGA_R <= curr_pixel.red;
     VGA_G <= curr_pixel.green;
@@ -426,110 +408,51 @@ begin
     ship.enable <= not ship_collision and not game_over;
     ship.bit_map <= SHIP_BITMAP;
 
-    -- SCORE_1: score 
-    --     generic map (
-    --         X_SIZE => score_board_sizeX,
-    --         Y_SIZE => score_board_sizeY
-    --     )
-    --     port map (
-    --         box => score_box,
-    --         enable => '1',
-    --         score_in => 987654,
-    --         pixel => curr_pixel
-    --     );
-
-    -- PEPE: objDisp 
-    --     generic map (
-    --         X_SIZE => pepe_sizeX,
-    --         Y_SIZE => pepe_sizeY
-    --     )
-    --     port map (
-    --         box => pepe_box,
-    --         bit_map => pepe_bit_map,
-    --         enable => '1',
-    --         pixel => curr_pixel
-    --     );
-
-
-    ---------- MUSIC + SOUND FX ------------------------------------------------------------------------------------------------------------------------
+-------- MUSIC + SOUND FX --------------------------------------------------------------------------------------------------------------------------------------
     -- CLK_88200: clk_div port map (clk_in => MAX10_CLK1_50, div => 567, clk_out => note_clk); -- 882000hz, go one octave higher than spec, beca
     -- CALC_NOTE: note_gen port map (clk => note_clk, enable => '1', notes => SW & '0' & '0', pwm => pwm);
     -- ARDUINO_IO(12) <= pwm;
 
-    -- FX_GEN6: sound_fx port map (
+    -- ALIEN_KILLED: sound_fx port map (
     --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(5),
-    --     fx => fx6,
-    --     pwm => pwm(5)
-    -- );
-    -- FX_GEN5: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(4),
+    --     reset_L => alien_killed_fx,
+    --     enable => not game_over,
     --     fx => fx5,
     --     pwm => pwm(4)
     -- );
-    -- FX_GEN4: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(3),
-    --     fx => fx4,
-    --     pwm => pwm(3)
-    -- );
-    -- FX_GEN3: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(2),
-    --     fx => fx3,
-    --     pwm => pwm(2)
-    -- );
-    -- FX_GEN2: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(1),
-    --     fx => fx2,
-    --     pwm => pwm(1)
-    -- );
-    -- FX_GEN1: sound_fx port map (
-    --     clk => MAX10_CLK1_50,
-    --     reset_L => KEY(0),
-    --     enable => SW(0),
-    --     fx => fx1,
-    --     pwm => pwm(0)
-    -- );
+    SHOOT_LASER_FX: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => KEY(0),
+        enable => not game_over,
+        fx => fx4,
+        pwm => pwm(3)
+    );
 
-    -- ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
+    GAME_OVER_FX: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => game_over,
+        enable => game_over,
+        fx => fx6,
+        pwm => pwm(5)
+    );
+
+    SHIP_DEATH_FX: sound_fx port map (
+        clk => MAX10_CLK1_50,
+        reset_L => not ship_collision,
+        enable => not game_over,
+        fx => fx1,
+        pwm => pwm(0)
+    );
+
+    ARDUINO_IO(12) <= pwm(5) xor pwm(4) xor pwm(3) xor pwm(2) xor pwm(1) xor pwm(0);
 
     
     ----------- Setup main screen ------------------------------------------------------------------------------------------------------------------------------------
 
-    -- TOP_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
-    --                     port map (box => Tline_box, clk => MAX10_CLK1_50, enable => '1', pixel => top_line_pixel);
-    -- BOTTOM_LINE: objDisp generic map (X_SIZE => line_sizeX, Y_SIZE => line_sizeY)
-    --                     port map (box => Bline_box, clk  => MAX10_CLK1_50, enable => '1', pixel => bottom_line_pixel);
-
-    -- SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, x_offset => shipX_offset, y_offset => shipY_offset, 
-    --                                          GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
-    -- SHIP_CURR: objDisp generic map (X_SIZE => ship_sizeX, Y_SIZE => ship_sizeY)
-    --                     port map (box => ship_box, clk  => MAX10_CLK1_50, enable => ship_alive AND NOT game_over, pixel => ship_pixel);
-
-    -- SCORE_1: objDisp generic map (X_SIZE => score_sizeX, Y_SIZE => score_sizeY)
-    --                     port map (box => score_box, clk  => MAX10_CLK1_50, enable => KEY(0), pixel => score_pixel);
-
     TOP_LINE: objDisp port map (box => Tline.box, bit_map => Tline.bit_map, in_bounds => Tline.in_bounds, mem_addr => Tline.abs_mem_addr);
     BOTTOM_LINE: objDisp port map (box => Bline.box, bit_map => Bline.bit_map, in_bounds => Bline.in_bounds, mem_addr => Bline.abs_mem_addr);
-    SHIP_CURR: objDisp port map (box => ship.box, bit_map => ship.bit_map, in_bounds => ship.in_bounds, mem_addr => ship.abs_mem_addr);
-    -- SCORE_1: objDisp port map (box => score_box, clk  => MAX10_CLK1_50, enable => KEY(0), pixel => score_pixel);
 
-    SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, en => start_sticky AND NOT pause, x_offset => shipX_offset, y_offset => shipY_offset, 
-        GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
-
-    
-
-
-
-    ---- Score Display --------------------------------------------------------------------------------------------------------------------------------
+-------- Score Display -----------------------------------------------------------------------------------------------------------------------------------------
     BINARY2DEC: bin2dec
             port map (
                 bin => curr_score,
@@ -546,8 +469,8 @@ begin
 
         score_disp(i).box.x_pos <= global_x;
         score_disp(i).box.y_pos <= global_y;
-        score_disp(i).box.x_origin <= 500 + ((score_space_size + score_sizeX) * (5-i));     -- 5-i fixes the order, 480 is just the x pos
-        score_disp(i).box.y_origin <= 10;
+        score_disp(i).box.x_origin <= 515 + ((score_space_size + SCORE_0_BITMAP.x_size) * (5-i));     -- 5-i fixes the order, 480 is just the x pos
+        score_disp(i).box.y_origin <= 8;
         score_disp(i).enable <= '1';
     end generate;
 
@@ -570,80 +493,79 @@ begin
         end process;
     end generate;
 
-    ---- Bitmap Select --------------------------------------------------------------------------------------------------------------------------------
+-------- Bitmap Select -----------------------------------------------------------------------------------------------------------------------------------------
 
-pixel : process(vga_clk)
-    begin
-        if(falling_edge(vga_clk)) then
+    pixel : process(vga_clk)
+        begin
+            if(falling_edge(vga_clk)) then
+                show_background <= '1';
+                curr_mem_addr <= (others => '1');       -- needed for collision
+                if (ship.in_bounds and ship.enable)= '1' then
+                    curr_mem_addr <= ship.abs_mem_addr;
+                    ship.pixel <= rom_pixel;
+                    show_background <= '0';
+                end if;
 
-            show_background <= '1';
-            curr_mem_addr <= (others => '1');       -- needed for collision
-            if (ship.in_bounds and ship.enable)= '1' then
-                curr_mem_addr <= ship.abs_mem_addr;
-                ship.pixel <= rom_pixel;
-                show_background <= '0';
+                for l in 0 to NUM_LIVES-1 loop
+                    if (ship_lives(l).in_bounds and ship_lives(l).enable) = '1' then
+                    curr_mem_addr <= ship_lives(l).abs_mem_addr;
+                    show_background <= '0';
+                    end if;
+                end loop;
+                for s in 0 to NUM_LASERS-1 loop
+                    if (lasers(s).in_bounds and lasers(s).enable) = '1' then
+                        curr_mem_addr <= lasers(s).abs_mem_addr;
+                        lasers(s).pixel <= rom_pixel;
+                        show_background <= '0';
+                    end if;
+                end loop;
+
+                for a in 0 to NUM_ENEMIES-1 loop
+                    if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
+                        curr_mem_addr <= aliens1(a).abs_mem_addr;
+                        aliens1(a).pixel <= rom_pixel;
+                        show_background <= '0';
+                    end if;
+                    if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
+                        curr_mem_addr <= aliens2(a).abs_mem_addr;
+                        aliens2(a).pixel <= rom_pixel;
+                        show_background <= '0';
+                    end if;
+                    if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
+                        curr_mem_addr <= aliens3(a).abs_mem_addr;
+                        aliens3(a).pixel <= rom_pixel;
+                        show_background <= '0';
+                    end if;
+                end loop;
+
+                for a in 0 to NUM_ASTEROIDS-1 loop
+                    if (asteroids(a).in_bounds and asteroids(a).enable) = '1' then
+                        curr_mem_addr <= asteroids(a).abs_mem_addr;
+                        asteroids(a).pixel <= rom_pixel;
+                        show_background <= '0';
+                    end if;
+                end loop;
+
+                for i in 5 downto 0 loop
+                    if (score_disp(i).in_bounds and score_disp(i).enable) = '1' then
+                        curr_mem_addr <= score_disp(i).abs_mem_addr;
+                        show_background <= '0';
+                    end if;
+                end loop;
+
+                if (Bline.in_bounds and Bline.enable) = '1' then
+                    curr_mem_addr <= Bline.abs_mem_addr;
+                    show_background <= '0';
+                end if; 
+
+                if (Tline.in_bounds and Tline.enable) = '1' then
+                    curr_mem_addr <= Tline.abs_mem_addr;
+                    show_background <= '0';
+                end if;
             end if;
+        end process;
 
-            for l in 0 to NUM_LIVES-1 loop
-                if (ship_lives(l).in_bounds and ship_lives(l).enable) = '1' then
-                   curr_mem_addr <= ship_lives(l).abs_mem_addr;
-                   show_background <= '0';
-                end if;
-            end loop;
-            for s in 0 to NUM_LASERS-1 loop
-                if (lasers(s).in_bounds and lasers(s).enable) = '1' then
-                    curr_mem_addr <= lasers(s).abs_mem_addr;
-                    lasers(s).pixel <= rom_pixel;
-                    show_background <= '0';
-                end if;
-            end loop;
-
-            for a in 0 to NUM_ENEMIES-1 loop
-                if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
-                    curr_mem_addr <= aliens1(a).abs_mem_addr;
-                    aliens1(a).pixel <= rom_pixel;
-                    show_background <= '0';
-                end if;
-                if (aliens2(a).in_bounds and aliens2(a).enable) = '1' then
-                    curr_mem_addr <= aliens2(a).abs_mem_addr;
-                    aliens2(a).pixel <= rom_pixel;
-                    show_background <= '0';
-                end if;
-                if (aliens3(a).in_bounds and aliens3(a).enable) = '1' then
-                    curr_mem_addr <= aliens3(a).abs_mem_addr;
-                    aliens3(a).pixel <= rom_pixel;
-                    show_background <= '0';
-                end if;
-            end loop;
-
-            for a in 0 to NUM_ASTEROIDS-1 loop
-                if (asteroids(a).in_bounds and asteroids(a).enable) = '1' then
-                    curr_mem_addr <= asteroids(a).abs_mem_addr;
-                    asteroids(a).pixel <= rom_pixel;
-                    show_background <= '0';
-                end if;
-            end loop;
-
-            for i in 5 downto 0 loop
-                if (score_disp(i).in_bounds and score_disp(i).enable) = '1' then
-                    curr_mem_addr <= score_disp(i).abs_mem_addr;
-                    show_background <= '0';
-                end if;
-            end loop;
-
-            if (Bline.in_bounds and Bline.enable) = '1' then
-                curr_mem_addr <= Bline.abs_mem_addr;
-                show_background <= '0';
-            end if; 
-
-            if (Tline.in_bounds and Tline.enable) = '1' then
-                curr_mem_addr <= Tline.abs_mem_addr;
-                show_background <= '0';
-            end if;
-        end if;
-    end process;
-
-    ------------------- Dificulty --------------------------------------------------------------------------------------
+-------- Dificulty ---------------------------------------------------------------------------------------------------------------------------------------------
     enable : process(curr_score)
     begin
         if curr_score > 500 then
@@ -736,7 +658,7 @@ pixel : process(vga_clk)
         end if;
     end process;
 
-    ---- Collision --------------------------------------------------------------------------------------
+-------- Collision ---------------------------------------------------------------------------------------------------------------------------------------------
 
     collision : process(vga_clk)
     begin
@@ -765,12 +687,12 @@ pixel : process(vga_clk)
             end if;
             for l in 0 to NUM_LASERS-1 loop
                 laser_hit(l) <= '0';
+                alien_killed_fx <= '1';
                 for a in 0 to NUM_ENEMIES-1 loop
                     if (lasers(l).in_bounds and lasers(l).enable) = '1' then
                         aliens1_killed(a) <= '0';
                         aliens2_killed(a) <= '0';
                         aliens3_killed(a) <= '0';
-                        alien_killed_fx <= '1';
                         if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
                             aliens1_killed(a) <= '1';
                             laser_hit(l) <= '1';
@@ -791,11 +713,18 @@ pixel : process(vga_clk)
                         end if;
                     end if;
                 end loop;
+
+                for a in 0 to NUM_ASTEROIDS-1 loop
+                    if (asteroids(a).in_bounds and asteroids(a).enable) = '1' then
+                        laser_hit(l) <= '1';
+                    end if;
+                end loop;
+
             end loop;
         end if;
     end process;
 
-------- Diagnostics -----------------------------------------------------------------
+-------- Diagnostics -------------------------------------------------------------------------------------------------------------------------------------------
 
     DIAGNOSTIC1: bin2seg7 port map (
         inData =>score_dec6(0),
@@ -839,7 +768,13 @@ pixel : process(vga_clk)
     );
      
 
-----Ship-----------------------------------------------------------------------------------------------------------------------
+-------- Ship---------------------------------------------------------------------------------------------------------------------------------------------------
+
+    SHIP_CURR: objDisp port map (box => ship.box, bit_map => ship.bit_map, in_bounds => ship.in_bounds, mem_addr => ship.abs_mem_addr);
+
+    SHIP_OFFSET_GEN: ship_movement port map (max10_clk => MAX10_CLK1_50, reset_L => ship_reset_L, en => start_sticky AND NOT pause, x_offset => shipX_offset, y_offset => shipY_offset, 
+        GSENSOR_SDI => GSENSOR_SDI, GSENSOR_SDO => GSENSOR_SDO, GSENSOR_CS_N => GSENSOR_CS_N, GSENSOR_SCLK => GSENSOR_SCLK);
+
     ship_main : process(ship_collision)
     begin
         if rising_edge(ship_collision) then
@@ -858,7 +793,7 @@ pixel : process(vga_clk)
         end if;
     end process;
 
--- ----Ship Lives--------------------------------------------------------------------------------------------------------------------
+-------- Ship Lives---------------------------------------------------------------------------------------------------------------------------------------------
     SHIP_REM_LIVES: for I in 0 to NUM_LIVES-1 generate
                     SHIP_LIFE: objDisp port map (box => ship_lives(I).box, bit_map => ship_lives(I).bit_map, in_bounds => ship_lives(I).in_bounds, mem_addr => ship_lives(I).abs_mem_addr);
                     
@@ -870,98 +805,137 @@ pixel : process(vga_clk)
                     ship_lives(I).bit_map <= SHIP_BITMAP;
     end generate;
     
--- ----Laser-------------------------------------------------------------------------------------------------------------------------
-LASERS_GEN: for I in 0 to NUM_LASERS-1 generate
-    LASER_disp: objDisp port map (box => lasers(I).box, bit_map => lasers(I).bit_map, in_bounds => lasers(I).in_bounds, mem_addr => lasers(I).abs_mem_addr);          
-    LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND (NOT laser_hit(I)), x_loc => lasers_xloc(I));
+-------- Laser--------------------------------------------------------------------------------------------------------------------------------------------------
 
-    laser_offset : process(lasers_xloc(I))
-        begin
-            if pause = '0' then
-                if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) = '1' then
-                    laser_shoot2(I) <= '0';
-                else
-                    lasers(I).box.x_origin <= laser_x(I) + lasers_xloc(I);
-                    laser_shoot2(I) <= '1';
+    LASERS_GEN: for I in 0 to NUM_LASERS-1 generate
+        LASER_disp: objDisp port map (box => lasers(I).box, bit_map => lasers(I).bit_map, in_bounds => lasers(I).in_bounds, mem_addr => lasers(I).abs_mem_addr);          
+        LASER_LOC: laser_movement port map (max10_clk => MAX10_CLK1_50, shoot => laser_shoot_main(I) AND (NOT laser_hit(I)), x_loc => lasers_xloc(I));
+
+        laser_offset : process(lasers_xloc(I))
+            begin
+                if pause = '0' then
+                    if (laser_x(I) + lasers_xloc(I) > screen_WIDTH) or laser_hit(I) = '1' then
+                        laser_shoot2(I) <= '0';
+                    else
+                        lasers(I).box.x_origin <= laser_x(I) + lasers_xloc(I);
+                        laser_shoot2(I) <= '1';
+                    end if;
+                    lasers(I).box.y_origin <= laser_y(I);
                 end if;
-                lasers(I).box.y_origin <= laser_y(I);
+            end process;
+            lasers(I).box.x_pos <= global_x;
+            lasers(I).box.y_pos <= global_y;
+            lasers(I).enable <= laser_shoot_main(I) AND NOT laser_hit(I) and start_sticky;
+            lasers(I).bit_map <= LASER_BITMAP;
+        end generate;       
+
+        shoot_laser : process(KEY(0), laser_shoot2, vga_clk)
+        variable en : integer := 0;
+        begin
+            if start_sticky = '1' and pause = '0' then
+                if game_over = '0' then
+                    if falling_edge(KEY(0)) then
+                        laser_shoot_main(en) <= '1';
+                        laser_x(en) <= ship.box.x_origin;
+                        laser_y(en) <= ship.box.y_origin + 5;
+                        en := en + 1;
+                        if en = NUM_LASERS then
+                            en := 0;
+                        end if;
+                    end if;
+                else
+                    laser_shoot_main(en) <= '0';
+                end if;
+
+                for i in 0 to NUM_LASERS-1 loop
+                    if laser_shoot2(i) = '0' then
+                        laser_shoot_main(i) <= '0';
+                    end if;
+                end loop;
             end if;
         end process;
-        lasers(I).box.x_pos <= global_x;
-        lasers(I).box.y_pos <= global_y;
-        lasers(I).enable <= laser_shoot_main(I) AND NOT laser_hit(I) and start_sticky;
-        lasers(I).bit_map <= LASER_BITMAP;
-    end generate;       
 
-    shoot_laser : process(KEY(0), laser_shoot2, vga_clk)
-    variable en : integer := 0;
-    begin
-        if start_sticky = '1' and pause = '0' then
-            if game_over = '0' then
-                if falling_edge(KEY(0)) then
-                    laser_shoot_main(en) <= '1';
-                    laser_x(en) <= ship.box.x_origin;
-                    laser_y(en) <= ship.box.y_origin + 5;
-                    en := en + 1;
-                    if en = NUM_LASERS then
-                        en := 0;
-                    end if;
-                end if;
-            else
-                laser_shoot_main(en) <= '0';
-            end if;
-
-            for i in 0 to NUM_LASERS-1 loop
-                if laser_shoot2(i) = '0' then
-                    laser_shoot_main(i) <= '0';
-                end if;
-            end loop;
-        end if;
-    end process;
-    
+-------- Random number gen -------------------------------------------------------------------------------------------------------------------------------------
 
     RN1: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => start_sticky, enable => '1', seed => "01001101", random_8 => random_num(15 downto 8));
     RN2: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => start_sticky, enable => '1', seed => "11010111", random_8 => random_num(7 downto 0));
     random_num(31 downto 24) <= random_num(15 downto 8) xor random_num(7 downto 0);
     random_num(23 downto 16) <= "11010101" xor random_num(31 downto 24);
     
-   ----Aliens-------------------------------------------------------------------------------------------------------------------------      
-ALIENS_GEN1: for I in 0 to NUM_ENEMIES-1 generate
-    ALIEN1: objDisp port map (box => aliens1(I).box, bit_map => aliens1(I).bit_map, in_bounds => aliens1(I).in_bounds, mem_addr => aliens1(I).abs_mem_addr);
-    ALIEN1_LOC: alien_movement generic map (X_SIZE => ALIEN1_BITMAP.x_size, Y_SIZE => ALIEN1_BITMAP.y_size)
-                                port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky,
-                                        cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause,
-                                        x_loc => aliens1(I).box.x_origin, y_loc => aliens1(I).box.y_origin, random_Y => random_num(I+7 downto I));
+-------- Aliens-------------------------------------------------------------------------------------------------------------------------------------------------
+    ALIENS_GEN1: for I in 0 to NUM_ENEMIES-1 generate
+        ALIEN1: objDisp port map (box => aliens1(I).box, bit_map => aliens1(I).bit_map, in_bounds => aliens1(I).in_bounds, mem_addr => aliens1(I).abs_mem_addr);
+        ALIEN1_LOC: alien_movement generic map (X_SIZE => ALIEN1_BITMAP.x_size, Y_SIZE => ALIEN1_BITMAP.y_size)
+                                    port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky,
+                                            cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause,
+                                            x_loc => aliens1(I).box.x_origin, y_loc => aliens1(I).box.y_origin, random_Y => random_num(I+7 downto I));
 
-    aliens1(I).box.x_pos <= global_x;
-    aliens1(I).box.y_pos <= global_y;
-    aliens1(I).enable <= aliens1_alive(I) AND start_sticky;
-    aliens1(I).bit_map <= ALIEN1_BITMAP;
+        aliens1(I).box.x_pos <= global_x;
+        aliens1(I).box.y_pos <= global_y;
+        aliens1(I).enable <= aliens1_alive(I) AND start_sticky;
+        aliens1(I).bit_map <= ALIEN1_BITMAP;
 
-end generate;
+    end generate;
 
 
-CLK_A1: clk_div port map (clk_in => MAX10_CLK1_50, div => a1_spawn_div, clk_out => a1_clk);
-ALIEN1_SPAWN: process(a1_clk, vga_clk)
-variable en :integer := 0;
-begin
+    CLK_A1: clk_div port map (clk_in => MAX10_CLK1_50, div => a1_spawn_div, clk_out => a1_clk);
+    ALIEN1_SPAWN: process(a1_clk, vga_clk)
+    variable en :integer := 0;
+    begin
+        if start_sticky = '1' and pause = '0' then
+            if rising_edge(a1_clk) then
+                if aliens1_alive(en) = '0' then
+                    aliens1_alive(en) <= '1';
+                    en := en + 1;
+                    if en = NUM_ENEMIES then
+                        en := 0;
+                    end if;
+                end if;
+            end if;
+            for i in 0 to NUM_ENEMIES-1 loop
+                if aliens1(i).box.x_origin = 0 or ship_collision = '1' then
+                    aliens1_alive(i) <= '0';
+                end if;
+            end loop;
+        end if;
+    end process;
+
+
+-------- Obstacles ---------------------------------------------------------------------------------------------------------------------------------------------
+
+    ASTEROIDS_GEN: for I in 0 to NUM_ASTEROIDS-1 generate
+        ASTEROID_DISP: objDisp port map (box => asteroids(I).box, bit_map => asteroids(I).bit_map, in_bounds => asteroids(I).in_bounds, mem_addr => asteroids(I).abs_mem_addr);
+        ASTEROID_LOC: obstacle_movement generic map (Y_SIZE => ASTEROID_BITMAP.y_size)
+                                        port map (max10_clk => MAX10_CLK1_50, reset_L => asteroids_active(I) AND start_sticky AND NOT ship_collision,
+                                                active => asteroids_active(I) AND start_sticky AND NOT pause AND NOT ship_collision, cnt_div => obs_cnt_div, 
+                                                x_loc => asteroids(I).box.x_origin, y_loc => asteroids(I).box.y_origin, random_Y => random_num(I+24 downto I+24-7));
+        asteroids(I).box.x_pos <= global_x;
+        asteroids(I).box.y_pos <= global_y;
+        asteroids(I).enable <= asteroids_active(I) AND start_sticky and not game_over;
+        asteroids(I).bit_map <= ASTEROID_BITMAP;
+    end generate;
+
+    CLK_AS: clk_div port map (clk_in => MAX10_CLK1_50, div => obs_spawn_div, clk_out => as_clk);
+    ASTEROID_SPAWN: process(as_clk)
+    variable en :integer := 0;
+    begin
     if start_sticky = '1' and pause = '0' then
-        if rising_edge(a1_clk) then
-            if aliens1_alive(en) = '0' then
-                aliens1_alive(en) <= '1';
+        if rising_edge(as_clk) then
+            if asteroids_active(en) = '0' then
+                asteroids_active(en) <= '1';
                 en := en + 1;
                 if en = NUM_ENEMIES then
                     en := 0;
                 end if;
             end if;
         end if;
-        for i in 0 to NUM_ENEMIES-1 loop
-            if aliens1(i).box.x_origin = 0 or ship_collision = '1' then
-                aliens1_alive(i) <= '0';
+        for i in 0 to NUM_ASTEROIDS-1 loop
+            if asteroids(I).box.x_origin = 0 or ship_collision = '1' then
+                asteroids_active(i) <= '0';
             end if;
         end loop;
     end if;
-end process;
--------------------------------------------------------
+    end process;
+
 
 end architecture;

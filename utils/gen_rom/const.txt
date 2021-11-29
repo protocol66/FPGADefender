@@ -12,3 +12,4 @@ constant SCORE_6_BITMAP : bit_map_t := bit_map_t'(0, 6316, 15, 25);
 constant SCORE_7_BITMAP : bit_map_t := bit_map_t'(0, 6691, 15, 25);
 constant SCORE_8_BITMAP : bit_map_t := bit_map_t'(0, 7066, 15, 25);
 constant SCORE_9_BITMAP : bit_map_t := bit_map_t'(0, 7441, 15, 25);
+constant ASTEROID_BITMAP : bit_map_t := bit_map_t'(0, 7816, 40, 40);
