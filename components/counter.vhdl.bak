@@ -24,7 +24,7 @@ begin
     begin
         if (reset_L = '0') then
 
-            count <= to_unsigned(SEED, SIZE);
+            count <= unsigned(SEED, SIZE);
 
         else 
             if(rising_edge(clk)) then

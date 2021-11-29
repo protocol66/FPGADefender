@@ -67,8 +67,9 @@ architecture arch of ship_movement is
 
     component counter is
         generic (
-            SIZE : integer := 1;
-            STEP : integer := 1
+            SIZE : positive := 1;
+            STEP : positive := 1;
+            SEED : natural := 0
             );
         port (
             clk     : in std_logic;
@@ -77,7 +78,7 @@ architecture arch of ship_movement is
             up_down : in std_logic := '0';
             cout    : out std_logic_vector(SIZE-1 downto 0)
         );
-    end component;
+    end component counter;
 
 begin
     U1: clk_div port map (clk_in => max10_clk, div => 500, clk_out => clk_10k);

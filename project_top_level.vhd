@@ -165,7 +165,7 @@ architecture rtl of project_top_level is
             reset_L : in std_logic;
             alive : in std_logic;
             cnt_div : positive := 500000;
-            random_Y : in std_logic_vector (7 downto 0);
+            random_Y : in std_logic_vector(7 downto 0);
     
             x_loc : out integer;
             y_loc : out integer
@@ -193,7 +193,7 @@ architecture rtl of project_top_level is
     constant SHIP_SPAWNY : positive := 240;
     constant NUM_LASERS : positive := 10;
 
-    constant NUM_ENEMIES : positive := 4;
+    constant NUM_ENEMIES : positive := 4;       -- max of 32 - 8ish due to the random_num
     constant NUM_ASTEROIDS : positive := 5;
 
 
@@ -284,7 +284,7 @@ architecture rtl of project_top_level is
     
     signal very_slow_clk : std_logic;
     signal as_clk : std_logic;
-    signal random_num : std_logic_vector(7 downto 0);
+    signal random_num : std_logic_vector(31 downto 0);
     
     signal pause : std_logic := '0';
     signal start_sticky : std_logic := '0';
@@ -823,7 +823,7 @@ LASERS_GEN: for I in 0 to NUM_LASERS-1 generate
         end process;
         lasers(I).box.x_pos <= global_x;
         lasers(I).box.y_pos <= global_y;
-        lasers(I).enable <= laser_shoot_main(I) AND NOT laser_hit(I);
+        lasers(I).enable <= laser_shoot_main(I) AND NOT laser_hit(I) and start_sticky;
         lasers(I).bit_map <= LASER_BITMAP;
     end generate;       
 
@@ -854,7 +854,10 @@ LASERS_GEN: for I in 0 to NUM_LASERS-1 generate
     end process;
     
 
-RN: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => '1', enable => '1', seed => "01001101", random_8 => random_num);
+    RN1: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => start_sticky, enable => '1', seed => "01001101", random_8 => random_num(15 downto 8));
+    RN2: pseudorandom_8 port map (clk => MAX10_CLK1_50, reset_L => start_sticky, enable => '1', seed => "11010111", random_8 => random_num(7 downto 0));
+    random_num(31 downto 24) <= random_num(15 downto 8) xor random_num(7 downto 0);
+    random_num(23 downto 16) <= "11010101" xor random_num(31 downto 24);
     
    ----Aliens-------------------------------------------------------------------------------------------------------------------------      
 ALIENS_GEN1: for I in 0 to NUM_ENEMIES-1 generate
@@ -862,7 +865,7 @@ ALIENS_GEN1: for I in 0 to NUM_ENEMIES-1 generate
     ALIEN1_LOC: alien_movement generic map (X_SIZE => ALIEN1_BITMAP.x_size, Y_SIZE => ALIEN1_BITMAP.y_size)
                                 port map (max10_clk => MAX10_CLK1_50, reset_L => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky,
                                         cnt_div => a1_cnt_div, alive => aliens1_alive(I) AND NOT aliens1_killed(I) AND start_sticky AND NOT pause,
-                                        x_loc => aliens1(I).box.x_origin, y_loc => aliens1(I).box.y_origin, random_Y => random_num);
+                                        x_loc => aliens1(I).box.x_origin, y_loc => aliens1(I).box.y_origin, random_Y => random_num(I+7 downto I));
 
     aliens1(I).box.x_pos <= global_x;
     aliens1(I).box.y_pos <= global_y;
