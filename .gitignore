@@ -2,3 +2,5 @@ quartus/output_files/*
 quartus/simulation/*
 quartus/db/*
 quartus/incremental_db/*
+*mif
+*bak
