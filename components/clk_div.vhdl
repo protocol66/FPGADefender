@@ -6,7 +6,7 @@ use ieee.math_real.all;
 entity clk_div is
     port (
         clk_in  : in std_logic;
-        div     : in integer;       -- rounds down to closest even number
+        div     : in natural;       -- rounds down to closest even number
         clk_out : buffer std_logic := '0'
     );
 end entity clk_div;

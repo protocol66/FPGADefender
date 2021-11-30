@@ -17,21 +17,23 @@ end laser_movement;
 
 architecture arch of laser_movement is
     signal x_counter_clk : std_logic;
-    signal x_shift : std_logic_vector(9 downto 0);
+    signal x_shift : std_logic_vector(11 downto 0);
     signal clk_100 : std_logic;
 
     component clk_div is
         port (
             clk_in  : in std_logic;
-            div     : in integer;       -- rounds down to closest even number
+            div     : in natural;       -- rounds down to closest even number
             clk_out : buffer std_logic := '0'
         );
     end component;
 
     component counter is
         generic (
-            SIZE : integer := 1;
-            STEP : integer := 1
+            SIZE : positive := 1;
+            STEP : positive := 1;
+            SEED : natural := 0;
+            OVERFLOW : std_logic := '1'
             );
         port (
             clk     : in std_logic;
@@ -40,10 +42,12 @@ architecture arch of laser_movement is
             up_down : in std_logic := '0';
             cout    : out std_logic_vector(SIZE-1 downto 0)
         );
-    end component;
+    end component counter;
 
 begin
     U1: clk_div port map (clk_in => max10_clk, div => 50000, clk_out => clk_100);
-    U2: counter generic map (SIZE => 10) port map(clk => clk_100, up_down => '0', reset_L => shoot, enable => shoot, cout => x_shift);
-    x_loc <= to_integer(unsigned(x_shift));
+
+    -- counter is 12 instead of 10 to reduce risk of overflow
+    U2: counter generic map (SIZE => 12, OVERFLOW => '0') port map(clk => clk_100, up_down => '0', reset_L => shoot, enable => shoot, cout => x_shift);
+    x_loc <= to_integer(unsigned(x_shift(9 downto 0)));
 end architecture;

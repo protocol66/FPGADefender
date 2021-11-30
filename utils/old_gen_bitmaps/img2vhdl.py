@@ -39,7 +39,7 @@ image_array = np.clip(image_array, 0, IMAGE_COLORS-1)
 
 #show downscaled image
 image = Image.fromarray(np.array(image_array*(255.0 / IMAGE_COLORS), dtype=np.int8), "RGB")
-image.show()
+# image.show()
 
 
 def gen_column_string(array):
