@@ -202,6 +202,8 @@ architecture rtl of project_top_level is
     constant NUM_ENEMIES : positive := 4;       -- max of 32 - 8ish due to the random_num
     constant NUM_ASTEROIDS : positive := 3;
 
+    constant NUM_STARS : positive := 15;
+
 -------- Signals -----------------------------------------------------------------------------------------------------------------------------------------------
 
     type ship_lives_ar_t is array (NUM_LIVES-1 downto 0) of obj;
@@ -209,6 +211,8 @@ architecture rtl of project_top_level is
     type laser_loc_ar_t is array (NUM_LASERS-1 downto 0) of integer;
     type alien_ar_t is array (NUM_ENEMIES-1 downto 0) of obj;
     type asteroids_ar_t is array (NUM_ASTEROIDS-1 downto 0) of obj;
+
+    type stars_loc_ar_t is array (NUM_STARS-1 downto 0) of integer;
 
     signal vga_clk              : std_logic;
     signal global_display_en    : std_logic;
@@ -287,7 +291,7 @@ architecture rtl of project_top_level is
     signal as_clk : std_logic;
     signal random_num : std_logic_vector(31 downto 0);
     
-    signal pause : std_logic := '0';
+    signal pause : std_logic;
     signal start_sticky : std_logic := '0'; 
 
     signal a2_en : std_logic := '0';
@@ -308,6 +312,9 @@ architecture rtl of project_top_level is
     signal alien_killed_fx : std_logic := '0';
     signal ship_hit_fx : std_logic := '0';
 
+    signal star_xloc : stars_loc_ar_t;
+    signal star_yloc : stars_loc_ar_t;
+    signal s_clk : std_logic;
 
 begin
 
@@ -361,12 +368,29 @@ begin
         if falling_edge(vga_clk) then
             if(show_background = '1') then
                 curr_pixel <= BACKGROUND;
+                for s in 0 to NUM_STARS-1 loop
+                    if (( star_xloc(s) = global_x or global_x = star_xloc(s) + 1) and (star_yloc(s) = global_y or global_y = star_yloc(s) + 1)) then
+                        curr_pixel <= WHITE;
+                    end if;
+                end loop;
             else 
                 curr_pixel <= rom_pixel;
             end if;
         end if;
     end process;
-
+    
+    CLK_S: clk_div port map (clk_in => MAX10_CLK1_50, div => SEC, clk_out => s_clk);
+    STARS: for S in 0 to NUM_STARS-1 generate
+        STAR: process (s_clk)
+        begin
+            if pause = '0' then
+                if rising_edge(s_clk) then
+                    star_xloc(S) <= screen_WIDTH / 2 + to_integer(signed(random_num((8 + S) downto (0 + S))));
+                    star_yloc(S) <= screen_HEIGHT / 2 + to_integer(signed(random_num((14 + S) downto (5 + S))));   
+                end if;
+            end if;
+        end process;
+    end generate;
 
 -------- Pause -------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -375,6 +399,8 @@ begin
         if falling_edge(KEY(1)) then
             if start_sticky = '1' then
                 pause <= not pause;
+            else
+                pause <= '1';
             end if;
         end if;
         if game_over = '1' then
@@ -519,11 +545,6 @@ begin
             if(falling_edge(vga_clk)) then
                 show_background <= '1';
                 curr_mem_addr <= (others => '0');       -- needed for collision
-                if (ship.in_bounds and ship.enable)= '1' then
-                    curr_mem_addr <= ship.abs_mem_addr;
-                    ship.pixel <= rom_pixel;
-                    show_background <= '0';
-                end if;
 
                 for l in 0 to NUM_LIVES-1 loop
                     if (ship_lives(l).in_bounds and ship_lives(l).enable) = '1' then
@@ -538,6 +559,12 @@ begin
                         show_background <= '0';
                     end if;
                 end loop;
+                
+                if (ship.in_bounds and ship.enable)= '1' then
+                    curr_mem_addr <= ship.abs_mem_addr;
+                    ship.pixel <= rom_pixel;
+                    show_background <= '0';
+                end if;
 
                 for a in 0 to NUM_ENEMIES-1 loop
                     if (aliens1(a).in_bounds and aliens1(a).enable) = '1' then
@@ -602,17 +629,29 @@ begin
         else
             a2_en <= '0';
         end if;
-        if curr_score > 2000 then
+        if curr_score > 1000 then
             obs_en <= '1';
         else
             obs_en <= '0';
         end if;
-        if curr_score > 5000 then
+        if curr_score > 2000 then
             a3_en <= '1';
         else
             a3_en <= '0';
         end if;
-        if curr_score > 500000 then
+        if SW(9) = '1' then
+            a1_cnt_div <= SEC / 640;
+            a1_spawn_div <= SEC;
+
+            a2_cnt_div <= SEC / 640;
+            a2_spawn_div <= SEC;
+
+            a3_cnt_div <= SEC / 640;
+            a3_spawn_div <= SEC;
+
+            obs_cnt_div <=  SEC / 640;
+            obs_spawn_div <= SEC;
+        elsif curr_score > 50000 then
             a1_cnt_div <= 2 * SEC / 640;
             a1_spawn_div <= SEC;
 
@@ -624,7 +663,7 @@ begin
 
             obs_cnt_div <= 4 * SEC / 640;
             obs_spawn_div <= 5 * SEC;
-        elsif curr_score > 200000 then
+        elsif curr_score > 40000 then
             a1_cnt_div <= 4 * SEC / 640;
             a1_spawn_div <= 2 * SEC;
 
@@ -636,7 +675,7 @@ begin
 
             obs_cnt_div <= 6 * SEC / 640;
             obs_spawn_div <= 10 * SEC;
-        elsif curr_score > 150000 then
+        elsif curr_score > 30000 then
             a1_cnt_div <= 4 * SEC / 640;
             a1_spawn_div <= 2 * SEC;
             
@@ -648,7 +687,7 @@ begin
 
             obs_cnt_div <= 8 * SEC / 640;
             obs_spawn_div <= 15 * SEC;
-        elsif curr_score > 100000 then
+        elsif curr_score > 20000 then
             a1_cnt_div <= 6 * SEC / 640;
             a1_spawn_div <= 3 * SEC;
             
@@ -961,7 +1000,7 @@ begin
     ALIEN2_SPAWN: process(a2_clk, vga_clk)
     variable en :integer := 0;
     begin
-        if start_sticky = '1' and pause = '0' then
+        if start_sticky = '1' and pause = '0' and a2_en = '1' then
             if rising_edge(a2_clk) then
                 if aliens2_alive(en) = '0' then
                     aliens2_alive(en) <= '1';
@@ -1001,7 +1040,7 @@ begin
     ALIEN3_SPAWN: process(a3_clk, vga_clk)
     variable en :integer := 0;
     begin
-        if start_sticky = '1' and pause = '0' then
+        if start_sticky = '1' and pause = '0' and a3_en = '1' then
             if rising_edge(a3_clk) then
                 if aliens3_alive(en) = '0' then
                     aliens3_alive(en) <= '1';
@@ -1038,7 +1077,7 @@ begin
     ASTEROID_SPAWN: process(as_clk)
     variable en :integer := 0;
     begin
-    if start_sticky = '1' and pause = '0' then
+    if start_sticky = '1' and pause = '0' and obs_en = '1' then
         if rising_edge(as_clk) then
             if asteroids_active(en) = '0' then
                 asteroids_active(en) <= '1';

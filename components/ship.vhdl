@@ -86,7 +86,7 @@ begin
     U2: ADXL345_controller port map(reset_n => '1', clk => max10_clk, data_valid => open, data_x => data_x, data_y => data_y, data_z => open, 
                                     SPI_SDI => GSENSOR_SDI, SPI_SDO => GSENSOR_SDO, SPI_CSN => GSENSOR_CS_N, SPI_CLK => GSENSOR_SCLK);
     U3: counter generic map (SIZE => 9) port map(clk => x_counter_clk, up_down => not data_x(4), reset_L => reset_L, enable => x_enable AND en, cout => x_shift);
-    U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => not data_y(4), reset_L => reset_L, enable => y_enable AND en, cout => y_shift);
+    U4: counter generic map (SIZE => 9) port map(clk => y_counter_clk, up_down => data_y(4), reset_L => reset_L, enable => y_enable AND en, cout => y_shift);
     
     x_clk_divider : process(clk_10k)
     variable count : integer := 0;
@@ -94,12 +94,12 @@ begin
         if rising_edge(clk_10k) and data_x(8 to 11) /= "0000" then
             count := count + 1;
             if data_x(4) = '0' then
-                if count > ((16 - to_integer(unsigned(data_x(8 to 11)))) * 100) then
+                if count > ((16 - to_integer(unsigned(data_x(8 to 11)))) * 50) then
                     count := 0;
                     x_counter_clk <= not x_counter_clk;
                 end if;
             else
-                if count > to_integer(unsigned(data_x(8 to 11))) * 100 then
+                if count > to_integer(unsigned(data_x(8 to 11))) * 50 then
                     count := 0;
                     x_counter_clk <= not x_counter_clk;
                 end if;
@@ -113,12 +113,12 @@ begin
         if rising_edge(clk_10k) and data_y(8 to 11) /= "0000" then
             count := count + 1;
             if data_y(4) = '0' then
-                if count > ((16 - to_integer(unsigned(data_y(8 to 11)))) * 100) then
+                if count > ((16 - to_integer(unsigned(data_y(8 to 11)))) * 50) then
                     count := 0;
                     y_counter_clk <= not y_counter_clk;
                 end if;
             else
-                if count > to_integer(unsigned(data_y(8 to 11))) * 100 then
+                if count > to_integer(unsigned(data_y(8 to 11))) * 50 then
                     count := 0;
                     y_counter_clk <= not y_counter_clk;
                 end if;
@@ -141,13 +141,13 @@ begin
         end if;
 
         if to_integer(signed(y_shift)) <= -1 * MAX_UP_OFFSET then
-            if data_y(4) = '1' then 
+            if data_y(4) = '0' then 
                 y_enable <= '1';
             else 
                 y_enable <= '0';
             end if;
         elsif to_integer(signed(y_shift)) >= MAX_DOWN_OFFSET then
-            if data_y(4) = '0' then 
+            if data_y(4) = '1' then 
                 y_enable <= '1';
             else 
                 y_enable <= '0';
